@@ -1,5 +1,7 @@
 import java.sql.*;
 
+import db.pojos.Patient;
+
 public class DBManager {
 	
 	
@@ -112,7 +114,7 @@ public class DBManager {
 	public void addPatient(Patient p){
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Patients INSERT "
+			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) INSERT ("") "
 		}
 	}
 		
