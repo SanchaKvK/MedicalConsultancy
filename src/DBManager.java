@@ -30,64 +30,66 @@ public class DBManager {
 		try {
 			stmt1 = c.createStatement();
 		
-			String sql1 = " CREATE TABLE patient"
-					+ "(id_patient INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ "name TEXT NOT NULL"
-					+ "gender TEXT"
-					+ "date of birth DATE NOT NULL"
-					+ "id TEXT NOT NULL UNIQUE"
-					+ "phone number TEXT UNIQUE"
-					+ "postcode TEXT)";
+			String sql1 = " CREATE TABLE patient "
+					+"(id_patient INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+"name TEXT NOT NULL, "
+					+"gender TEXT, "
+					+"date of birth DATE NOT NULL, "
+					+"id TEXT NOT NULL UNIQUE, "
+					+"phone number TEXT UNIQUE, "
+					+"postcode TEXT)";
 			
 			stmt1.executeUpdate(sql1);
-			sql1 = "CREATE TABLE doctor"
-					+ "(id_doctor INTEGER PRIMARY KEY AUTOINCREMENT"
-					+ "specialization TEXT NOT NULL"
-					+ "name TEXT NOT NULL"
-					+ "hospital TEXT)";
+			sql1 = "CREATE TABLE doctor "
+					+"(id_doctor INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+"specialization TEXT NOT NULL, "
+					+"name TEXT NOT NULL hospital)";
 			stmt1.executeUpdate(sql1);
 			
 			
-			sql1 = "CREATE TABLE videoconsultation"
-					 + "id_video INTEGER PRIMARY KEY AUTOINCREMENT"
-					+	"consultation_date DATE NOT NULL"
-					+		"consultation_time TIME NOT NULL"
-					+		"duration INTEGER"
-					+	"type of call TEXT"
-					+	"notes TEXT"
-					+  "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL"
-					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL)";	
+			sql1 = "CREATE TABLE videoconsultation "
+					+"(id_video INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+"consultation_date DATE NOT NULL, "
+					+"consultation_time TIME NOT NULL, "
+					+"duration INTEGER, "
+					+"type of call TEXT, "
+					+"notes TEXT, "
+					+"id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, "
+					+"id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL)";	
 
 			stmt1.executeUpdate(sql1);
 			
 			
-			sql1 = "CREATE TABLE prescription"
-					+ "(id_prescription INTEGER PRIMARY KEY AUTOINCREMENT"
-					+ "doses INTEGER NOT NULL"
-					+ "notes TEXT"
-					+ "duration INTEGER NOT NULL"
-					+ "name TEXT NOT NULL"
-					+ "id_video INTEGER REFERENCES video_consultation(id_video) ON DELETE SET NULL)";
+			sql1 = "CREATE TABLE prescription "
+					+"(id_prescription INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+"doses INTEGER NOT NULL, "
+					+"notes TEXT, "
+					+"duration INTEGER NOT NULL, "
+					+"name TEXT NOT NULL, "
+					+"id_video INTEGER REFERENCES video_consultation(id_video) ON DELETE SET NULL)";
 			
 			stmt1.executeUpdate(sql1);
 			
-			sql1 = "CREATE TABLE pathology"
-					+ "id_pathology INTEGER PRIMARY KEY AUTOINCREMENT"
-					+ "name TEXT NOT NULL"
-					+ "type TEXT"
-					+ "CREATE TABLE patient_pathology"
-					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL"
-					+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL"
-					+ "PRIMARY KEY(id_patient,id_pathology))";
+			sql1 = "CREATE TABLE pathology "
+					+ "id_pathology INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ "name TEXT NOT NULL, "
+					+ "type TEXT)";
 					
 			stmt1.executeUpdate(sql1);
 			
-			sql1 = "CREATE TABLE rating"
-					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL"
-					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL"
-					+ "score INTEGER"
-					+ "review TEXT"
-					+ "PRIMARY KEY(id_patient,id_doctor))";
+			sql1= "CREATE TABLE patient_pathology "
+					+"id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
+					+"id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL, "
+					+"PRIMARY KEY(id_patient,id_pathology))";
+			
+			stmt1.executeUpdate(sql1);
+			
+			sql1 = "CREATE TABLE rating "
+					+"id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
+					+"id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, "
+					+"score INTEGER, "
+					+"review TEXT, "
+					+"PRIMARY KEY(id_patient,id_doctor))";
 			
 			
 			stmt1.executeUpdate(sql1);
