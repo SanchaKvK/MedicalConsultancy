@@ -1,5 +1,6 @@
 import java.sql.*;
 
+import db.pojos.Doctor;
 import db.pojos.Patient;
 
 public class DBManager {
@@ -43,7 +44,8 @@ public class DBManager {
 			sql1 = "CREATE TABLE doctor "
 					+"(id_doctor INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+"specialization TEXT NOT NULL, "
-					+"name TEXT NOT NULL hospital)";
+					+"name TEXT NOT NULL, "
+					+"hospital TEXT)";
 			stmt1.executeUpdate(sql1);
 			
 			
@@ -118,6 +120,20 @@ public class DBManager {
 			Statement stmt = c.createStatement();
 			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) INSERT ("") "
 		}
+	}
+	
+	
+	public void addDoctor(Doctor d) {
+		
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO doctor (name, specialization, hospital) VALUES ('"+d.getName()+"', '"+d.getSpecialization()+"','"+d.getHospital()+"')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 		
 	
