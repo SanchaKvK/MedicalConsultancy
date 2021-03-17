@@ -14,6 +14,9 @@ public class Prescription implements Serializable{
 	private Integer doses;
 	private Integer duration;
 	private String notes;
+	private Video_consultation vd; 
+	
+	
 	public Integer getId_prescription() {
 		return id_prescription;
 	}
@@ -26,16 +29,33 @@ public class Prescription implements Serializable{
 		
 	}
 	
-	public Prescription(Integer id_prescription, String name, Integer doses, Integer duration, String notes) {
+	
+
+
+	public Video_consultation getVd() {
+		return vd;
+	}
+
+
+
+
+	public void setVd(Video_consultation vd) {
+		this.vd = vd;
+	}
+
+
+
+
+	public Prescription(Integer id_prescription, String name, Integer doses, Integer duration, String notes,
+			Video_consultation vd) {
 		super();
 		this.id_prescription = id_prescription;
 		this.name = name;
 		this.doses = doses;
 		this.duration = duration;
 		this.notes = notes;
+		this.vd = vd;
 	}
-	
-	
 
 
 

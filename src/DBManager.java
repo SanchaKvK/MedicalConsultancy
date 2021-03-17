@@ -2,6 +2,7 @@ import java.sql.*;
 
 import db.pojos.Doctor;
 import db.pojos.Patient;
+import db.pojos.Prescription;
 
 public class DBManager {
 	
@@ -136,6 +137,19 @@ public class DBManager {
 		
 	}
 		
+	
+public void addPrescription(Prescription p) {
+		
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO prescription (doses, notes, duration, name, id_video) VALUES ("+p.getDoses()+",'"+p.getNotes()+"',"+p.getDuration()+",'"+p.getName()+"',"+p.getVd().getId_video()+")";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	
