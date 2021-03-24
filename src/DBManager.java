@@ -2,6 +2,8 @@ import java.sql.*;
 
 import db.pojos.Doctor;
 import db.pojos.Patient;
+import db.pojos.Rating;
+import db.pojos.Video_consultation;
 
 public class DBManager {
 	
@@ -127,7 +129,7 @@ public class DBManager {
 		
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO doctor (name, specialization, hospital) VALUES ('"+d.getName()+"', '"+d.getSpecialization()+"','"+d.getHospital()+"')";
+			String sql = "INSERT INTO Doctor (name, specialization, hospital) VALUES ('"+d.getName()+"', '"+d.getSpecialization()+"','"+d.getHospital()+"')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -136,9 +138,33 @@ public class DBManager {
 		
 	}
 		
-	
+	public void addRating (Rating r) { 
+	 
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO Rating (score,review) VALUES ('"+r.getScore()+"','"+r.getReview()+"')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+		
+	public void addVideo_consultation (Video_consultation v) {
+		
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO Video_consultation(id_video, consultation_date,consultation_time,duration,type,notes,prescription) VALUES ('"+d.getId_video()+"', '"+d.getConsultation_date()+"','"+d.getConsultatiton_time()+"','"+d.getDuration()+"',)";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	
 	
 
-}
+	}
