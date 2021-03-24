@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.pojos.Doctor;
@@ -161,7 +162,28 @@ public void addPrescription(Prescription p) {
 		}
 		
 	}
+
+
+	public void searchDoctorByName(String doctor) {
+		List<Doctor> doctors=new ArrayList<>();
+		
+		try {
+			
+			
+			String sql= "SELECT* FROM doctor WHERE name LIKE ?";
+			PreparedStatement prep= c.prepareStatement(sql);
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+	}
 	
+
 	
 	
 	
