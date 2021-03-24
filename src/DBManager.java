@@ -5,12 +5,12 @@ import java.util.List;
 import db.pojos.Doctor;
 import db.pojos.Pathology;
 import db.pojos.Patient;
-<<<<<<< HEAD
+
 import db.pojos.Prescription;
-=======
+
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
->>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
+
 
 public class DBManager {
 	
