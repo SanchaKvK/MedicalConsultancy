@@ -41,6 +41,26 @@ public class Patient implements Serializable{
 
 
 	public Patient(Integer id_patient, String name, String gender, Date birth, int id, String phone_number,
+			String postcode) {
+		super();
+		this.id_patient = id_patient;
+		this.name = name;
+		this.gender = gender;
+		this.birth = birth;
+		this.id = id;
+		this.phone_number = phone_number;
+		this.postcode = postcode;
+	}
+
+
+
+
+
+
+
+
+
+	public Patient(Integer id_patient, String name, String gender, Date birth, int id, String phone_number,
 			String postcode, List<Video_consultation> videos, List<Rating> ratings, List<Pathology> pathologies) {
 		super();
 		this.id_patient = id_patient;
