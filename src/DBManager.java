@@ -1,9 +1,20 @@
 import java.sql.*;
+import java.util.List;
 
 import db.pojos.Doctor;
+import db.pojos.Pathology;
 import db.pojos.Patient;
+//<<<<<<< HEAD
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
+//=======
+//<<<<<<< HEAD
+import db.pojos.Prescription;
+//=======
+import db.pojos.Rating;
+import db.pojos.Video_consultation;
+//>>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
+//>>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy
 
 public class DBManager {
 	
@@ -120,7 +131,11 @@ public class DBManager {
 	public void addPatient(Patient p){
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) INSERT ("") "
+			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"+ 
+			 p.getName()+"', '"+ p.getGender()+"', "+ p.getBirth() + ",'" +p.getId()+"', '"+ 
+					p.getPhone_number()+"', '"+p.getPostcode()+"'";
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -138,6 +153,7 @@ public class DBManager {
 		
 	}
 		
+
 	public void addRating (Rating r) { 
 	 
 		try {
@@ -163,6 +179,22 @@ public class DBManager {
 		
 		
 	}
+
+	
+public void addPrescription(Prescription p) {
+		
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO prescription (doses, notes, duration, name, id_video) VALUES ("+p.getDoses()+",'"+p.getNotes()+"',"+p.getDuration()+",'"+p.getName()+"',"+p.getVd().getId_video()+")";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+
 	
 	
 	
