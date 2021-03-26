@@ -6,6 +6,8 @@ import db.pojos.Doctor;
 import db.pojos.Pathology;
 import db.pojos.Patient;
 
+
+
 import db.pojos.Prescription;
 
 import db.pojos.Rating;

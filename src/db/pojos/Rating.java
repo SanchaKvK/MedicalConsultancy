@@ -9,6 +9,8 @@ public class Rating implements Serializable {
 	private static final long serialVersionUID = -3167341965153243574L;
 	private Integer score;
 	private String review;
+	private Doctor doc;
+	private Patient pat;
 	
 	
 	public Rating() {
@@ -17,10 +19,12 @@ public class Rating implements Serializable {
 	}
 
 
-	public Rating(Integer score, String review) {
+	public Rating(Doctor doc, Patient pat,Integer score, String review) {
 		super();
 		this.score = score;
 		this.review = review;
+		this.doc=doc;
+		this.pat=pat;
 	}
 
 
@@ -80,6 +84,26 @@ public class Rating implements Serializable {
 	@Override
 	public String toString() {
 		return "Rating [score=" + score + ", review=" + review + "]";
+	}
+
+
+	public Doctor getDoc() {
+		return doc;
+	}
+
+
+	public void setDoc(Doctor doc) {
+		this.doc = doc;
+	}
+
+
+	public Patient getPat() {
+		return pat;
+	}
+
+
+	public void setPat(Patient pat) {
+		this.pat = pat;
 	}
 	
 	
