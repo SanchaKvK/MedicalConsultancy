@@ -20,6 +20,8 @@ public class Video_consultation implements Serializable {
 	private String type;
 	private String notes;
 	private List<Prescription>prescription;
+	private Doctor doc;
+	private Patient pat;
 	
 	public Video_consultation() {
 		super();
@@ -30,7 +32,7 @@ public class Video_consultation implements Serializable {
 	
 	
 	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
-			String type, String notes, List<Prescription> prescription) {
+			String type, String notes, List<Prescription> prescription, Doctor doc, Patient pat) {
 		super();
 		this.id_video = id_video;
 		this.consultation_date = consultation_date;
@@ -39,6 +41,8 @@ public class Video_consultation implements Serializable {
 		this.type = type;
 		this.notes = notes;
 		this.prescription = prescription;
+		this.doc= doc;
+		this.pat=pat;
 	}
 
 	
@@ -135,6 +139,30 @@ public class Video_consultation implements Serializable {
 
 	public void setPrescription(List<Prescription> prescription) {
 		this.prescription = prescription;
+	}
+
+
+
+	public Doctor getDoc() {
+		return doc;
+	}
+
+
+
+	public void setDoc(Doctor doc) {
+		this.doc = doc;
+	}
+
+
+
+	public Patient getPat() {
+		return pat;
+	}
+
+
+
+	public void setPat(Patient pat) {
+		this.pat = pat;
 	}
 	
 	

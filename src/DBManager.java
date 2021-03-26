@@ -1,20 +1,10 @@
 import java.sql.*;
-import java.util.List;
+import db.pojos.*;
 
-import db.pojos.Doctor;
-import db.pojos.Pathology;
-import db.pojos.Patient;
-//<<<<<<< HEAD
-import db.pojos.Rating;
-import db.pojos.Video_consultation;
-//=======
-//<<<<<<< HEAD
 import db.pojos.Prescription;
-//=======
+
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
-//>>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
-//>>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy
 
 public class DBManager {
 	
@@ -131,9 +121,10 @@ public class DBManager {
 	public void addPatient(Patient p){
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"+ 
-			 p.getName()+"', '"+ p.getGender()+"', "+ p.getBirth() + ",'" +p.getId()+"', '"+ 
+			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"+p.getName()+"', '"+ p.getGender()+"', "+ p.getBirth() + ",'" +p.getId()+"', '"+ 
 					p.getPhone_number()+"', '"+p.getPostcode()+"'";
+			stmt.executeUpdate(sql);
+			stmt.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -158,7 +149,7 @@ public class DBManager {
 	 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Rating (score,review) VALUES ('"+r.getScore()+"','"+r.getReview()+"')";
+			String sql = "INSERT INTO Rating (id_Doctor,id_Patient,score,review) VALUES ('"+r.getDoc().getId_doctor()+ "','"+r.getPat().getId_patient()+"','"+r.getReview()+"'+'"+r.getScore()+"')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -170,7 +161,7 @@ public class DBManager {
 		
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Video_consultation(id_video, consultation_date,consultation_time,duration,type,notes,prescription) VALUES ('"+d.getId_video()+"', '"+d.getConsultation_date()+"','"+d.getConsultatiton_time()+"','"+d.getDuration()+"',)";
+			String sql = "INSERT INTO Video_consultation(id_video, consultation_date,consultation_time,duration,type,notes,prescription,id_doctor,id_patient) VALUES ('"+v.getId_video()+"', '"+v.getConsultation_date()+"','"+v.getConsultatiton_time()+"','"+v.getDuration()+"', '"+v.getDoc().getId_doctor()+"','"+v.getPat().getId_patient()+"')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -181,7 +172,7 @@ public class DBManager {
 	}
 
 	
-public void addPrescription(Prescription p) {
+	public void addPrescription(Prescription p) {
 		
 		try {
 			Statement stmt = c.createStatement();
@@ -193,10 +184,6 @@ public void addPrescription(Prescription p) {
 		}
 		
 	}
-	
-
-	
-	
 	
 
 	}
