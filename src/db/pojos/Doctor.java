@@ -57,10 +57,18 @@ public class Doctor implements Serializable {
 
 
 
+
+
+
+
+
+
+//Doctor prints ratings but not videos
+
 	@Override
 	public String toString() {
 		return "Doctor [id_doctor=" + id_doctor + ", specialization=" + specialization + ", name=" + name
-				+ ", hospital=" + hospital + "]";
+				+ ", hospital=" + hospital + ", ratings=" + ratings + "]";
 	}
 
 

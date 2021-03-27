@@ -79,27 +79,14 @@ public class Patient implements Serializable{
 
 
 
-
-
-
-
-
-
-
-
+//Patient print pathologies but not videos and ratings
 
 	@Override
 	public String toString() {
 		return "Patient [id_patient=" + id_patient + ", name=" + name + ", gender=" + gender + ", birth=" + birth
-				+ ", id=" + id + ", phone_number=" + phone_number + ", postcode=" + postcode + "]";
+				+ ", id=" + id + ", phone_number=" + phone_number + ", postcode=" + postcode + ", videos=" + videos
+				+ ", ratings=" + ratings + ", pathologies=" + pathologies + "]";
 	}
-
-
-
-
-
-
-
 
 
 	@Override

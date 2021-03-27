@@ -49,11 +49,19 @@ public class Video_consultation implements Serializable {
 	
 
 
+
+
+
+
+
+
+//Video_consultation prints doc,pat and prescription
+
 	@Override
 	public String toString() {
 		return "Video_consultation [id_video=" + id_video + ", consultation_date=" + consultation_date
 				+ ", consultatiton_time=" + consultatiton_time + ", duration=" + duration + ", type=" + type
-				+ ", notes=" + notes + "]";
+				+ ", notes=" + notes + ", prescription=" + prescription + ", doc=" + doc + ", pat=" + pat + "]";
 	}
 
 

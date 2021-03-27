@@ -80,7 +80,7 @@ public class Rating implements Serializable {
 		this.review = review;
 	}
 
-
+//Rating doesnt print doctor and patient
 	@Override
 	public String toString() {
 		return "Rating [score=" + score + ", review=" + review + "]";

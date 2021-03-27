@@ -59,7 +59,7 @@ public class Prescription implements Serializable{
 
 
 
-
+//Prescription does not print vd
 	@Override
 	public String toString() {
 		return "Prescription [id_prescription=" + id_prescription + ", name=" + name + ", doses=" + doses

@@ -27,7 +27,7 @@ public class Pathology implements Serializable{
 	}
 	
 	
-	
+	//Pathology doesnt print patients
 	@Override
 	public String toString() {
 		return "Pathology [id_pathology=" + id_pathology + ", name=" + name + ", type=" + type + "]";
