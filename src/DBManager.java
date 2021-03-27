@@ -1,12 +1,16 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import db.pojos.*;
 
 import db.pojos.Prescription;
 
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
+
 
 public class DBManager {
 	
@@ -186,6 +190,154 @@ public class DBManager {
 		}
 		
 	}
+	
+	public List<Doctor> searchDoctorByName(String name) {
+		// TODO ratings? 
+		List<Doctor> doctors=new ArrayList<>();
+
+		try {
+			String sql = "SELECT * FROM doctor WHERE name LIKE ?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setString(1, "%" + name + "%");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+
+				Doctor doctor = new Doctor(rs.getInt("id_doctor"), rs.getString("specialization"), rs.getString("name"), rs.getString("hospital"));
+				doctors.add(doctor);
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return doctors;
+	}
+	
+	
+
+	public List<Patient> searchPatientByName(String name) {
+		//TODO pathologies,ratings ?
+		List<Patient> patients=new ArrayList<>();
+
+		try {
+			String sql = "SELECT * FROM patient WHERE name LIKE ?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setString(1, "%" + name + "%");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+
+				Patient patient = new Patient(rs.getInt("id_patient"), rs.getString("name"), rs.getString("gender"), rs.getDate("date of birth"), rs.getInt("id"),rs.getString("phone number"), rs.getString("postcode"));
+				patients.add(patient);
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return patients;
+	}
+	
+	public void fireDoctor(int id) {
+		try {
+			String sql = "DELETE FROM doctor WHERE id_doctor = ?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deletePatient(int id) {
+		try {
+			String sql = "DELETE FROM patient WHERE id_patient = ?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteVideo(int id) {
+		try {
+			String sql = "DELETE FROM videoconsultation WHERE id_video = ?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, id);
+			prep.executeUpdate();
+			prep.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updatePatientName(int id,String name) {
+
+		try {
+			String sql = "UPDATE patient SET name LIKE ? where patient_id=?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setString(1, "%" + name + "%");
+			stmt.setInt(2, id);
+			stmt.executeUpdate();
+
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void updatePatientPhone(int id,int number) {
+
+		try {
+
+			String sql = "UPDATE patient SET phone number LIKE ? where patient_id=?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setInt(1, number);
+			stmt.setInt(2, id);
+			stmt.executeUpdate();
+
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void updateDoctortName(int id,String name) {
+
+		try {
+			String sql = "UPDATE doctor SET name LIKE ? where id_doctor=?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setString(1, "%" + name + "%");
+			stmt.setInt(2, id);
+			stmt.executeUpdate();
+
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void updateDoctorHospital(int id,String name) {
+
+		try {
+			String sql = "UPDATE doctor SET hospital LIKE ? where id_doctor=?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setString(1, "%" + name + "%");
+			stmt.setInt(2, id);
+			stmt.executeUpdate();
+
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	
 	
 	
