@@ -1,21 +1,12 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import db.pojos.Doctor;
-import db.pojos.Pathology;
-import db.pojos.Patient;
-
-
+import db.pojos.*;
 
 import db.pojos.Prescription;
 
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
-
-
 
 public class DBManager {
 	
@@ -132,9 +123,10 @@ public class DBManager {
 	public void addPatient(Patient p){
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"+ 
-			 p.getName()+"', '"+ p.getGender()+"', "+ p.getBirth() + ",'" +p.getId()+"', '"+ 
+			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"+p.getName()+"', '"+ p.getGender()+"', "+ p.getBirth() + ",'" +p.getId()+"', '"+ 
 					p.getPhone_number()+"', '"+p.getPostcode()+"'";
+			stmt.executeUpdate(sql);
+			stmt.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -145,7 +137,7 @@ public class DBManager {
 		
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO doctor (name, specialization, hospital) VALUES ('"+d.getName()+"', '"+d.getSpecialization()+"','"+d.getHospital()+"')";
+			String sql = "INSERT INTO Doctor (name, specialization, hospital) VALUES ('"+d.getName()+"', '"+d.getSpecialization()+"','"+d.getHospital()+"')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -154,8 +146,35 @@ public class DBManager {
 		
 	}
 		
+
+	public void addRating (Rating r) { 
+	 
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO Rating (id_Doctor,id_Patient,score,review) VALUES ('"+r.getDoc().getId_doctor()+ "','"+r.getPat().getId_patient()+"','"+r.getReview()+"'+'"+r.getScore()+"')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+		
+	public void addVideo_consultation (Video_consultation v) {
+		
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO Video_consultation(id_video, consultation_date,consultation_time,duration,type,notes,prescription,id_doctor,id_patient) VALUES ('"+v.getId_video()+"', '"+v.getConsultation_date()+"','"+v.getConsultatiton_time()+"','"+v.getDuration()+"', '"+v.getDoc().getId_doctor()+"','"+v.getPat().getId_patient()+"')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 	
-public void addPrescription(Prescription p) {
+	public void addPrescription(Prescription p) {
 		
 		try {
 			Statement stmt = c.createStatement();
@@ -167,156 +186,9 @@ public void addPrescription(Prescription p) {
 		}
 		
 	}
-
-
-	public List<Doctor> searchDoctorByName(String name) {
-		// TODO ratings and videos? 
-		List<Doctor> doctors=new ArrayList<>();
-	
-		try {
-			String sql = "SELECT * FROM doctor WHERE name LIKE ?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setString(1, "%" + name + "%");
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				
-				Doctor doctor = new Doctor(rs.getInt("id_doctor"), rs.getString("specialization"), rs.getString("name"), rs.getString("hospital"));
-				doctors.add(doctor);
-			}
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return doctors;
-	}
-	
-	public List<Patient> searchPatientByName(String name) {
-		//TODO pathologies,videos,ratings
-		List<Patient> patients=new ArrayList<>();
-	
-		try {
-			String sql = "SELECT * FROM patient WHERE name LIKE ?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setString(1, "%" + name + "%");
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				
-				Patient patient = new Patient(rs.getInt("id_patient"), rs.getString("name"), rs.getString("gender"), rs.getDate("date of birth"), rs.getInt("id"),rs.getString("phone number"), rs.getString("postcode"));
-				patients.add(patient);
-			}
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return patients;
-	}
-	
-	
-	public void fireDoctor(int id) {
-		try {
-			String sql = "DELETE FROM doctor WHERE id_doctor = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void deletePatient(int id) {
-		try {
-			String sql = "DELETE FROM patient WHERE id_patient = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void deleteVideo(int id) {
-		try {
-			String sql = "DELETE FROM videoconsultation WHERE id_video = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void updatePatientName(int id,String name) {
-	
-		try {
-			String sql = "UPDATE patient SET name LIKE ? where patient_id=?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setString(1, "%" + name + "%");
-			stmt.setInt(2, id);
-			stmt.executeUpdate();
-		
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	public void updatePatientPhone(int id,int number) {
-		
-		try {
-			String sql = "UPDATE patient SET phone number LIKE ? where patient_id=?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setInt(1, number);
-			stmt.setInt(2, id);
-			stmt.executeUpdate();
-		
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void updateDoctortName(int id,String name) {
-		
-		try {
-			String sql = "UPDATE doctor SET name LIKE ? where id_doctor=?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setString(1, "%" + name + "%");
-			stmt.setInt(2, id);
-			stmt.executeUpdate();
-		
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	public void updateDoctorHospital(int id,String name) {
-		
-		try {
-			String sql = "UPDATE doctor SET hospital LIKE ? where id_doctor=?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setString(1, "%" + name + "%");
-			stmt.setInt(2, id);
-			stmt.executeUpdate();
-		
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
 	
 	
 	
 	
 
-}
+	}
