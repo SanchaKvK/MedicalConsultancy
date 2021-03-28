@@ -1,16 +1,19 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.sql.*;
+package medicalConsultancy.db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import db.pojos.*;
-
+import db.pojos.Doctor;
+import db.pojos.Patient;
 import db.pojos.Prescription;
-
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
-
 
 public class DBManager {
 	
