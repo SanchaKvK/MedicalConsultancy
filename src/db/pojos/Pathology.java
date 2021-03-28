@@ -1,6 +1,7 @@
 package db.pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Pathology implements Serializable{
@@ -18,6 +19,19 @@ public class Pathology implements Serializable{
 		super();
 		
 	}
+	
+	
+	//used in the application
+	public Pathology(Integer id_pathology, String name, String type) {
+		super();
+		this.id_pathology = id_pathology;
+		this.name = name;
+		this.type = type;
+		this.patients= new ArrayList<Patient>();
+	}
+
+
+
 	public Pathology(Integer id_pathology, String name, String type, List<Patient> patients) {
 		super();
 		this.id_pathology = id_pathology;
