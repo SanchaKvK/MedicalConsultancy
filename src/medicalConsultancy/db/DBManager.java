@@ -212,7 +212,7 @@ public class DBManager {
 				Patient patient = new Patient(rs.getInt("id_patient"), rs.getString("name"), rs.getString("gender"),
 						rs.getDate("date of birth"), rs.getInt("id"), rs.getString("phone number"),
 						rs.getString("postcode"));
-				patient.setPathologies(getPathologiesOfPatient(patient.getId()));
+				patient.setPathologies(getPathologiesOfPatient(patient.getId_patient()));
 				patients.add(patient);
 			}
 			rs.close();

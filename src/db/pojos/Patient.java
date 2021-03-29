@@ -17,7 +17,7 @@ public class Patient implements Serializable{
 	private String name;
 	private String gender;
 	private Date birth;
-	private int id;
+	private String id;
 	private String phone_number;
 	private String postcode;
 	private List<Video_consultation> videos;
@@ -40,7 +40,25 @@ public class Patient implements Serializable{
 
 
 
-	public Patient(Integer id_patient, String name, String gender, Date birth, int id, String phone_number,
+	public Patient(String name, String gender, Date birth, String id, String phone_number, String postcode) {
+		super();
+		this.name = name;
+		this.gender = gender;
+		this.birth = birth;
+		this.id = id;
+		this.phone_number = phone_number;
+		this.postcode = postcode;
+	}
+
+
+
+
+
+
+
+
+
+	public Patient(Integer id_patient, String name, String gender, Date birth, String id, String phone_number,
 			String postcode) {
 		super();
 		this.id_patient = id_patient;
@@ -60,7 +78,7 @@ public class Patient implements Serializable{
 
 
 
-	public Patient(Integer id_patient, String name, String gender, Date birth, int id, String phone_number,
+	public Patient(Integer id_patient, String name, String gender, Date birth, String id, String phone_number,
 			String postcode, List<Video_consultation> videos, List<Rating> ratings, List<Pathology> pathologies) {
 		super();
 		this.id_patient = id_patient;
@@ -217,12 +235,12 @@ public class Patient implements Serializable{
 	}
 
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
