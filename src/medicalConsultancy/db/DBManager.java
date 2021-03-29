@@ -23,7 +23,7 @@ public class DBManager {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./fu/MedicalConsultancy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicalConsultancy.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -43,8 +43,8 @@ public class DBManager {
 			stmt1 = c.createStatement();
 
 			String sql1 = " CREATE TABLE patient " + "(id_patient INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "name TEXT NOT NULL, " + "gender TEXT, " + "date of birth DATE NOT NULL, "
-					+ "id TEXT NOT NULL UNIQUE, " + "phone number TEXT UNIQUE, " + "postcode TEXT)";
+					+ "name TEXT NOT NULL, " + "gender TEXT, " + "date_of_birth DATE NOT NULL, "
+					+ "id TEXT NOT NULL UNIQUE, " + "phone_number TEXT UNIQUE, " + "postcode TEXT)";
 
 			stmt1.executeUpdate(sql1);
 			sql1 = "CREATE TABLE doctor " + "(id_doctor INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -53,7 +53,7 @@ public class DBManager {
 
 			sql1 = "CREATE TABLE videoconsultation " + "(id_video INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "consultation_date DATE NOT NULL, " + "consultation_time TIME NOT NULL, " + "duration INTEGER, "
-					+ "type of call TEXT, " + "notes TEXT, "
+					+ "type_of_call TEXT, " + "notes TEXT, "
 					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, "
 					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL)";
 
@@ -105,9 +105,11 @@ public class DBManager {
 	public void addPatient(Patient p) {
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"
+			String sql = "INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES('"
 					+ p.getName() + "', '" + p.getGender() + "', " + p.getBirth() + ",'" + p.getId() + "', '"
 					+ p.getPhone_number() + "', '" + p.getPostcode() + "')";
+			
+			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -119,7 +121,7 @@ public class DBManager {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Doctor (name, specialization, hospital) VALUES ('" + d.getName() + "', '"
+			String sql = "INSERT INTO doctor (name, specialization, hospital) VALUES ('" + d.getName() + "', '"
 					+ d.getSpecialization() + "','" + d.getHospital() + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -133,7 +135,7 @@ public class DBManager {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Rating (id_Doctor,id_Patient,score,review) VALUES ('" + r.getDoc().getId_doctor()
+			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES ('" + r.getDoc().getId_doctor()
 					+ "','" + r.getPat().getId_patient() + "','" + r.getReview() + "'+'" + r.getScore() + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -146,7 +148,7 @@ public class DBManager {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO Video_consultation(id_video, consultation_date,consultation_time,duration,type,notes,prescription,id_doctor,id_patient) VALUES ('"
+			String sql = "INSERT INTO video_consultation(id_video, consultation_date,consultation_time,duration,type_of_call,notes,prescription,id_doctor,id_patient) VALUES ('"
 					+ v.getId_video() + "', '" + v.getConsultation_date() + "','" + v.getConsultatiton_time() + "','"
 					+ v.getDuration() + "', '" + v.getDoc().getId_doctor() + "','" + v.getPat().getId_patient() + "')";
 			stmt.executeUpdate(sql);
@@ -210,7 +212,7 @@ public class DBManager {
 			while (rs.next()) {
 
 				Patient patient = new Patient(rs.getInt("id_patient"), rs.getString("name"), rs.getString("gender"),
-						rs.getDate("date of birth"), rs.getString("id"), rs.getString("phone number"),
+						rs.getDate("date_of_birth"), rs.getString("id"), rs.getString("phone_number"),
 						rs.getString("postcode"));
 				patient.setPathologies(getPathologiesOfPatient(patient.getId_patient()));
 				patients.add(patient);
