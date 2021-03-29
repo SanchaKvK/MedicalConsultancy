@@ -23,7 +23,7 @@ public class DBManager {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicalConsultancy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./fu/MedicalConsultancy.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -66,19 +66,19 @@ public class DBManager {
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE pathology " + "id_pathology INTEGER PRIMARY KEY AUTOINCREMENT, "
+			sql1 = "CREATE TABLE pathology " + "(id_pathology INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "name TEXT NOT NULL, " + "type TEXT)";
 
 			stmt1.executeUpdate(sql1);
 
 			sql1 = "CREATE TABLE patient_pathology "
-					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
+					+ "(id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
 					+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL, "
 					+ "PRIMARY KEY(id_patient,id_pathology))";
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE rating " + "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
+			sql1 = "CREATE TABLE rating " + "(id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
 					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, " + "score INTEGER, "
 					+ "review TEXT, " + "PRIMARY KEY(id_patient,id_doctor))";
 
@@ -107,7 +107,7 @@ public class DBManager {
 			Statement stmt = c.createStatement();
 			String sql = "INSERT INTO Patient (name , gender, date of birth, id, phone number, postcode) VALUES('"
 					+ p.getName() + "', '" + p.getGender() + "', " + p.getBirth() + ",'" + p.getId() + "', '"
-					+ p.getPhone_number() + "', '" + p.getPostcode() + "'";
+					+ p.getPhone_number() + "', '" + p.getPostcode() + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -210,7 +210,7 @@ public class DBManager {
 			while (rs.next()) {
 
 				Patient patient = new Patient(rs.getInt("id_patient"), rs.getString("name"), rs.getString("gender"),
-						rs.getDate("date of birth"), rs.getInt("id"), rs.getString("phone number"),
+						rs.getDate("date of birth"), rs.getString("id"), rs.getString("phone number"),
 						rs.getString("postcode"));
 				patient.setPathologies(getPathologiesOfPatient(patient.getId_patient()));
 				patients.add(patient);
