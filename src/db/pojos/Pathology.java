@@ -32,6 +32,13 @@ public class Pathology implements Serializable{
 
 
 
+	public Pathology(String name, String type) {
+		super();
+		this.name = name;
+		this.type = type;
+	}
+
+
 	public Pathology(Integer id_pathology, String name, String type, List<Patient> patients) {
 		super();
 		this.id_pathology = id_pathology;

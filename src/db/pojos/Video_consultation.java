@@ -31,6 +31,23 @@ public class Video_consultation implements Serializable {
 	
 	
 	
+	
+
+
+	public Video_consultation(Date consultation_date, Time consultatiton_time, String type, Doctor doc, Patient pat) {
+		super();
+		this.consultation_date = consultation_date;
+		this.consultatiton_time = consultatiton_time;
+		this.type = type;
+		this.doc = doc;
+		this.pat = pat;
+	}
+
+
+
+
+
+
 	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
 			String type, String notes, List<Prescription> prescription, Doctor doc, Patient pat) {
 		super();
