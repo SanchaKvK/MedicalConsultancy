@@ -48,6 +48,9 @@ public class Patient implements Serializable{
 		this.id = id;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
+		this.videos=new ArrayList<Video_consultation>();
+		this.ratings=new ArrayList<Rating>();
+		this.pathologies=new ArrayList<Pathology>();
 	}
 
 
@@ -68,6 +71,9 @@ public class Patient implements Serializable{
 		this.id = id;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
+		this.videos=new ArrayList<Video_consultation>();
+		this.ratings=new ArrayList<Rating>();
+		this.pathologies=new ArrayList<Pathology>();
 	}
 
 

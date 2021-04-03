@@ -16,7 +16,7 @@ public class Video_consultation implements Serializable {
 	private Integer id_video;
 	private Date consultation_date;
 	private Time consultatiton_time;
-	private int duration;
+	private Integer duration;
 	private String type;
 	private String notes;
 	private List<Prescription>prescription;
@@ -34,6 +34,36 @@ public class Video_consultation implements Serializable {
 	
 
 
+	public Video_consultation(Date consultation_date, Time consultatiton_time, String type) {
+		super();
+		this.consultation_date = consultation_date;
+		this.consultatiton_time = consultatiton_time;
+		this.type = type;
+		this.prescription=new ArrayList<Prescription>();
+	}
+
+
+
+
+
+
+	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
+			String type, String notes) {
+		super();
+		this.id_video = id_video;
+		this.consultation_date = consultation_date;
+		this.consultatiton_time = consultatiton_time;
+		this.duration = duration;
+		this.type = type;
+		this.notes = notes;
+		this.prescription=new ArrayList<Prescription>();
+	}
+
+
+
+
+
+
 	public Video_consultation(Date consultation_date, Time consultatiton_time, String type, Doctor doc, Patient pat) {
 		super();
 		this.consultation_date = consultation_date;
@@ -41,6 +71,26 @@ public class Video_consultation implements Serializable {
 		this.type = type;
 		this.doc = doc;
 		this.pat = pat;
+		this.prescription=new ArrayList<Prescription>();
+	}
+
+
+
+
+
+
+	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
+			String type, String notes, Doctor doc, Patient pat) {
+		super();
+		this.id_video = id_video;
+		this.consultation_date = consultation_date;
+		this.consultatiton_time = consultatiton_time;
+		this.duration = duration;
+		this.type = type;
+		this.notes = notes;
+		this.doc = doc;
+		this.pat = pat;
+		this.prescription=new ArrayList<Prescription>();
 	}
 
 

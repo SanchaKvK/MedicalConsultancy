@@ -37,6 +37,8 @@ public class DBManager {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	private void createTables() {
 		Statement stmt1;
@@ -57,6 +59,7 @@ public class DBManager {
 					+ "type_of_call TEXT, " + "notes TEXT, "
 					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, "
 					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL)";
+			
 
 			stmt1.executeUpdate(sql1);
 
@@ -94,6 +97,9 @@ public class DBManager {
 		}
 
 	}
+	
+	
+	
 
 	public void disconnect() {
 		try {
@@ -111,7 +117,6 @@ public class DBManager {
 					+ p.getName() + "', '" + p.getGender() + "', " + p.getBirth() + ",'" + p.getId() + "', '"
 					+ p.getPhone_number() + "', '" + p.getPostcode() + "')";
 			
-			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -147,6 +152,7 @@ public class DBManager {
 
 	}
 	
+	
 
 
 	public void addRating(Rating r) {
@@ -161,21 +167,32 @@ public class DBManager {
 			e.printStackTrace();
 		}
 	}
+	
+
 
 	public void addVideo_consultation(Video_consultation v) {
 
 		try {
-			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO video_consultation(id_video, consultation_date,consultation_time,duration,type_of_call,notes,prescription,id_doctor,id_patient) VALUES ('"
-					+ v.getId_video() + "', '" + v.getConsultation_date() + "','" + v.getConsultatiton_time() + "','"
-					+ v.getDuration() + "', '" + v.getDoc().getId_doctor() + "','" + v.getPat().getId_patient() + "')";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (Exception e) {
+			
+			String sql="INSERT INTO videoconsultation (consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setDate(1, v.getConsultation_date());
+			ps.setTime(2, v.getConsultatiton_time());
+			ps.setString(3, v.getType());
+			ps.setInt(4, v.getDoc().getId_doctor());
+			ps.setInt(5, v.getPat().getId_patient());
+			ps.executeUpdate();
+			ps.close();
+		}
+		
+		
+		catch(Exception e) {
 			e.printStackTrace();
 		}
-
 	}
+	
+	
+	
 
 	public void addPrescription(Prescription p) {
 
@@ -191,6 +208,29 @@ public class DBManager {
 		}
 
 	}
+	
+	
+	
+	public void diagnosePathology(int patient_id,int pathology_id) {
+		try {
+			
+		String sql="INSERT INTO patient_pathology(id_patient,id_pathology) VALUES(?,?)";
+		PreparedStatement ps=c.prepareStatement(sql);
+		ps.setInt(1, patient_id);
+		ps.setInt(2, pathology_id);
+		ps.executeUpdate();
+		ps.close();
+		
+		
+			}
+		
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 	
 
 
@@ -221,7 +261,6 @@ public class DBManager {
 	
 
 	public List<Patient> searchPatientByName(String name) {
-		// TODO ratings ?
 		List<Patient> patients = new ArrayList<Patient>();
 
 		try {
@@ -244,8 +283,38 @@ public class DBManager {
 		}
 		return patients;
 	}
+	 
+	public List<Video_consultation> getVideosOfPatient(int id_patient) {
+		List<Video_consultation> videos=new ArrayList<Video_consultation>();
+		try {
+			
+			String sql="SELECT * FROM videoconsultation WHERE id_patient=?";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1,id_patient);
+			ResultSet rs=ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				Video_consultation v=new Video_consultation(rs.getInt("id_video"),rs.getDate("consultation_date"),
+						rs.getTime("consultation_time"),rs.getInt("duration"),rs.getString("type_of_call"),
+						rs.getString("notes"),this.getDoctor(rs.getInt("id_doctor")),this.getPatient(rs.getInt("id_patient")));
+				videos.add(v);
+				
+			}
+			
+			
+		}
+		
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return videos;
+	}
 	
 	
+
 	
 
 	public List<Pathology> getPathologiesOfPatient(int id_patient) {
@@ -299,6 +368,8 @@ public class DBManager {
 	
 			return null;}
 	
+	//Doctor method will return a Doctor with id,specialization,name and hospital.
+	
 	public Doctor getDoctor(int id_doctor) {
 		
 		try {
@@ -312,8 +383,13 @@ public class DBManager {
 				
 				return new Doctor(id_doctor,rs.getString("specialization"),rs.getString("name"),rs.getString("hospital"));
 				
+				
 			}
+			
+			rs.close();
+			ps.close();
 			}
+		
 		
 		
 		catch(Exception e) {
@@ -322,11 +398,44 @@ public class DBManager {
 		return null;
 	}
 	
+	public Video_consultation getVideo(int id_video) {
+		
+		
+		try {
+			String sql="SELECT*FROM videoconsultation WHERE id_video=?";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1, id_video);
+			ResultSet rs=ps.executeQuery();
+			
+			
+			if(rs.next()) {
+				
+				return new Video_consultation(rs.getInt("id_video"),rs.getDate("consultation_date"),rs.getTime("consultation_time"),rs.getInt("duration"),rs.getString("type_of_call"),
+						rs.getString("notes"));
+			
+			
+			}
+			
+			rs.close();
+			ps.close();
+		}
+		
+		catch(Exception e) {e.printStackTrace();}
+		
+		
+		
+		
+		
+		return null;
+	}
+	
+	//Patient method will return a Patient with id,name,gender,birth,id,phone,postcode.
+	
 	public Patient getPatient(int id_patient) {
 		
 		try {
 			
-			String sql="INSERT INTO patient WHERE id_patient=?";
+			String sql="SELECT*FROM patient WHERE id_patient=?";
 			PreparedStatement ps=c.prepareStatement(sql);
 			ps.setInt(1, id_patient);
 			ResultSet rs=ps.executeQuery();
@@ -382,29 +491,10 @@ public class DBManager {
 	}
 	
 	
-	public void updateVideoPatient(int id_doctor)
+	
 
 
 	
-	public void diagnosePathology(int patient_id,int pathology_id) {
-		try {
-			
-		String sql="INSERT INTO patient_pathology(id_patient,id_pathology) VALUES(?,?)";
-		PreparedStatement ps=c.prepareStatement(sql);
-		ps.setInt(1, patient_id);
-		ps.setInt(2, pathology_id);
-		ps.executeUpdate();
-		ps.close();
-		
-		
-			}
-		
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
 
 	
 	

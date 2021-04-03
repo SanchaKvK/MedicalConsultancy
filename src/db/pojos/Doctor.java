@@ -31,6 +31,19 @@ public class Doctor implements Serializable {
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
+		this.videos=new ArrayList<Video_consultation>();
+		this.ratings=new ArrayList<Rating>();
+	}
+
+
+
+
+	public Doctor(String specialization, String name) {
+		super();
+		this.specialization = specialization;
+		this.name = name;
+		this.videos=new ArrayList<Video_consultation>();
+		this.ratings=new ArrayList<Rating>();
 	}
 
 
@@ -42,6 +55,8 @@ public class Doctor implements Serializable {
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
+		this.videos=new ArrayList<Video_consultation>();
+		this.ratings=new ArrayList<Rating>();
 	}
 
 
