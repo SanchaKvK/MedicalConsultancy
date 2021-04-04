@@ -23,7 +23,7 @@ public class DBManager {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicalConsultancy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicatlConsultancy.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -112,13 +112,17 @@ public class DBManager {
 
 	public void addPatient(Patient p) {
 		try {
-			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES('"
-					+ p.getName() + "', '" + p.getGender() + "', " + p.getBirth() + ",'" + p.getId() + "', '"
-					+ p.getPhone_number() + "', '" + p.getPostcode() + "')";
+			String sql="INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES(?,?,?,?,?,?)";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setString(1,p.getName());
+			ps.setString(2, p.getGender());
+			ps.setDate(3, p.getBirth());
+			ps.setString(4, p.getId());
+			ps.setString(5, p.getPhone_number());
+			ps.setString(6, p.getPostcode());
 			
-			stmt.executeUpdate(sql);
-			stmt.close();
+			ps.executeUpdate();
+			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -158,11 +162,14 @@ public class DBManager {
 	public void addRating(Rating r) {
 
 		try {
-			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES (" + r.getDoc().getId_doctor()
-					+ "," + r.getPat().getId_patient() + "," + r.getScore() + ",'" + r.getReview() + "')";
-			stmt.executeUpdate(sql);
-			stmt.close();
+			String sql="INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1,r.getDoc().getId_doctor());
+			ps.setInt(2, r.getPat().getId_patient());
+			ps.setInt(3, r.getScore());
+			ps.setString(4, r.getReview());
+			ps.executeUpdate();
+			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
