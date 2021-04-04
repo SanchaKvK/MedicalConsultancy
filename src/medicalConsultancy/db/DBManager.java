@@ -66,7 +66,7 @@ public class DBManager {
 			sql1 = "CREATE TABLE prescription " + "(id_prescription INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "doses INTEGER NOT NULL, " + "notes TEXT, " + "duration INTEGER NOT NULL, "
 					+ "name TEXT NOT NULL, "
-					+ "id_video INTEGER REFERENCES video_consultation(id_video) ON DELETE SET NULL)";
+					+ "id_video INTEGER REFERENCES videoconsultation(id_video) ON DELETE SET NULL)";
 
 			stmt1.executeUpdate(sql1);
 
@@ -159,8 +159,8 @@ public class DBManager {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES ('" + r.getDoc().getId_doctor()
-					+ "','" + r.getPat().getId_patient() + "','" + r.getReview() + "'+'" + r.getScore() + "')";
+			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES (" + r.getDoc().getId_doctor()
+					+ "," + r.getPat().getId_patient() + "," + r.getScore() + ",'" + r.getReview() + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -198,7 +198,7 @@ public class DBManager {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO prescription (doses, notes, duration, name, id_video) VALUES (" + p.getDoses()
+			String sql = "INSERT INTO prescription(doses, notes, duration, name, id_video) VALUES (" + p.getDoses()
 					+ ",'" + p.getNotes() + "'," + p.getDuration() + ",'" + p.getName() + "'," + p.getVd().getId_video()
 					+ ")";
 			stmt.executeUpdate(sql);
@@ -398,6 +398,64 @@ public class DBManager {
 		return null;
 	}
 	
+	
+	public Prescription getPrescription(int id_prescription) {
+		
+		try {
+			
+			String sql="SELECT*FROM prescription WHERE id_prescription=?";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1, id_prescription);
+			ResultSet rs=ps.executeQuery();
+			
+			if(rs.next()) {
+				
+				return new Prescription(rs.getInt("id_prescription"),rs.getString("name"),rs.getInt("doses"),
+						rs.getInt("duration"),rs.getString("notes"),this.getVideo(rs.getInt("id_video")));
+				
+			}
+			
+			rs.close();
+			ps.close();
+			}
+		
+		
+		
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	public Rating getRating(int id_doctor, int id_patient) {
+		
+		try {
+			
+			String sql="SELECT*FROM rating WHERE id_doctor=? AND id_patient=?";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1, id_doctor);
+			ps.setInt(2, id_patient);
+			ResultSet rs=ps.executeQuery();
+			
+			if(rs.next()) {
+				
+				return new Rating(this.getDoctor(rs.getInt("id_doctor")),this.getPatient(rs.getInt("id_patient")),rs.getInt("score"),rs.getString("review"));
+				
+				
+			}
+			
+			rs.close();
+			ps.close();
+			}
+		
+		
+		
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public Video_consultation getVideo(int id_video) {
 		
 		

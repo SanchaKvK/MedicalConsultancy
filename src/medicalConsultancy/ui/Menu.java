@@ -12,6 +12,7 @@ import java.util.List;
 import db.pojos.Doctor;
 import db.pojos.Pathology;
 import db.pojos.Patient;
+import db.pojos.Prescription;
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
 import medicalConsultancy.db.DBManager;
@@ -42,6 +43,8 @@ public class Menu {
 		System.out.println("11. Get patient by id");
 		System.out.println("12. Get pathology by id");
 		System.out.println("13. Get video by id");
+		System.out.println("14. Get rating by id");
+		System.out.println("15. Get prescription by id");
 	
 
 		System.out.println("0. Exit");
@@ -60,6 +63,13 @@ public class Menu {
 			
 		case 4:
 			addVideo();
+			break;
+			
+		case 5:
+			rate();
+			break;
+		case 6:
+			prescribe();
 			break;
 		case 7:
 			searchPatient();
@@ -86,6 +96,13 @@ public class Menu {
 		case 13:
 			getVideo();
 			break;
+			
+		case 14:
+			getRate();
+			break;
+		case 15:
+			getPrescription();
+			break;
 		case 0:
 			dbman.disconnect();
 			System.exit(0);
@@ -97,7 +114,62 @@ public class Menu {
 		
 	}
 	
+	private static void prescribe() throws Exception{
+		System.out.println("Doses: ");
+		Integer doses=Integer.parseInt(reader.readLine());
+		System.out.println("Duration: ");
+		Integer duration=Integer.parseInt(reader.readLine());
+		System.out.println("Name: ");
+		String name=reader.readLine();
+		System.out.println("Notes: ");
+		String notes=reader.readLine();
+		System.out.println("Introduce id video: ");
+		Integer id_video=Integer.parseInt(reader.readLine());
+		Prescription p=new Prescription(name,doses,duration,notes,dbman.getVideo(id_video));
+		dbman.addPrescription(p);
+		
+		
+	}
 	
+	
+	
+	private static void rate() throws Exception{
+		System.out.println("Introduce your id:");
+		Integer id_patient=Integer.parseInt(reader.readLine());
+		searchDoctor();
+		System.out.println("Introduce doctor`s id: ");
+		Integer id_doctor=Integer.parseInt(reader.readLine());
+		
+		System.out.println("Review: ");
+		String review=reader.readLine();
+		System.out.println("Score(0-5): ");
+		Integer score=Integer.parseInt(reader.readLine());
+		
+		Rating rating=new Rating(dbman.getDoctor(id_doctor),dbman.getPatient(id_patient),score,review);
+		dbman.addRating(rating);
+		
+		
+		
+		
+	}
+	private static void getRate() throws Exception{
+		
+		System.out.println("Introduce your id: ");
+		Integer id_patient=Integer.parseInt(reader.readLine());
+		searchDoctor();
+		System.out.println("Introduce doctor`s id: ");
+		Integer id_doctor=Integer.parseInt(reader.readLine());
+		System.out.println(dbman.getRating(id_doctor, id_patient));
+		
+	}
+	
+	private static void getPrescription()throws Exception{
+		
+		System.out.println("Prescription id: ");
+		System.out.println(dbman.getPrescription(Integer.parseInt(reader.readLine())));
+		
+		
+	}
 	
 	private static void getVideo()throws Exception{
 		

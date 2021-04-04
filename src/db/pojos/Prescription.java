@@ -56,6 +56,20 @@ public class Prescription implements Serializable{
 		this.notes = notes;
 		this.vd = vd;
 	}
+	
+	
+
+
+
+public Prescription(String name, Integer doses, Integer duration, String notes, Video_consultation vd) {
+		super();
+		this.name = name;
+		this.doses = doses;
+		this.duration = duration;
+		this.notes = notes;
+		this.vd = vd;
+	}
+
 
 
 
