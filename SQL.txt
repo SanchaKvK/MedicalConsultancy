@@ -40,6 +40,7 @@ id_pathology INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
 type TEXT
 );
+
 CREATE TABLE patient_pathology(
 id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL,
 id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL,
