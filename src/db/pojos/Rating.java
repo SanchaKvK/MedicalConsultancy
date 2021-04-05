@@ -26,6 +26,15 @@ public class Rating implements Serializable {
 		this.doc=doc;
 		this.pat=pat;
 	}
+	
+	
+
+
+	public Rating(Integer score, String review) {
+		super();
+		this.score = score;
+		this.review = review;
+	}
 
 
 	@Override

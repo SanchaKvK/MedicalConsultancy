@@ -49,6 +49,18 @@ public class Doctor implements Serializable {
 
 
 
+	public Doctor(Integer id_doctor, String specialization, String name, String hospital, List<Rating> ratings) {
+		super();
+		this.id_doctor = id_doctor;
+		this.specialization = specialization;
+		this.name = name;
+		this.hospital = hospital;
+		this.ratings = ratings;
+	}
+
+
+
+
 	public Doctor(Integer id_doctor, String specialization, String name, String hospital) {
 		super();
 		this.id_doctor = id_doctor;

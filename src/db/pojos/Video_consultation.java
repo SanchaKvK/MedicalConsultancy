@@ -98,6 +98,25 @@ public class Video_consultation implements Serializable {
 
 
 
+	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, Integer duration,
+			String type, String notes, List<Prescription> prescription, Doctor doc, Patient pat) {
+		super();
+		this.id_video = id_video;
+		this.consultation_date = consultation_date;
+		this.consultatiton_time = consultatiton_time;
+		this.duration = duration;
+		this.type = type;
+		this.notes = notes;
+		this.prescription = prescription;
+		this.doc = doc;
+		this.pat = pat;
+	}
+
+
+
+
+
+
 	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
 			String type, String notes, List<Prescription> prescription, Doctor doc, Patient pat) {
 		super();
@@ -128,7 +147,7 @@ public class Video_consultation implements Serializable {
 	public String toString() {
 		return "Video_consultation [id_video=" + id_video + ", consultation_date=" + consultation_date
 				+ ", consultatiton_time=" + consultatiton_time + ", duration=" + duration + ", type=" + type
-				+ ", notes=" + notes + ", prescription=" + prescription + ", doc=" + doc + ", pat=" + pat + "]";
+				+ ", notes=" + notes + ", prescription=" + prescription + ", doctor=" + doc.getName() + ", patient=" + pat.getName() + "]";
 	}
 
 

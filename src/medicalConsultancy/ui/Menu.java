@@ -32,19 +32,14 @@ public class Menu {
 		System.out.println("Choose an option:");
 		System.out.println("1. Add a patient");
 		System.out.println("2. Add a doctor");
-		System.out.println("3. Add a pathology");
-		System.out.println("4. Add a video consultation");
-		System.out.println("5. Add a rating");
-		System.out.println("6. Add a prescription");
+		System.out.println("3. Prescribe");
+		System.out.println("4. Make an appointment");
+		System.out.println("5. Rate a doctor");
+		System.out.println("6. Diagnose");
 		System.out.println("7. Search a patient by name");
 		System.out.println("8. Search a doctor by name");
-		System.out.println("9. Search a pathology by name");
-		System.out.println("10. Get doctor by id");
-		System.out.println("11. Get patient by id");
-		System.out.println("12. Get pathology by id");
-		System.out.println("13. Get video by id");
-		System.out.println("14. Get rating by id");
-		System.out.println("15. Get prescription by id");
+		System.out.println("9. Get video by id");
+
 	
 
 		System.out.println("0. Exit");
@@ -56,20 +51,17 @@ public class Menu {
 		case 2:
 			addDoctor();
 			break;
-			
-		case 3: 
-			addPathology();
+		case 3:
+			prescribe();
 			break;
-			
 		case 4:
-			addVideo();
+			makeAppointment();
 			break;
-			
 		case 5:
 			rate();
 			break;
 		case 6:
-			prescribe();
+			diagnose();
 			break;
 		case 7:
 			searchPatient();
@@ -78,31 +70,11 @@ public class Menu {
 		case 8:
 			searchDoctor();
 			break;
-			
+						
 		case 9:
-			searchPathologies();
-			break;
-	
-		case 10:
-			getDoctor();
-			break;
-		case 11:
-			getPatient();
-			break;
-		case 12:
-			getPathology();
-			break;
-			
-		case 13:
 			getVideo();
 			break;
-			
-		case 14:
-			getRate();
-			break;
-		case 15:
-			getPrescription();
-			break;
+
 		case 0:
 			dbman.disconnect();
 			System.exit(0);
@@ -113,6 +85,9 @@ public class Menu {
 		} while (true);
 		
 	}
+	
+	
+	
 	
 	private static void prescribe() throws Exception{
 		System.out.println("Doses: ");
@@ -216,27 +191,6 @@ public class Menu {
 		
 	}
 	
-	
-
-	
-	private static void addVideo() throws Exception {
-		System.out.println("Date of the appointment(yyyy-MM-dd): ");
-		LocalDate date=LocalDate.parse(reader.readLine(),formatter);
-		System.out.println("Hour of the appointment");
-		LocalTime time=LocalTime.parse(reader.readLine(), formatterTime);
-		System.out.println("Type of appointment: ");
-		String type=reader.readLine();
-		searchDoctor();
-		System.out.println("Introduce doctor`s id: ");
-		Integer id_doctor=Integer.parseInt(reader.readLine());
-		System.out.println("Which is your id?");
-		Integer id_patient=Integer.parseInt(reader.readLine());
-		
-		
-		Video_consultation vd=new Video_consultation(Date.valueOf(date),Time.valueOf(time),type,dbman.getDoctor(id_doctor),dbman.getPatient(id_patient));
-		dbman.addVideo_consultation(vd);
-		
-	}
 		
 		private static void addPatient() throws Exception {
 			
@@ -338,9 +292,14 @@ public class Menu {
 			
 		}
 		
+		
+		
+
+		}
+		
 
 		
 	
 	
 
-}
+

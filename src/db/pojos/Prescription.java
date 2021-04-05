@@ -73,7 +73,21 @@ public Prescription(String name, Integer doses, Integer duration, String notes, 
 
 
 
-//Prescription does not print vd
+
+
+public Prescription(Integer id_prescription, String name, Integer doses, Integer duration, String notes) {
+	super();
+	this.id_prescription = id_prescription;
+	this.name = name;
+	this.doses = doses;
+	this.duration = duration;
+	this.notes = notes;
+}
+
+
+
+
+	//Prescription does not print vd
 	@Override
 	public String toString() {
 		return "Prescription [id_prescription=" + id_prescription + ", name=" + name + ", doses=" + doses

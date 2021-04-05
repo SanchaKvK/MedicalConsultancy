@@ -23,7 +23,7 @@ public class DBManager {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicatlConsultancy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicalConsultancy.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -92,10 +92,13 @@ public class DBManager {
 		} catch (SQLException e) {
 			if (!e.getMessage().contains("already exists")) {
 				e.printStackTrace();
-				
-			}
-		}
-
+				}
+			
+			
+		
+		}	
+		
+		
 	}
 	
 	
@@ -254,6 +257,7 @@ public class DBManager {
 
 				Doctor doctor = new Doctor(rs.getInt("id_doctor"), rs.getString("specialization"), rs.getString("name"),
 						rs.getString("hospital"));
+				doctor.setRatings(this.getRatingOfDoctors(doctor.getId_doctor()));
 				doctors.add(doctor);
 			}
 			rs.close();
@@ -262,6 +266,29 @@ public class DBManager {
 			e.printStackTrace();
 		}
 		return doctors;
+	}
+	
+	public List<Rating> getRatingOfDoctors(int id_doctor){
+		List<Rating>ratings=new ArrayList<Rating>();
+		try {
+		String sql="SELECT*FROM rating WHERE id_doctor=?";
+		PreparedStatement ps=c.prepareStatement(sql);
+		ps.setInt(1, id_doctor);
+		ResultSet rs=ps.executeQuery();
+		
+		while(rs.next()) {
+			
+			ratings.add(new Rating(rs.getInt("score"),rs.getString("review")));
+		}
+		
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		return ratings;
+		
 	}
 
 	
@@ -406,33 +433,6 @@ public class DBManager {
 	}
 	
 	
-	public Prescription getPrescription(int id_prescription) {
-		
-		try {
-			
-			String sql="SELECT*FROM prescription WHERE id_prescription=?";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1, id_prescription);
-			ResultSet rs=ps.executeQuery();
-			
-			if(rs.next()) {
-				
-				return new Prescription(rs.getInt("id_prescription"),rs.getString("name"),rs.getInt("doses"),
-						rs.getInt("duration"),rs.getString("notes"),this.getVideo(rs.getInt("id_video")));
-				
-			}
-			
-			rs.close();
-			ps.close();
-			}
-		
-		
-		
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
 	
 	public Rating getRating(int id_doctor, int id_patient) {
@@ -475,9 +475,10 @@ public class DBManager {
 			
 			if(rs.next()) {
 				
-				return new Video_consultation(rs.getInt("id_video"),rs.getDate("consultation_date"),rs.getTime("consultation_time"),rs.getInt("duration"),rs.getString("type_of_call"),
-						rs.getString("notes"));
-			
+				Video_consultation v= new Video_consultation(rs.getInt("id_video"),rs.getDate("consultation_date"),rs.getTime("consultation_time"),rs.getInt("duration"),rs.getString("type_of_call"),
+						rs.getString("notes"),this.getDoctor(rs.getInt("id_doctor")),this.getPatient(rs.getInt("id_patient")));
+			v.setPrescription(this.getPrescriptionOfVideos(v.getId_video()));
+			return v;
 			
 			}
 			
@@ -491,6 +492,56 @@ public class DBManager {
 		
 		
 		
+		return null;
+	}
+	
+	
+	public List<Prescription> getPrescriptionOfVideos(int id_video){
+		
+		List<Prescription> prescriptions=new ArrayList<Prescription>();
+		try {
+			String sql="SELECT*FROM prescription WHERE id_video=?";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1, id_video);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				
+				prescriptions.add(this.getPrescription(rs.getInt("id_prescription")));
+				
+			}
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return prescriptions;
+	}
+	
+public Prescription getPrescription(int id_prescription) {
+		
+		try {
+			
+			String sql="SELECT*FROM prescription WHERE id_prescription=?";
+			PreparedStatement ps=c.prepareStatement(sql);
+			ps.setInt(1, id_prescription);
+			ResultSet rs=ps.executeQuery();
+			
+			if(rs.next()) {
+				
+				return new Prescription(rs.getInt("id_prescription"),rs.getString("name"),rs.getInt("doses"),
+						rs.getInt("duration"),rs.getString("notes"));
+				
+			}
+			
+			rs.close();
+			ps.close();
+			}
+		
+		
+		
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
