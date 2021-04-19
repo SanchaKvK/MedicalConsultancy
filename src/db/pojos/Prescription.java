@@ -87,10 +87,10 @@ public Prescription(Integer id_prescription, String name, Integer doses, Integer
 
 
 
-	//Prescription does not print vd
+	//Prescription does not print vd,id_prescription
 	@Override
 	public String toString() {
-		return "Prescription [id_prescription=" + id_prescription + ", name=" + name + ", doses=" + doses
+		return "Prescription [ name=" + name + ", doses=" + doses
 				+ ", duration=" + duration + ", notes=" + notes + "]";
 	}
 

@@ -1,11 +1,14 @@
 package medicalConsultancy.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,6 @@ public class DBManager {
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
-			
 
 		} catch (SQLException sqlE) {
 			System.out.println("There was a database exception");
@@ -37,8 +39,6 @@ public class DBManager {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	private void createTables() {
 		Statement stmt1;
@@ -59,7 +59,6 @@ public class DBManager {
 					+ "type_of_call TEXT, " + "notes TEXT, "
 					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, "
 					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL)";
-			
 
 			stmt1.executeUpdate(sql1);
 
@@ -92,17 +91,11 @@ public class DBManager {
 		} catch (SQLException e) {
 			if (!e.getMessage().contains("already exists")) {
 				e.printStackTrace();
-				}
-			
-			
-		
-		}	
-		
-		
+			}
+
+		}
+
 	}
-	
-	
-	
 
 	public void disconnect() {
 		try {
@@ -115,15 +108,15 @@ public class DBManager {
 
 	public void addPatient(Patient p) {
 		try {
-			String sql="INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES(?,?,?,?,?,?)";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setString(1,p.getName());
+			String sql = "INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES(?,?,?,?,?,?)";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setString(1, p.getName());
 			ps.setString(2, p.getGender());
 			ps.setDate(3, p.getBirth());
 			ps.setString(4, p.getId());
 			ps.setString(5, p.getPhone_number());
 			ps.setString(6, p.getPostcode());
-			
+
 			ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {
@@ -144,13 +137,12 @@ public class DBManager {
 		}
 
 	}
-	
+
 	public void addPathology(Pathology p) {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO pathology (name, type) VALUES ('" + p.getName() + "', '"
-				 + p.getType() + "')";
+			String sql = "INSERT INTO pathology (name, type) VALUES ('" + p.getName() + "', '" + p.getType() + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -158,16 +150,13 @@ public class DBManager {
 		}
 
 	}
-	
-	
-
 
 	public void addRating(Rating r) {
 
 		try {
-			String sql="INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1,r.getDoc().getId_doctor());
+			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, r.getDoc().getId_doctor());
 			ps.setInt(2, r.getPat().getId_patient());
 			ps.setInt(3, r.getScore());
 			ps.setString(4, r.getReview());
@@ -177,15 +166,13 @@ public class DBManager {
 			e.printStackTrace();
 		}
 	}
-	
-
 
 	public void addVideo_consultation(Video_consultation v) {
 
 		try {
-			
-			String sql="INSERT INTO videoconsultation (consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
-			PreparedStatement ps=c.prepareStatement(sql);
+
+			String sql = "INSERT INTO videoconsultation (consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
+			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, v.getConsultation_date());
 			ps.setTime(2, v.getConsultatiton_time());
 			ps.setString(3, v.getType());
@@ -194,15 +181,11 @@ public class DBManager {
 			ps.executeUpdate();
 			ps.close();
 		}
-		
-		
-		catch(Exception e) {
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
 
 	public void addPrescription(Prescription p) {
 
@@ -218,34 +201,27 @@ public class DBManager {
 		}
 
 	}
-	
-	
-	
-	public void diagnosePathology(int patient_id,int pathology_id) {
+
+	public void diagnosePathology(int patient_id, int pathology_id) {
 		try {
-			
-		String sql="INSERT INTO patient_pathology(id_patient,id_pathology) VALUES(?,?)";
-		PreparedStatement ps=c.prepareStatement(sql);
-		ps.setInt(1, patient_id);
-		ps.setInt(2, pathology_id);
-		ps.executeUpdate();
-		ps.close();
-		
-		
-			}
-		
-		catch(Exception e) {
+
+			String sql = "INSERT INTO patient_pathology(id_patient,id_pathology) VALUES(?,?)";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, patient_id);
+			ps.setInt(2, pathology_id);
+			ps.executeUpdate();
+			ps.close();
+
+		}
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
-	
-
-
 	public List<Doctor> searchDoctorByName(String name) {
-		// TODO ratings?
+
 		List<Doctor> doctors = new ArrayList<>();
 
 		try {
@@ -257,7 +233,7 @@ public class DBManager {
 
 				Doctor doctor = new Doctor(rs.getInt("id_doctor"), rs.getString("specialization"), rs.getString("name"),
 						rs.getString("hospital"));
-				doctor.setRatings(this.getRatingOfDoctors(doctor.getId_doctor()));
+				doctor.setRatings(this.getRatingOfDoctor(doctor.getId_doctor()));
 				doctors.add(doctor);
 			}
 			rs.close();
@@ -267,32 +243,28 @@ public class DBManager {
 		}
 		return doctors;
 	}
-	
-	public List<Rating> getRatingOfDoctors(int id_doctor){
-		List<Rating>ratings=new ArrayList<Rating>();
-		try {
-		String sql="SELECT*FROM rating WHERE id_doctor=?";
-		PreparedStatement ps=c.prepareStatement(sql);
-		ps.setInt(1, id_doctor);
-		ResultSet rs=ps.executeQuery();
-		
-		while(rs.next()) {
-			
-			ratings.add(new Rating(rs.getInt("score"),rs.getString("review")));
-		}
-		
-		
-		}catch(Exception e) {
-			e.printStackTrace();
-			
-		}
-		
-		return ratings;
-		
-	}
 
-	
-	
+	public List<Rating> getRatingOfDoctor(int id_doctor) {
+		List<Rating> ratings = new ArrayList<Rating>();
+		try {
+			String sql = "SELECT*FROM rating WHERE id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_doctor);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				ratings.add(new Rating(rs.getInt("score"), rs.getString("review")));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return ratings;
+
+	}
 
 	public List<Patient> searchPatientByName(String name) {
 		List<Patient> patients = new ArrayList<Patient>();
@@ -317,53 +289,22 @@ public class DBManager {
 		}
 		return patients;
 	}
-	 
-	public List<Video_consultation> getVideosOfPatient(int id_patient) {
-		List<Video_consultation> videos=new ArrayList<Video_consultation>();
-		try {
-			
-			String sql="SELECT * FROM videoconsultation WHERE id_patient=?";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1,id_patient);
-			ResultSet rs=ps.executeQuery();
-			
-			while(rs.next()) {
-				
-				Video_consultation v=new Video_consultation(rs.getInt("id_video"),rs.getDate("consultation_date"),
-						rs.getTime("consultation_time"),rs.getInt("duration"),rs.getString("type_of_call"),
-						rs.getString("notes"),this.getDoctor(rs.getInt("id_doctor")),this.getPatient(rs.getInt("id_patient")));
-				videos.add(v);
-				
-			}
-			
-			
-		}
-		
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return videos;
-	}
-	
-	
-
-	
 
 	public List<Pathology> getPathologiesOfPatient(int id_patient) {
 
 		List<Pathology> pathologies = new ArrayList<Pathology>();
 
 		try {
-			String sql = "SELECT*FROM patient_pathology WHERE id_patient=?";
+			String sql = "SELECT p.id_pathology,p.name,p.type FROM patient_pathology AS pp JOIN pathology AS p ON pp.id_pathology=p.id_pathology WHERE pp.id_patient=?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_patient);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 
 				int id_pathology = rs.getInt("id_pathology");
-				pathologies.add(getPathology(id_pathology));
+				String name = rs.getString("name");
+				String type = rs.getString("type");
+				pathologies.add(new Pathology(id_pathology, name, type));
 			}
 
 		} catch (Exception e) {
@@ -372,203 +313,297 @@ public class DBManager {
 		return pathologies;
 	}
 
-	public Pathology getPathology(int id_pathology) {
-		try {	
-			
-			String sql="SELECT*FROM pathology WHERE id_pathology=?";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1,id_pathology );
-			
-			ResultSet rs=ps.executeQuery();
-			
-			if(rs.next()) {
-				
-				String name=rs.getString("name");
-				String type=rs.getString("type");
-				return new Pathology(id_pathology,name,type);
-				
+	public List<Pathology> searchPathologyByName(String name) {
+		List<Pathology> p = new ArrayList<Pathology>();
+		try {
+			String sql = "SELECT*FROM pathology WHERE name LIKE ?";
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setString(1, "%" + name + "%");
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				Pathology py = new Pathology(rs.getInt("id_pathology"), rs.getString("name"), rs.getString("type"));
+				p.add(py);
+
 			}
-				
-				rs.close();
-				ps.close();}
-				
-			
-			catch(Exception e) {
-				
-				e.printStackTrace();
+			rs.close();
+			stmt.close();
+
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return p;
+	}
+
+	// Patient method will return a Patient with
+	// id,name,gender,birth,id,phone,postcode and pathologies.
+
+	public Patient getPatient(int id_patient) {
+
+		try {
+
+			String sql = "SELECT*FROM patient WHERE id_patient=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_patient);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"),
+						rs.getDate("date_of_birth"), rs.getString("id"), rs.getString("phone_number"),
+						rs.getString("postcode"));
+				p.setPathologies(getPathologiesOfPatient(p.getId_patient()));
+				return p;
+
 			}
-			
-			
-	
-			return null;}
-	
-	//Doctor method will return a Doctor with id,specialization,name and hospital.
-	
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	// Doctor method will return a Doctor with id,specialization,name and hospital.
+
 	public Doctor getDoctor(int id_doctor) {
-		
+
 		try {
-			
-			String sql="SELECT*FROM doctor WHERE id_doctor=?";
-			PreparedStatement ps=c.prepareStatement(sql);
+
+			String sql = "SELECT*FROM doctor WHERE id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_doctor);
-			ResultSet rs=ps.executeQuery();
-			
-			if(rs.next()) {
-				
-				return new Doctor(id_doctor,rs.getString("specialization"),rs.getString("name"),rs.getString("hospital"));
-				
-				
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
+						rs.getString("hospital"));
+
 			}
-			
+
 			rs.close();
 			ps.close();
-			}
-		
-		
-		
-		catch(Exception e) {
+		}
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	
-	
-	
-	public Rating getRating(int id_doctor, int id_patient) {
-		
-		try {
-			
-			String sql="SELECT*FROM rating WHERE id_doctor=? AND id_patient=?";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1, id_doctor);
-			ps.setInt(2, id_patient);
-			ResultSet rs=ps.executeQuery();
-			
-			if(rs.next()) {
-				
-				return new Rating(this.getDoctor(rs.getInt("id_doctor")),this.getPatient(rs.getInt("id_patient")),rs.getInt("score"),rs.getString("review"));
-				
-				
-			}
-			
-			rs.close();
-			ps.close();
-			}
-		
-		
-		
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+
 	public Video_consultation getVideo(int id_video) {
-		
-		
+
 		try {
-			String sql="SELECT*FROM videoconsultation WHERE id_video=?";
-			PreparedStatement ps=c.prepareStatement(sql);
+			String sql = "SELECT*FROM videoconsultation WHERE id_video=?";
+			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_video);
-			ResultSet rs=ps.executeQuery();
-			
-			
-			if(rs.next()) {
-				
-				Video_consultation v= new Video_consultation(rs.getInt("id_video"),rs.getDate("consultation_date"),rs.getTime("consultation_time"),rs.getInt("duration"),rs.getString("type_of_call"),
-						rs.getString("notes"),this.getDoctor(rs.getInt("id_doctor")),this.getPatient(rs.getInt("id_patient")));
-			v.setPrescription(this.getPrescriptionOfVideos(v.getId_video()));
-			return v;
-			
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				Video_consultation v = new Video_consultation(rs.getInt("id_video"), rs.getDate("consultation_date"),
+						rs.getTime("consultation_time"), rs.getInt("duration"), rs.getString("type_of_call"),
+						rs.getString("notes"), this.getDoctor(rs.getInt("id_doctor")),
+						this.getPatient(rs.getInt("id_patient")));
+				v.setPrescription(this.getPrescriptionOfVideos(v.getId_video()));
+				return v;
+
 			}
-			
+
 			rs.close();
 			ps.close();
 		}
-		
-		catch(Exception e) {e.printStackTrace();}
-		
-		
-		
-		
-		
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
-	
-	
-	public List<Prescription> getPrescriptionOfVideos(int id_video){
-		
-		List<Prescription> prescriptions=new ArrayList<Prescription>();
+
+	public List<Prescription> getPrescriptionOfVideos(int id_video) {
+
+		List<Prescription> prescriptions = new ArrayList<Prescription>();
 		try {
-			String sql="SELECT*FROM prescription WHERE id_video=?";
-			PreparedStatement ps=c.prepareStatement(sql);
+			String sql = "SELECT*FROM prescription WHERE id_video=?";
+			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_video);
-			ResultSet rs=ps.executeQuery();
-			while(rs.next()) {
-				
-				prescriptions.add(this.getPrescription(rs.getInt("id_prescription")));
-				
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+
+				prescriptions.add(new Prescription(rs.getInt("id_prescription"), rs.getString("name"),
+						rs.getInt("doses"), rs.getInt("duration"), rs.getString("notes")));
+
 			}
-			
-		}
-		catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return prescriptions;
 	}
-	
-public Prescription getPrescription(int id_prescription) {
-		
+
+	public List<Video_consultation> getVideosOfPatient(int id_patient) {
+		List<Video_consultation> videos = new ArrayList<Video_consultation>();
 		try {
-			
-			String sql="SELECT*FROM prescription WHERE id_prescription=?";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1, id_prescription);
-			ResultSet rs=ps.executeQuery();
-			
-			if(rs.next()) {
-				
-				return new Prescription(rs.getInt("id_prescription"),rs.getString("name"),rs.getInt("doses"),
-						rs.getInt("duration"),rs.getString("notes"));
-				
+
+			String sql = "SELECT * FROM videoconsultation WHERE id_patient=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_patient);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				videos.add(this.getVideo(rs.getInt("id_video")));
+
 			}
-			
+
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return videos;
+	}
+
+	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
+		Date d = Date.valueOf(LocalDate.now());
+
+		List<Video_consultation> vd = new ArrayList<Video_consultation>();
+
+		try {
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>? AND id_patient=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setDate(1, d);
+			ps.setInt(2, id_patient);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				vd.add(this.getVideo(rs.getInt("id_video")));
+
+			}
+
 			rs.close();
 			ps.close();
-			}
-		
-		
-		
-		catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+
+		return vd;
+
 	}
-	
-	//Patient method will return a Patient with id,name,gender,birth,id,phone,postcode.
-	
-	public Patient getPatient(int id_patient) {
-		
+
+	public List<Video_consultation> getPatientPreviousVideos(int id_patient) {
+		Date d = Date.valueOf(LocalDate.now());
+
+		List<Video_consultation> vd = new ArrayList<Video_consultation>();
+
 		try {
-			
-			String sql="SELECT*FROM patient WHERE id_patient=?";
-			PreparedStatement ps=c.prepareStatement(sql);
-			ps.setInt(1, id_patient);
-			ResultSet rs=ps.executeQuery();
-			
-			if(rs.next()) {
-				
-				return new Patient(id_patient,rs.getString("name"),rs.getString("gender"),
-						rs.getDate("date_of_birth"),rs.getString("id"),rs.getString("phone_number"),rs.getString("postcode"));
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<? AND id_patient=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setDate(1, d);
+			ps.setInt(2, id_patient);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				vd.add(this.getVideo(rs.getInt("id_video")));
+
 			}
-			
-		}catch(Exception e) {
+
+			rs.close();
+			ps.close();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
-		
+
+		return vd;
+
 	}
-	
+
+	public List<Video_consultation> getVideosOfDoctor(int id_doctor) {
+		List<Video_consultation> videos = new ArrayList<Video_consultation>();
+		try {
+
+			String sql = "SELECT * FROM videoconsultation WHERE id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_doctor);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				videos.add(this.getVideo(rs.getInt("id_video")));
+
+			}
+
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return videos;
+	}
+
+	public List<Video_consultation> getDoctorFutureVideos(int id_doctor) {
+		Date d = Date.valueOf(LocalDate.now());
+
+		List<Video_consultation> vd = new ArrayList<Video_consultation>();
+
+		try {
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>? AND id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setDate(1, d);
+			ps.setInt(2, id_doctor);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				vd.add(this.getVideo(rs.getInt("id_video")));
+
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vd;
+
+	}
+
+	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor) {
+		Date d = Date.valueOf(LocalDate.now());
+
+		List<Video_consultation> vd = new ArrayList<Video_consultation>();
+
+		try {
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<? AND id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setDate(1, d);
+			ps.setInt(2, id_doctor);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				vd.add(this.getVideo(rs.getInt("id_video")));
+
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vd;
+
+	}
 
 	public void fireDoctor(int id) {
 		try {
@@ -594,7 +629,7 @@ public Prescription getPrescription(int id_prescription) {
 		}
 	}
 
-	public void deleteVideo(int id) {
+	public void deleteAppointment(int id) {
 		try {
 			String sql = "DELETE FROM videoconsultation WHERE id_video = ?";
 			PreparedStatement prep = c.prepareStatement(sql);
@@ -605,41 +640,35 @@ public Prescription getPrescription(int id_prescription) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
 
-
-	
-
-	
-	
-
-	
-	
-	public List<Pathology> searchPathologyByName(String name) {
-		List<Pathology> p=new ArrayList<Pathology>();
+	public void changeAppointmentDate(Date d, int id) {
 		try {
-			String sql="SELECT*FROM pathology WHERE name LIKE ?";
-			PreparedStatement stmt = c.prepareStatement(sql);
-			stmt.setString(1, "%" + name + "%");
-			ResultSet rs=stmt.executeQuery();
-			
-			while(rs.next()) {
-				
-				Pathology py=new Pathology(rs.getInt("id_pathology"),rs.getString("name"),rs.getString("type"));
-				p.add(py);
-				
-			}	
-			rs.close();
-			stmt.close();
-			
-		}
-		
-		catch(Exception e) {
+			String sql = "UPDATE videoconsultation SET consultation_date=? WHERE id_video=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setDate(1, d);
+			prep.setInt(2, id);
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return p;
+
 	}
+
+	public void changeAppointmentTime(Time t, int id) {
+		try {
+			String sql = "UPDATE videoconsultation SET consultation_time=? WHERE id_video=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setTime(1, t);
+			prep.setInt(2, id);
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }
