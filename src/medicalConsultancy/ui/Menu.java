@@ -269,11 +269,7 @@ public class Menu {
 		int id_video = Integer.parseInt(reader.readLine());
 		System.out.println("Hour of the appointment");
 		LocalTime time = LocalTime.parse(reader.readLine(), formatterTime);
-		if (time.isBefore(LocalTime.now())) {
-			System.out.println("Invalid time");
-			return;
-		} else
-			dbman.changeAppointmentTime(Time.valueOf(time), id_video);
+		dbman.changeAppointmentTime(Time.valueOf(time), id_video);
 
 	}
 
@@ -301,11 +297,8 @@ public class Menu {
 		int id_video = Integer.parseInt(reader.readLine());
 		System.out.println("Hour of the appointment");
 		LocalTime time = LocalTime.parse(reader.readLine(), formatterTime);
-		if (time.isBefore(LocalTime.now())) {
-			System.out.println("Invalid time");
-			return;
-		} else
-			dbman.changeAppointmentTime(Time.valueOf(time), id_video);
+
+		dbman.changeAppointmentTime(Time.valueOf(time), id_video);
 
 	}
 
