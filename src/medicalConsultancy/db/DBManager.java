@@ -9,7 +9,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import db.pojos.Doctor;
@@ -22,6 +25,7 @@ import db.pojos.Video_consultation;
 public class DBManager {
 
 	private Connection c;
+	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
 
 	public void connect() {
 		try {
@@ -636,7 +640,7 @@ public class DBManager {
 			prep.setInt(1, id);
 			prep.executeUpdate();
 			prep.close();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -669,6 +673,30 @@ public class DBManager {
 			e.printStackTrace();
 		}
 
+	}
+
+	public List<Time> availableHours(int id_doctor, Date consultation_date) {
+		List<Time> hours = new ArrayList<Time>();
+		LocalTime time = LocalTime.parse("09:00", formatterTime);
+
+		for (int i = 0; i < 11; i++) {
+			hours.add(Time.valueOf(time.plusHours(i)));
+		}
+		try {
+			String sql = "SELECT consultation_time FROM videoconsultation WHERE id_doctor=? AND consultation_date=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_doctor);
+			ps.setDate(2, consultation_date);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				hours.remove(rs.getTime("consultation_time"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return hours;
 	}
 
 }

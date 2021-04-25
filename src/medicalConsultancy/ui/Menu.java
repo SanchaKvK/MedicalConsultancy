@@ -72,6 +72,8 @@ public class Menu {
 			System.out.println("6. View all appointments");
 			System.out.println("7. Rate a doctor");
 			System.out.println("8. Search doctor");
+			System.out.println("9. Cancel appointment");
+			System.out.println("10. Emergency");
 
 			System.out.println("0. Exit");
 			int choice = Integer.parseInt(reader.readLine());
@@ -83,7 +85,7 @@ public class Menu {
 				makeAppointment();
 				break;
 			case 3:
-				videosMenuPatient();
+				updateVideoPatient();
 				break;
 			case 4:
 				getFuturePatientVideos();
@@ -103,7 +105,9 @@ public class Menu {
 			case 8:
 				searchDoctor();
 				break;
-
+			case 9:
+				deleteVideoPatient();
+				break;
 			case 0:
 				dbman.disconnect();
 				System.exit(0);
@@ -125,9 +129,8 @@ public class Menu {
 			System.out.println("4. View future appointments");
 			System.out.println("5. View previous appointments");
 			System.out.println("6. View all appointments");
-			System.out.println("7. Diagnose");
-			System.out.println("8. View my ratings");
-
+			System.out.println("7. View my ratings");
+			System.out.println("8. Cancel Appointment");
 			System.out.println("0. Exit");
 			int choice = Integer.parseInt(reader.readLine());
 			switch (choice) {
@@ -138,7 +141,7 @@ public class Menu {
 				doctorGetPatient();
 				break;
 			case 3:
-				videosMenuDoctor();
+				updateVideoDoctor();
 				break;
 			case 4:
 				getFutureDoctorVideos();
@@ -152,77 +155,11 @@ public class Menu {
 				break;
 
 			case 7:
-				diagnose();
-				break;
-
-			case 8:
 				getDoctorRatings();
 				break;
 
-			case 0:
-				dbman.disconnect();
-				System.exit(0);
-				break;
-			default:
-				break;
-			}
-
-		}
-	}
-
-	private static void videosMenuDoctor() throws Exception {
-		while (true) {
-			System.out.println("Choose an option: ");
-			System.out.println("1. Delete video consultation");
-			System.out.println("2. Change date of video-consultation");
-			System.out.println("3. Change time of video-consultation");
-			System.out.println("4. Back");
-			System.out.println("0. Exit");
-			int choice = Integer.parseInt(reader.readLine());
-			if (choice == 4)
-				break;
-			switch (choice) {
-			case 1:
+			case 8:
 				deleteVideoDoctor();
-				break;
-			case 2:
-				updateVideoDoctorDate();
-				break;
-			case 3:
-				updateVideoDoctorTime();
-				break;
-
-			case 0:
-				dbman.disconnect();
-				System.exit(0);
-				break;
-			default:
-				break;
-			}
-
-		}
-	}
-
-	private static void videosMenuPatient() throws Exception {
-		while (true) {
-			System.out.println("Choose an option: ");
-			System.out.println("1. Delete video consultation");
-			System.out.println("2. Change date of video-consultation");
-			System.out.println("3. Change time of video-consultation");
-			System.out.println("4. Back");
-			System.out.println("0. Exit");
-			int choice = Integer.parseInt(reader.readLine());
-			if (choice == 4)
-				break;
-			switch (choice) {
-			case 1:
-				deleteVideoPatient();
-				break;
-			case 2:
-				updateVideoPatientDate();
-				break;
-			case 3:
-				updateVideoPatientTime();
 				break;
 
 			case 0:
@@ -245,60 +182,68 @@ public class Menu {
 
 	}
 
-	private static void updateVideoDoctorDate() throws Exception {
+	private static void updateVideoDoctor() throws Exception {
 
 		System.out.println("Introduce your id: ");
-		System.out.println(dbman.getDoctorFutureVideos(Integer.parseInt(reader.readLine())));
+		int id_doctor = Integer.parseInt(reader.readLine());
+		System.out.println(dbman.getDoctorFutureVideos(id_doctor));
+
 		System.out.println("Choose id video: ");
 		int id_video = Integer.parseInt(reader.readLine());
+
 		System.out.println("New Date(yyyy-MM-dd): ");
 		LocalDate date = LocalDate.parse(reader.readLine(), formatter);
 		if (date.isBefore(LocalDate.now())) {
 			System.out.println("Invalid date");
 			return;
-		} else
-			dbman.changeAppointmentDate(Date.valueOf(date), id_video);
+		}
+
+		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+		System.out.println("Available hours: ");
+
+		for (int i = 0; i < hours.size(); i++) {
+			System.out.println(i + 1 + ". " + hours.get(i));
+		}
+		System.out.println("0. Back to menu");
+		int index = Integer.parseInt(reader.readLine());
+		if (index == 0)
+			return;
+		dbman.changeAppointmentDate(Date.valueOf(date), id_video);
+		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
 
 	}
 
-	private static void updateVideoDoctorTime() throws Exception {
-
-		System.out.println("Introduce your id: ");
-		System.out.println(dbman.getDoctorFutureVideos(Integer.parseInt(reader.readLine())));
-		System.out.println("Choose id video: ");
-		int id_video = Integer.parseInt(reader.readLine());
-		System.out.println("Hour of the appointment");
-		LocalTime time = LocalTime.parse(reader.readLine(), formatterTime);
-		dbman.changeAppointmentTime(Time.valueOf(time), id_video);
-
-	}
-
-	private static void updateVideoPatientDate() throws Exception {
+	private static void updateVideoPatient() throws Exception {
 
 		System.out.println("Introduce your id: ");
 		System.out.println(dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine())));
+
 		System.out.println("Choose id video: ");
 		int id_video = Integer.parseInt(reader.readLine());
+
 		System.out.println("New Date(yyyy-MM-dd): ");
 		LocalDate date = LocalDate.parse(reader.readLine(), formatter);
 		if (date.isBefore(LocalDate.now())) {
 			System.out.println("Invalid date");
 			return;
-		} else
-			dbman.changeAppointmentDate(Date.valueOf(date), id_video);
+		}
 
-	}
+		int id_doctor = dbman.getVideo(id_video).getDoc().getId_doctor();
 
-	private static void updateVideoPatientTime() throws Exception {
+		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+		System.out.println("Available hours: ");
 
-		System.out.println("Introduce your id: ");
-		System.out.println(dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine())));
-		System.out.println("Choose id video: ");
-		int id_video = Integer.parseInt(reader.readLine());
-		System.out.println("Hour of the appointment");
-		LocalTime time = LocalTime.parse(reader.readLine(), formatterTime);
+		for (int i = 0; i < hours.size(); i++) {
+			System.out.println(i + 1 + ". " + hours.get(i));
+		}
+		System.out.println("0. Back to menu");
+		int index = Integer.parseInt(reader.readLine());
+		if (index == 0) {
+			return;
+		}
 
-		dbman.changeAppointmentTime(Time.valueOf(time), id_video);
+		dbman.changeAppointmentDate(Date.valueOf(date), id_video);
+		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
 
 	}
 
@@ -323,28 +268,39 @@ public class Menu {
 		System.out.println("Patient id");
 		int id = Integer.parseInt(reader.readLine());
 		System.out.println(dbman.getPatient(id));
-		System.out.println(dbman.getPathologiesOfPatient(id));
 
 	}
 
 	private static void getFuturePatientVideos() throws Exception {
 
 		System.out.println("Id patient: ");
-		System.out.println(dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine())));
+		List<Video_consultation> l = dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine()));
+		for (Video_consultation video : l) {
+			System.out.println(video);
+
+		}
 
 	}
 
 	private static void getPreviousPatientVideos() throws Exception {
 
 		System.out.println("Id patient: ");
-		System.out.println(dbman.getPatientPreviousVideos(Integer.parseInt(reader.readLine())));
+		List<Video_consultation> l = dbman.getPatientPreviousVideos(Integer.parseInt(reader.readLine()));
+		for (Video_consultation video : l) {
+			System.out.println(video);
+
+		}
 
 	}
 
 	private static void getAllPatientVideos() throws Exception {
 
 		System.out.println("Id patient: ");
-		System.out.println(dbman.getVideosOfPatient(Integer.parseInt(reader.readLine())));
+		List<Video_consultation> l = dbman.getVideosOfPatient(Integer.parseInt(reader.readLine()));
+		for (Video_consultation video : l) {
+			System.out.println(video);
+
+		}
 
 	}
 
@@ -394,7 +350,7 @@ public class Menu {
 
 		System.out.println("Review: ");
 		String review = reader.readLine();
-		System.out.println("Score(0-5): ");
+		System.out.println("Score(1-5): ");
 		Integer score = Integer.parseInt(reader.readLine());
 
 		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
@@ -491,19 +447,28 @@ public class Menu {
 
 	private static void makeAppointment() throws Exception {
 
-		System.out.println("Date of the appointment(yyyy-MM-dd): ");
-		LocalDate date = LocalDate.parse(reader.readLine(), formatter);
-		System.out.println("Hour of the appointment");
-		LocalTime time = LocalTime.parse(reader.readLine(), formatterTime);
-		System.out.println("Type of appointment: ");
-		String type = reader.readLine();
 		searchDoctor();
 		System.out.println("Introduce doctor`s id: ");
 		Integer id_doctor = Integer.parseInt(reader.readLine());
+		System.out.println("Date of the appointment(yyyy-MM-dd): ");
+		LocalDate date = LocalDate.parse(reader.readLine(), formatter);
+		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+		System.out.println("Available hours: ");
+
+		for (int i = 0; i < hours.size(); i++) {
+			System.out.println(i + 1 + ". " + hours.get(i));
+		}
+		System.out.println("0. Back to menu");
+		int index = Integer.parseInt(reader.readLine());
+		if (index == 0)
+			return;
+
+		System.out.println("Type of appointment: ");
+		String type = reader.readLine();
 		System.out.println("Which is your id?");
 		Integer id_patient = Integer.parseInt(reader.readLine());
 
-		Video_consultation vd = new Video_consultation(Date.valueOf(date), Time.valueOf(time), type,
+		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
 				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
 		dbman.addVideo_consultation(vd);
 
