@@ -15,11 +15,13 @@ import db.pojos.Patient;
 import db.pojos.Prescription;
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
+import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
 
 public class Menu {
 
-	private static DBManager dbman = new DBManager();
+	
+	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
