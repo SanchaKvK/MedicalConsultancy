@@ -21,12 +21,15 @@ import db.pojos.Patient;
 import db.pojos.Prescription;
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
+import mconsultancy.db.ifaces.DBinterface;
 
-public class DBManager {
+public class DBManager implements DBinterface {
 
 	private Connection c;
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-
+	
+	
+	@Override
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -101,6 +104,7 @@ public class DBManager {
 
 	}
 
+	@Override
 	public void disconnect() {
 		try {
 			c.close();
@@ -110,6 +114,8 @@ public class DBManager {
 		}
 	}
 
+	
+	@Override
 	public void addPatient(Patient p) {
 		try {
 			String sql = "INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES(?,?,?,?,?,?)";
@@ -128,6 +134,9 @@ public class DBManager {
 		}
 	}
 
+	
+	
+	@Override
 	public void addDoctor(Doctor d) {
 
 		try {
@@ -141,7 +150,9 @@ public class DBManager {
 		}
 
 	}
-
+	
+	
+	@Override
 	public void addPathology(Pathology p) {
 
 		try {
@@ -155,6 +166,7 @@ public class DBManager {
 
 	}
 
+	@Override
 	public void addRating(Rating r) {
 
 		try {
@@ -171,6 +183,8 @@ public class DBManager {
 		}
 	}
 
+	
+	@Override
 	public void addVideo_consultation(Video_consultation v) {
 
 		try {
@@ -191,6 +205,7 @@ public class DBManager {
 		}
 	}
 
+	@Override
 	public void addPrescription(Prescription p) {
 
 		try {
@@ -206,6 +221,8 @@ public class DBManager {
 
 	}
 
+	
+	@Override
 	public void diagnosePathology(int patient_id, int pathology_id) {
 		try {
 
@@ -224,6 +241,9 @@ public class DBManager {
 
 	}
 
+	
+	
+	@Override
 	public List<Doctor> searchDoctorByName(String name) {
 
 		List<Doctor> doctors = new ArrayList<>();
@@ -248,6 +268,8 @@ public class DBManager {
 		return doctors;
 	}
 
+	
+	@Override
 	public List<Rating> getRatingOfDoctor(int id_doctor) {
 		List<Rating> ratings = new ArrayList<Rating>();
 		try {
@@ -270,6 +292,7 @@ public class DBManager {
 
 	}
 
+	@Override
 	public List<Patient> searchPatientByName(String name) {
 		List<Patient> patients = new ArrayList<Patient>();
 
@@ -294,6 +317,8 @@ public class DBManager {
 		return patients;
 	}
 
+	
+	@Override
 	public List<Pathology> getPathologiesOfPatient(int id_patient) {
 
 		List<Pathology> pathologies = new ArrayList<Pathology>();
@@ -317,6 +342,7 @@ public class DBManager {
 		return pathologies;
 	}
 
+	@Override
 	public List<Pathology> searchPathologyByName(String name) {
 		List<Pathology> p = new ArrayList<Pathology>();
 		try {
@@ -346,6 +372,8 @@ public class DBManager {
 	// Patient method will return a Patient with
 	// id,name,gender,birth,id,phone,postcode and pathologies.
 
+	
+	@Override
 	public Patient getPatient(int id_patient) {
 
 		try {
@@ -374,6 +402,8 @@ public class DBManager {
 
 	// Doctor method will return a Doctor with id,specialization,name and hospital.
 
+	
+	@Override
 	public Doctor getDoctor(int id_doctor) {
 
 		try {
@@ -400,6 +430,8 @@ public class DBManager {
 		return null;
 	}
 
+	
+	@Override
 	public Video_consultation getVideo(int id_video) {
 
 		try {
@@ -430,6 +462,7 @@ public class DBManager {
 		return null;
 	}
 
+	@Override
 	public List<Prescription> getPrescriptionOfVideos(int id_video) {
 
 		List<Prescription> prescriptions = new ArrayList<Prescription>();
@@ -451,6 +484,8 @@ public class DBManager {
 		return prescriptions;
 	}
 
+	
+	@Override
 	public List<Video_consultation> getVideosOfPatient(int id_patient) {
 		List<Video_consultation> videos = new ArrayList<Video_consultation>();
 		try {
@@ -474,6 +509,9 @@ public class DBManager {
 		return videos;
 	}
 
+	
+	
+	@Override
 	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
 		Date d = Date.valueOf(LocalDate.now());
 
@@ -502,6 +540,9 @@ public class DBManager {
 
 	}
 
+	
+	
+	@Override
 	public List<Video_consultation> getPatientPreviousVideos(int id_patient) {
 		Date d = Date.valueOf(LocalDate.now());
 
@@ -530,6 +571,9 @@ public class DBManager {
 
 	}
 
+	
+	
+	@Override
 	public List<Video_consultation> getVideosOfDoctor(int id_doctor) {
 		List<Video_consultation> videos = new ArrayList<Video_consultation>();
 		try {
@@ -553,6 +597,9 @@ public class DBManager {
 		return videos;
 	}
 
+	
+	
+	@Override
 	public List<Video_consultation> getDoctorFutureVideos(int id_doctor) {
 		Date d = Date.valueOf(LocalDate.now());
 
@@ -581,6 +628,9 @@ public class DBManager {
 
 	}
 
+	
+	
+	@Override
 	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor) {
 		Date d = Date.valueOf(LocalDate.now());
 
@@ -609,6 +659,9 @@ public class DBManager {
 
 	}
 
+	
+	
+	@Override
 	public void fireDoctor(int id) {
 		try {
 			String sql = "DELETE FROM doctor WHERE id_doctor = ?";
@@ -621,6 +674,8 @@ public class DBManager {
 		}
 	}
 
+	
+	@Override
 	public void deletePatient(int id) {
 		try {
 			String sql = "DELETE FROM patient WHERE id_patient = ?";
@@ -633,6 +688,8 @@ public class DBManager {
 		}
 	}
 
+	
+	@Override
 	public void deleteAppointment(int id) {
 		try {
 			String sql = "DELETE FROM videoconsultation WHERE id_video = ?";
@@ -645,6 +702,10 @@ public class DBManager {
 		}
 	}
 
+	
+	
+	
+	@Override
 	public void changeAppointmentDate(Date d, int id) {
 		try {
 			String sql = "UPDATE videoconsultation SET consultation_date=? WHERE id_video=?";
@@ -660,6 +721,9 @@ public class DBManager {
 
 	}
 
+	
+	
+	@Override
 	public void changeAppointmentTime(Time t, int id) {
 		try {
 			String sql = "UPDATE videoconsultation SET consultation_time=? WHERE id_video=?";
@@ -674,40 +738,10 @@ public class DBManager {
 		}
 
 	}
+
 	
-	public void changeVideoconsultationNotes(String notes, int id) {
-		
-		try {
-			String sql = "UPDATE videoconsultation SET notes=? WHERE id_video=?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setString(1, notes);
-			prep.setInt(2, id);
-			prep.executeUpdate();
-			prep.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
-		
-		
-	}
-
-	public void changeVideoconsultationDuration(int duration, int id) {
-		
-		try {
-			String sql = "UPDATE videoconsultation SET duration=? WHERE id_video=?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, duration);
-			prep.setInt(2, id);
-			prep.executeUpdate();
-			prep.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}	
 	
+	@Override
 	public List<Time> availableHours(int id_doctor, Date consultation_date) {
 		List<Time> hours = new ArrayList<Time>();
 		LocalTime time = LocalTime.parse("09:00", formatterTime);
