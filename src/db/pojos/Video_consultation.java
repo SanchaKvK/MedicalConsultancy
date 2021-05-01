@@ -6,6 +6,9 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.*;
+@Entity
+@Table(name="videoconsultation")
 public class Video_consultation implements Serializable {
 
 	
@@ -13,14 +16,22 @@ public class Video_consultation implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1367040608239901293L;
+	@Id
+	@GeneratedValue(generator = "videoconsultation")
+	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
 	private Integer id_video;
 	private Date consultation_date;
 	private Time consultatiton_time;
 	private Integer duration;
 	private String type;
 	private String notes;
+	@OneToMany(mappedBy="vd")
 	private List<Prescription>prescription;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="id_doctor")
 	private Doctor doc;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="id_patient")
 	private Patient pat;
 	
 	public Video_consultation() {

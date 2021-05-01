@@ -1,7 +1,9 @@
 package medicalConsultancy.ui;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.MessageDigest;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -9,45 +11,43 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import db.iface.UserInterface;
 import db.pojos.Doctor;
 import db.pojos.Pathology;
 import db.pojos.Patient;
 import db.pojos.Prescription;
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
+import db.pojos.users.Role;
+import db.pojos.users.User;
 import medicalConsultancy.db.DBManager;
+import medicalConsultancy.db.UserManager;
 
 public class Menu {
 
+	private static UserInterface user = new UserManager();
 	private static DBManager dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-
+	
+	
 	public static void main(String[] args) throws Exception {
 		dbman.connect();
+		user.connect();
 		do {
 			System.out.println("Choose an option:");
-			System.out.println("1. Are you a patient");
-			System.out.println("2. Are you a doctor");
-			System.out.println("3. Add patient");
-			System.out.println("4. Add doctor");
+			System.out.println("1. Register");
+			System.out.println("2. Login");
 
 			System.out.println("0. Exit");
 			int choice = Integer.parseInt(reader.readLine());
 			switch (choice) {
 			case 1:
-				patientMenu();
+				register();
 				break;
 			case 2:
-				doctorMenu();
-				break;
-
-			case 3:
-				addPatient();
-				break;
-			case 4:
-				addDoctor();
+				login();
 				break;
 			case 0:
 				dbman.disconnect();
@@ -58,6 +58,48 @@ public class Menu {
 			}
 		} while (true);
 
+	}
+
+	public static void register() throws Exception {
+
+		System.out.println("Introduce your email: ");
+		String email = reader.readLine();
+		System.out.println("Introduce the id of your role: ");
+		System.out.println(user.getAllRoles());
+		Integer role_id = Integer.parseInt(reader.readLine());
+		Role role = user.getRole(role_id);
+		if (role.getName().equalsIgnoreCase("patient")) {
+			addPatient();
+		}
+		else if (role.getName().equalsIgnoreCase("doctor")) {
+			addDoctor();
+		}
+		System.out.println("Introduce password:");
+		String password = reader.readLine();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] hash = md.digest();
+		user.addUser(new User(email, hash, role));
+
+	}
+
+	public static void login() throws Exception {
+
+		System.out.println("Introduce email: ");
+		String email = reader.readLine();
+		System.out.println("Introduce password");
+		String password = reader.readLine();
+		User us = user.checkPassword(email, password);
+		if (us == null) {
+			System.out.println("Wrong password or email");
+			return;
+		}
+
+		else if (us.getRole().getName().equalsIgnoreCase("doctor")) {
+			doctorMenu();
+		} else if (us.getRole().getName().equalsIgnoreCase("patient")) {
+			patientMenu();
+		}
 	}
 
 	private static void patientMenu() throws Exception {
