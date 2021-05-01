@@ -20,13 +20,14 @@ import db.pojos.Rating;
 import db.pojos.Video_consultation;
 import db.pojos.users.Role;
 import db.pojos.users.User;
+import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
 import medicalConsultancy.db.UserManager;
 
 public class Menu {
 
-	private static UserInterface user = new UserManager();
-	private static DBManager dbman = new DBManager();
+	
+	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
@@ -173,6 +174,7 @@ public class Menu {
 			System.out.println("6. View all appointments");
 			System.out.println("7. View my ratings");
 			System.out.println("8. Cancel Appointment");
+			System.out.println("9. Add videoconsultation information");
 			System.out.println("0. Exit");
 			int choice = Integer.parseInt(reader.readLine());
 			switch (choice) {
@@ -203,11 +205,16 @@ public class Menu {
 			case 8:
 				deleteVideoDoctor();
 				break;
-
+				
+			case 9:
+				addInfoVideoconsultation();
+				break;
+				
 			case 0:
 				dbman.disconnect();
 				System.exit(0);
 				break;
+				
 			default:
 				break;
 			}
@@ -367,21 +374,7 @@ public class Menu {
 
 	}
 
-	private static void prescribe() throws Exception {
-		System.out.println("Doses: ");
-		Integer doses = Integer.parseInt(reader.readLine());
-		System.out.println("Duration: ");
-		Integer duration = Integer.parseInt(reader.readLine());
-		System.out.println("Name: ");
-		String name = reader.readLine();
-		System.out.println("Notes: ");
-		String notes = reader.readLine();
-		System.out.println("Introduce id video: ");
-		Integer id_video = Integer.parseInt(reader.readLine());
-		Prescription p = new Prescription(name, doses, duration, notes, dbman.getVideo(id_video));
-		dbman.addPrescription(p);
 
-	}
 
 	private static void rate() throws Exception {
 		System.out.println("Introduce your id:");
@@ -513,6 +506,38 @@ public class Menu {
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
 				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
 		dbman.addVideo_consultation(vd);
+
+	}
+	
+	private static void addInfoVideoconsultation() throws Exception{
+		
+		System.out.println("Videoconsultation information: ");
+		System.out.println("Introduce the id of the videoconsultation: ");
+		Integer id_video = Integer.parseInt(reader.readLine());
+		System.out.println("Introduce the duration: ");
+		Integer duration = Integer.parseInt(reader.readLine());
+		dbman.changeVideoconsultationDuration(duration, id_video);
+		System.out.println("Introduce the doctor's notes: ");
+		String notes = reader.readLine();
+		dbman.changeVideoconsultationNotes(notes, id_video);
+		System.out.println("Introduce the prescription: ");
+		prescribe(id_video);	
+		
+	}
+	
+	private static void prescribe(int id_video) throws Exception {
+		System.out.println("Doses: ");
+		Integer doses = Integer.parseInt(reader.readLine());
+		System.out.println("Duration: ");
+		Integer duration = Integer.parseInt(reader.readLine());
+		System.out.println("Name: ");
+		String name = reader.readLine();
+		System.out.println("Notes: ");
+		String notes = reader.readLine();
+		System.out.println("Introduce id video: ");
+	
+		Prescription p = new Prescription(name, doses, duration, notes, dbman.getVideo(id_video));
+		dbman.addPrescription(p);
 
 	}
 
