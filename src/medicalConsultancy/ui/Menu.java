@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import db.iface.UserInterface;
+import mconsultancy.db.ifaces.UserInterface;
 import db.pojos.Doctor;
 import db.pojos.Pathology;
 import db.pojos.Patient;
@@ -26,7 +26,7 @@ import medicalConsultancy.db.UserManager;
 
 public class Menu {
 
-	
+	private static UserInterface usman=new UserManager();
 	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -35,7 +35,7 @@ public class Menu {
 	
 	public static void main(String[] args) throws Exception {
 		dbman.connect();
-		user.connect();
+		usman.connect();
 		do {
 			System.out.println("Choose an option:");
 			System.out.println("1. Register");
@@ -66,9 +66,9 @@ public class Menu {
 		System.out.println("Introduce your email: ");
 		String email = reader.readLine();
 		System.out.println("Introduce the id of your role: ");
-		System.out.println(user.getAllRoles());
+		System.out.println(usman.getAllRoles());
 		Integer role_id = Integer.parseInt(reader.readLine());
-		Role role = user.getRole(role_id);
+		Role role = usman.getRole(role_id);
 		if (role.getName().equalsIgnoreCase("patient")) {
 			addPatient();
 		}
@@ -80,7 +80,7 @@ public class Menu {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(password.getBytes());
 		byte[] hash = md.digest();
-		user.addUser(new User(email, hash, role));
+		usman.addUser(new User(email, hash, role));
 
 	}
 
@@ -90,7 +90,7 @@ public class Menu {
 		String email = reader.readLine();
 		System.out.println("Introduce password");
 		String password = reader.readLine();
-		User us = user.checkPassword(email, password);
+		User us = usman.checkPassword(email, password);
 		if (us == null) {
 			System.out.println("Wrong password or email");
 			return;

@@ -766,6 +766,39 @@ public class DBManager implements DBinterface {
 		return hours;
 	}
 	
+	public void changeVideoconsultationNotes(String notes, int id) {
+
+		try {
+			String sql = "UPDATE videoconsultation SET notes=? WHERE id_video=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, notes);
+			prep.setInt(2, id);
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+
+
+	}
+
+	public void changeVideoconsultationDuration(int duration, int id) {
+
+		try {
+			String sql = "UPDATE videoconsultation SET duration=? WHERE id_video=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, duration);
+			prep.setInt(2, id);
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	
 	
 

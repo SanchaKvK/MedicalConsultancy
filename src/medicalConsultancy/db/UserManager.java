@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import db.iface.UserInterface;
+import mconsultancy.db.ifaces.UserInterface;
 import db.pojos.users.Role;
 import db.pojos.users.User;
 

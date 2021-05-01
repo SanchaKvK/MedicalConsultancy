@@ -101,5 +101,11 @@ public interface DBinterface {
 	
 	//Lists the availability of a specific doctor on a given date
 	public List<Time> availableHours(int id_doctor, Date consultation_date);
+	
+	//updates the notes in a specific video consultation
+	public void changeVideoconsultationNotes(String notes, int id);
+	
+	//updates the duration in a specific videoconsultation
+	public void changeVideoconsultationDuration(int duration, int id);
 
 }
