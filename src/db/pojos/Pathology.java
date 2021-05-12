@@ -1,8 +1,14 @@
 package db.pojos;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="pathology")
 
 public class Pathology implements Serializable{
 
@@ -11,9 +17,14 @@ public class Pathology implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 7155856944921964272L;
+	@Id
+	@GeneratedValue(generator="pathology")
+	@TableGenerator(name="pathology", table="sqlite_sequence",
+	    pkColumnName="name", valueColumnName="seq", pkColumnValue="pathology")
 	private Integer id_pathology;
 	private String name;
 	private String type;
+	@ManyToMany(mappedBy="pathologies")
 	private List<Patient>patients;
 	public Pathology() {
 		super();

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import mconsultancy.db.ifaces.UserInterface;
-import db.pojos.users.Role;
+
 import db.pojos.users.User;
 
 public class UserManager implements UserInterface {
@@ -20,12 +20,7 @@ public class UserManager implements UserInterface {
 		em.getTransaction().begin();
 		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
 		em.getTransaction().commit();
-		List<Role> existingRoles = this.getAllRoles();
-		if (existingRoles.size() < 2) {
-
-			this.addRole(new Role("patient"));
-			this.addRole(new Role("doctor"));
-		}
+		
 
 	}
 
@@ -35,13 +30,7 @@ public class UserManager implements UserInterface {
 
 	}
 
-	@Override
-	public void addRole(Role role) {
-		em.getTransaction().begin();
-		em.persist(role);
-		em.getTransaction().commit();
-
-	}
+	
 
 	@Override
 	public void addUser(User user) {
@@ -51,12 +40,7 @@ public class UserManager implements UserInterface {
 
 	}
 
-	@Override
-	public Role getRole(int id) {
-		Query q = em.createNativeQuery("SELECT*FROM roles WHERE id=?", Role.class);
-		q.setParameter(1, id);
-		return (Role) q.getSingleResult();
-	}
+	
 
 	@Override
 	public User checkPassword(String email, String password) {
@@ -76,11 +60,6 @@ public class UserManager implements UserInterface {
 		return null;
 	}
 
-	@Override
-	public List<Role> getAllRoles() {
-		Query q = em.createNativeQuery("SELECT*FROM roles", Role.class);
-
-		return (List<Role>) q.getResultList();
-	}
+	
 
 }

@@ -1,275 +1,179 @@
 package db.pojos;
 
-
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.*;
 
-public class Patient implements Serializable{
-	
+import db.pojos.users.User;
+
+@Entity
+@DiscriminatorValue("p")
+
+public class Patient extends User implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2012426771680446727L;
-	private Integer id_patient;
+
 	private String name;
 	private String gender;
-	private Date birth;
-	private String id;
+	private Date date_of_birth;
+	private String DNI;
 	private String phone_number;
 	private String postcode;
+
+	@OneToMany(mappedBy = "pat")
 	private List<Video_consultation> videos;
-	private List<Rating>ratings;
-	private List<Pathology>pathologies;
-	
+	@OneToMany(mappedBy = "pat")
+	private List<Rating> ratings;
+
+	@ManyToMany
+	@JoinTable(name="patient_pathology",
+		joinColumns={@JoinColumn(name="id_patient", referencedColumnName="id")},
+	    inverseJoinColumns={@JoinColumn(name="id_pathology", referencedColumnName="id_pathology")})
+	private List<Pathology> pathologies;
+
 	public Patient() {
-		
+
 		super();
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
-		this.pathologies=new ArrayList<Pathology>();
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+		this.pathologies = new ArrayList<Pathology>();
 	}
-	
 
-	
-
-	
-
-
-
-
-	public Patient(String name, String gender, Date birth, String id, String phone_number, String postcode) {
-		super();
+	public Patient(String email, byte[] password, String role, String name, String gender, Date birth, String iD,
+			String phone_number, String postcode) {
+		super(email, password, role);
 		this.name = name;
 		this.gender = gender;
-		this.birth = birth;
-		this.id = id;
+		this.date_of_birth = birth;
+		this.DNI = iD;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
-		this.pathologies=new ArrayList<Pathology>();
 	}
 
+	public Patient(Integer id, String email, byte[] password, String role, String name, String gender, Date birth,
+			String iD, String phone_number, String postcode) {
+		super(id, email, password, role);
+		this.name = name;
+		this.gender = gender;
+		this.date_of_birth = birth;
+		this.DNI = iD;
+		this.phone_number = phone_number;
+		this.postcode = postcode;
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+		this.pathologies = new ArrayList<Pathology>();
+	}
 
-
-
-
-
-
-
-
-	public Patient(Integer id_patient, String name, String gender, Date birth, String id, String phone_number,
+	public Patient(Integer id, String name, String gender, Date birth, String iD2, String phone_number,
 			String postcode) {
-		super();
-		this.id_patient = id_patient;
+		super(id);
 		this.name = name;
 		this.gender = gender;
-		this.birth = birth;
-		this.id = id;
+		this.date_of_birth = birth;
+		this.DNI = iD2;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
-		this.pathologies=new ArrayList<Pathology>();
 	}
 
-
-
-
-
-
-
-
-
-	public Patient(Integer id_patient, String name, String gender, Date birth, String id, String phone_number,
-			String postcode, List<Video_consultation> videos, List<Rating> ratings, List<Pathology> pathologies) {
+	public Patient(String name, String gender, Date birth, String ID, String phone_number, String postcode) {
 		super();
-		this.id_patient = id_patient;
 		this.name = name;
 		this.gender = gender;
-		this.birth = birth;
-		this.id = id;
+		this.date_of_birth = birth;
+		this.DNI = ID;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
-		this.videos = videos;
-		this.ratings = ratings;
-		this.pathologies = pathologies;
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+		this.pathologies = new ArrayList<Pathology>();
 	}
-
-
-
-
 
 //Patient print pathologies but not videos and ratings
 
 	@Override
 	public String toString() {
-		return "Patient [id_patient=" + id_patient + ", name=" + name + ", gender=" + gender + ", birth=" + birth
-				+ ", id=" + id + ", phone_number=" + phone_number + ", postcode=" + postcode + ", pathologies=" + pathologies + "]";
+		return "Patient [id_patient=" + super.getId() + ", name=" + name + ", gender=" + gender + ", birth=" + date_of_birth
+				+ ", id=" + DNI + ", phone_number=" + phone_number + ", postcode=" + postcode + ", pathologies="
+				+ pathologies + "]";
 	}
 
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id_patient == null) ? 0 : id_patient.hashCode());
-		return result;
-	}
-
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Patient other = (Patient) obj;
-		if (id_patient == null) {
-			if (other.id_patient != null)
-				return false;
-		} else if (!id_patient.equals(other.id_patient))
-			return false;
-		return true;
-	}
-
-	
-	
-
-	
 	public List<Pathology> getPathologies() {
 		return pathologies;
 	}
-
-
-
-
-
-
-
-
 
 	public void setPathologies(List<Pathology> pathologies) {
 		this.pathologies = pathologies;
 	}
 
-
-
-
-
-
-
-
-
-	public void setId_patient(Integer id_patient) {
-		this.id_patient = id_patient;
-	}
-
-
-
-
 	public List<Rating> getRatings() {
 		return ratings;
 	}
-
-
-
 
 	public void setRatings(List<Rating> ratings) {
 		this.ratings = ratings;
 	}
 
-
-
-
 	public List<Video_consultation> getVideos() {
 		return videos;
 	}
-
-
 
 	public void setVideos(List<Video_consultation> videos) {
 		this.videos = videos;
 	}
 
-
-
-	public int getId_patient() {
-		return id_patient;
-	}
-
-
-	public void setId_patient(int id_patient) {
-		this.id_patient = id_patient;
-	}
-
-
 	public String getName() {
 		return name;
 	}
-
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getGender() {
 		return gender;
 	}
-
 
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
-
 	public Date getBirth() {
-		return birth;
+		return date_of_birth;
 	}
-
 
 	public void setBirth(Date birth) {
-		this.birth = birth;
+		this.date_of_birth = birth;
 	}
 
+	public String getID() {
+		return DNI;
 
-	public String getId() {
-		return id;
 	}
 
-
-	public void setId(String id) {
-		this.id = id;
+	public void setID(String id) {
+		this.DNI = id;
 	}
-
 
 	public String getPhone_number() {
 		return phone_number;
 	}
 
-
 	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
 	}
-
 
 	public String getPostcode() {
 		return postcode;
 	}
 
-
 	public void setPostcode(String postcode) {
 		this.postcode = postcode;
 	}
-	
-	
-	
 
 }

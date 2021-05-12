@@ -4,80 +4,64 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Doctor implements Serializable {
-	
+import javax.persistence.*;
+
+import db.pojos.users.User;
+
+@Entity
+@DiscriminatorValue("d")
+public class Doctor extends User implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1691412521236621262L;
-	private Integer id_doctor;
+
 	private String specialization;
 	private String name;
 	private String hospital;
-	private List<Video_consultation>videos;
-	private List<Rating>ratings;
+	@OneToMany(mappedBy = "doc")
+	private List<Video_consultation> videos;
+	@OneToMany(mappedBy = "doc")
+	private List<Rating> ratings;
+
 	public Doctor() {
 		super();
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
-		
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+
 	}
-	
-	
-	
-	
-	public Doctor(String specialization, String name, String hospital) {
-		super();
+
+	public Doctor(Integer id, String email, byte[] password, String role_name, String specialization, String name,
+			String hospital) {
+		super(id, email, password, role_name);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
 	}
 
-
-
-
-	public Doctor(String specialization, String name) {
-		super();
-		this.specialization = specialization;
-		this.name = name;
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
-	}
-
-
-
-
-	public Doctor(Integer id_doctor, String specialization, String name, String hospital, List<Rating> ratings) {
-		super();
-		this.id_doctor = id_doctor;
+	public Doctor(Integer id, String specialization, String name, String hospital) {
+		super(id);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
-		this.ratings = ratings;
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
 	}
 
-
-
-
-	public Doctor(Integer id_doctor, String specialization, String name, String hospital) {
-		super();
-		this.id_doctor = id_doctor;
+	public Doctor(String email, byte[] password, String role_name, String specialization, String name,
+			String hospital) {
+		super(email, password, role_name);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
-		this.videos=new ArrayList<Video_consultation>();
-		this.ratings=new ArrayList<Rating>();
 	}
 
-
-
-
-	public Doctor(Integer id_doctor, String specialization, String name, String hospital,
-			List<Video_consultation> videos, List<Rating> ratings) {
+	public Doctor(String specialization, String name, String hospital, List<Video_consultation> videos,
+			List<Rating> ratings) {
 		super();
-		this.id_doctor = id_doctor;
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
@@ -85,41 +69,30 @@ public class Doctor implements Serializable {
 		this.ratings = ratings;
 	}
 
-
-
-	
-
-	
-
-
-
-
-
-
-
-
-
+	public Doctor(String specialization, String name, String hospital) {
+		super();
+		this.specialization = specialization;
+		this.hospital = hospital;
+		this.name = name;
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+	}
 
 //Doctor prints ratings but not videos
 
 	@Override
 	public String toString() {
-		return "Doctor [id_doctor=" + id_doctor + ", specialization=" + specialization + ", name=" + name
-				+ ", hospital=" + hospital + ", ratings=" + ratings + "]";
+		return "Doctor [id_doctor=" + super.getId() + ", specialization=" + specialization + ", name=" + name
+				+ ", hospital=" + hospital + ", ratings=" + ratings + "role_name=" + super.getRole_name() + "]";
 	}
-
-
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id_doctor== null) ? 0 : id_doctor.hashCode());
+		result = prime * result + ((super.getId() == null) ? 0 : super.getId().hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -130,78 +103,52 @@ public class Doctor implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Doctor other = (Doctor) obj;
-		if (id_doctor == null) {
-			if (other.id_doctor != null)
+		if (super.getId() == null) {
+			if (other.getId() != null)
 				return false;
-		} else if (!id_doctor.equals(other.id_doctor))
+		} else if (!super.getId().equals(other.getId()))
 			return false;
 		return true;
 	}
 
-
-
-
-	
 	public List<Rating> getRatings() {
 		return ratings;
 	}
-
-
-
 
 	public void setRatings(List<Rating> ratings) {
 		this.ratings = ratings;
 	}
 
-
-
-
-	public void setId_doctor(Integer id_doctor) {
-		this.id_doctor = id_doctor;
-	}
-
-
-
-
 	public List<Video_consultation> getVideos() {
 		return videos;
 	}
-
-
 
 	public void setVideos(List<Video_consultation> videos) {
 		this.videos = videos;
 	}
 
-
-
-	public int getId_doctor() {
-		return id_doctor;
-	}
-	public void setId_doctor(int id_doctor) {
-		this.id_doctor = id_doctor;
-	}
 	public String getSpecialization() {
 		return specialization;
 	}
+
 	public void setSpecialization(String specialization) {
 		this.specialization = specialization;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getHospital() {
 		return hospital;
 	}
+
 	public void setHospital(String hospital) {
 		this.hospital = hospital;
 	}
-	
-	
-	
-	
 
 }

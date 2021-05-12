@@ -2,6 +2,9 @@ package db.pojos;
 
 import java.io.Serializable;
 
+import javax.persistence.*;
+@Entity
+@Table(name="prescription")
 public class Prescription implements Serializable{
 
 	
@@ -9,11 +12,18 @@ public class Prescription implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -9167640245820196360L;
+	@Id
+	@GeneratedValue(generator="prescription")
+	@TableGenerator(name="prescription", table="sqlite_sequence",
+	    pkColumnName="name", valueColumnName="seq", pkColumnValue="prescription")
 	private Integer id_prescription;
 	private String name;
 	private Integer doses;
 	private Integer duration;
 	private String notes;
+	@ManyToOne(fetch = FetchType.LAZY)
+
+	@JoinColumn(name = "id_video")
 	private Video_consultation vd; 
 	
 	

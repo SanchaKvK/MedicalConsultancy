@@ -18,7 +18,7 @@ import db.pojos.Patient;
 import db.pojos.Prescription;
 import db.pojos.Rating;
 import db.pojos.Video_consultation;
-import db.pojos.users.Role;
+
 import db.pojos.users.User;
 import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
@@ -26,15 +26,16 @@ import medicalConsultancy.db.UserManager;
 
 public class Menu {
 
-	private static UserInterface usman=new UserManager();
+	private static User user;
+	private static UserInterface usman = new UserManager();
 	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-	
-	
+
 	public static void main(String[] args) throws Exception {
 		dbman.connect();
+
 		usman.connect();
 		do {
 			System.out.println("Choose an option:");
@@ -63,24 +64,18 @@ public class Menu {
 
 	public static void register() throws Exception {
 
-		System.out.println("Introduce your email: ");
-		String email = reader.readLine();
-		System.out.println("Introduce the id of your role: ");
-		System.out.println(usman.getAllRoles());
-		Integer role_id = Integer.parseInt(reader.readLine());
-		Role role = usman.getRole(role_id);
-		if (role.getName().equalsIgnoreCase("patient")) {
-			addPatient();
+		System.out.println("Are you a patient? Press 1");
+		System.out.println("Are you a doctor? Press 2");
+		int option = Integer.parseInt(reader.readLine());
+
+		if (option == 1) {
+
+			Patient p = askPatient();
+			usman.addUser(p);
+
+		} else if (option == 2) {
+			usman.addUser(askDoctor());
 		}
-		else if (role.getName().equalsIgnoreCase("doctor")) {
-			addDoctor();
-		}
-		System.out.println("Introduce password:");
-		String password = reader.readLine();
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update(password.getBytes());
-		byte[] hash = md.digest();
-		usman.addUser(new User(email, hash, role));
 
 	}
 
@@ -96,9 +91,12 @@ public class Menu {
 			return;
 		}
 
-		else if (us.getRole().getName().equalsIgnoreCase("doctor")) {
+		else if (us.getRole_name().equals("d")) {
+			user = us;
+			System.out.println(us);
 			doctorMenu();
-		} else if (us.getRole().getName().equalsIgnoreCase("patient")) {
+		} else if (us.getRole_name().equals("p")) {
+			user = us;
 			patientMenu();
 		}
 	}
@@ -205,16 +203,16 @@ public class Menu {
 			case 8:
 				deleteVideoDoctor();
 				break;
-				
+
 			case 9:
 				addInfoVideoconsultation();
 				break;
-				
+
 			case 0:
 				dbman.disconnect();
 				System.exit(0);
 				break;
-				
+
 			default:
 				break;
 			}
@@ -224,8 +222,7 @@ public class Menu {
 
 	private static void deleteVideoDoctor() throws Exception {
 
-		System.out.println("Introduce your id: ");
-		System.out.println(dbman.getDoctorFutureVideos(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getDoctorFutureVideos(user.getId()));
 		System.out.println("Choose id video: ");
 		dbman.deleteAppointment(Integer.parseInt(reader.readLine()));
 
@@ -233,8 +230,7 @@ public class Menu {
 
 	private static void updateVideoDoctor() throws Exception {
 
-		System.out.println("Introduce your id: ");
-		int id_doctor = Integer.parseInt(reader.readLine());
+		int id_doctor = user.getId();
 		System.out.println(dbman.getDoctorFutureVideos(id_doctor));
 
 		System.out.println("Choose id video: ");
@@ -264,8 +260,7 @@ public class Menu {
 
 	private static void updateVideoPatient() throws Exception {
 
-		System.out.println("Introduce your id: ");
-		System.out.println(dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getPatientFutureVideos(user.getId()));
 
 		System.out.println("Choose id video: ");
 		int id_video = Integer.parseInt(reader.readLine());
@@ -277,7 +272,7 @@ public class Menu {
 			return;
 		}
 
-		int id_doctor = dbman.getVideo(id_video).getDoc().getId_doctor();
+		int id_doctor = dbman.getVideo(id_video).getDoc().getId();
 
 		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
 		System.out.println("Available hours: ");
@@ -298,8 +293,7 @@ public class Menu {
 
 	private static void deleteVideoPatient() throws Exception {
 
-		System.out.println("Introduce your id: ");
-		System.out.println(dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getPatientFutureVideos(user.getId()));
 		System.out.println("Choose id video: ");
 		dbman.deleteAppointment(Integer.parseInt(reader.readLine()));
 
@@ -307,8 +301,7 @@ public class Menu {
 
 	private static void getDoctorRatings() throws Exception {
 
-		System.out.println("Id doctor: ");
-		System.out.println(dbman.getRatingOfDoctor(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getRatingOfDoctor(user.getId()));
 
 	}
 
@@ -322,8 +315,7 @@ public class Menu {
 
 	private static void getFuturePatientVideos() throws Exception {
 
-		System.out.println("Id patient: ");
-		List<Video_consultation> l = dbman.getPatientFutureVideos(Integer.parseInt(reader.readLine()));
+		List<Video_consultation> l = dbman.getPatientFutureVideos(user.getId());
 		for (Video_consultation video : l) {
 			System.out.println(video);
 
@@ -333,8 +325,7 @@ public class Menu {
 
 	private static void getPreviousPatientVideos() throws Exception {
 
-		System.out.println("Id patient: ");
-		List<Video_consultation> l = dbman.getPatientPreviousVideos(Integer.parseInt(reader.readLine()));
+		List<Video_consultation> l = dbman.getPatientPreviousVideos(user.getId());
 		for (Video_consultation video : l) {
 			System.out.println(video);
 
@@ -344,8 +335,7 @@ public class Menu {
 
 	private static void getAllPatientVideos() throws Exception {
 
-		System.out.println("Id patient: ");
-		List<Video_consultation> l = dbman.getVideosOfPatient(Integer.parseInt(reader.readLine()));
+		List<Video_consultation> l = dbman.getVideosOfPatient(user.getId());
 		for (Video_consultation video : l) {
 			System.out.println(video);
 
@@ -355,30 +345,25 @@ public class Menu {
 
 	private static void getFutureDoctorVideos() throws Exception {
 
-		System.out.println("Id doctor: ");
-		System.out.println(dbman.getDoctorFutureVideos(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getDoctorFutureVideos(user.getId()));
 
 	}
 
 	private static void getPreviousDoctorVideos() throws Exception {
 
-		System.out.println("Id doctor: ");
-		System.out.println(dbman.getDoctorPreviousVideos(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getDoctorPreviousVideos(user.getId()));
 
 	}
 
 	private static void getAllDoctorVideos() throws Exception {
 
-		System.out.println("Id doctor: ");
-		System.out.println(dbman.getVideosOfDoctor(Integer.parseInt(reader.readLine())));
+		System.out.println(dbman.getVideosOfDoctor(user.getId()));
 
 	}
 
-
-
 	private static void rate() throws Exception {
-		System.out.println("Introduce your id:");
-		Integer id_patient = Integer.parseInt(reader.readLine());
+
+		Integer id_patient = user.getId();
 		searchDoctor();
 		System.out.println("Introduce doctor`s id: ");
 		Integer id_doctor = Integer.parseInt(reader.readLine());
@@ -394,24 +379,31 @@ public class Menu {
 	}
 
 	private static void getDoctor() throws Exception {
-		System.out.println("Doctor id:");
 
-		System.out.println(dbman.getDoctor(Integer.parseInt(reader.readLine())));
+		System.out.println(user.getId());
+		System.out.println(dbman.getDoctor(user.getId()));
 
 	}
 
 	private static void getPatient() throws Exception {
 
-		System.out.println("Patient id");
-		Patient p = dbman.getPatient(Integer.parseInt(reader.readLine()));
-		System.out.println("Patient [id_patient=" + p.getId_patient() + ", name=" + p.getName() + ", gender="
-				+ p.getGender() + ", birth=" + p.getBirth() + ", id=" + p.getId() + ", phone_number="
-				+ p.getPhone_number() + ", postcode=" + p.getPostcode() + "]");
+		
+		Patient p = dbman.getPatient(user.getId());
+		System.out.println("Patient [id_patient=" + p.getId() + ", name=" + p.getName() + ", gender=" + p.getGender()
+				+ ", birth=" + p.getBirth() + ", id=" + p.getId() + ", phone_number=" + p.getPhone_number()
+				+ ", postcode=" + p.getPostcode() + "]");
 
 	}
 
-	private static void addPatient() throws Exception {
+	private static Patient askPatient() throws Exception {
+		System.out.println("Introduce your email: ");
+		String email = reader.readLine();
 
+		System.out.println("Introduce password:");
+		String password = reader.readLine();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] hash = md.digest();
 		System.out.println("Introduce patient info: ");
 		System.out.println("Name: ");
 		String name = reader.readLine();
@@ -425,13 +417,21 @@ public class Menu {
 		String phone = reader.readLine();
 		System.out.println("Postcode: ");
 		String pc = reader.readLine();
-		Patient p = new Patient(name, gender, Date.valueOf(birth), id, phone, pc);
+		Patient p = new Patient(email, hash, "p", name, gender, Date.valueOf(birth), id, phone, pc);
 
-		dbman.addPatient(p);
+		return p;
 
 	}
 
-	private static void addDoctor() throws Exception {
+	private static Doctor askDoctor() throws Exception {
+		System.out.println("Introduce your email: ");
+		String email = reader.readLine();
+
+		System.out.println("Introduce password:");
+		String password = reader.readLine();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] hash = md.digest();
 
 		System.out.println("Introduce doctor info: ");
 		System.out.println("Name: ");
@@ -440,9 +440,10 @@ public class Menu {
 		String specialization = reader.readLine();
 		System.out.println("Hospital: ");
 		String hospital = reader.readLine();
-		Doctor d = new Doctor(specialization, name, hospital);
 
-		dbman.addDoctor(d);
+		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital);
+
+		return d;
 
 	}
 
@@ -500,19 +501,20 @@ public class Menu {
 
 		System.out.println("Type of appointment: ");
 		String type = reader.readLine();
-		System.out.println("Which is your id?");
-		Integer id_patient = Integer.parseInt(reader.readLine());
+
+		Integer id_patient = user.getId();
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
 				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
 		dbman.addVideo_consultation(vd);
 
 	}
-	
-	private static void addInfoVideoconsultation() throws Exception{
-		
+
+	private static void addInfoVideoconsultation() throws Exception {
+
 		System.out.println("Videoconsultation information: ");
 		System.out.println("Introduce the id of the videoconsultation: ");
+		getPreviousDoctorVideos();
 		Integer id_video = Integer.parseInt(reader.readLine());
 		System.out.println("Introduce the duration: ");
 		Integer duration = Integer.parseInt(reader.readLine());
@@ -521,10 +523,15 @@ public class Menu {
 		String notes = reader.readLine();
 		dbman.changeVideoconsultationNotes(notes, id_video);
 		System.out.println("Introduce the prescription: ");
-		prescribe(id_video);	
-		
+		prescribe(id_video);
+		System.out.println("Do you want to diagnose a pathology? Y/N");
+
+		String option = reader.readLine();
+		if (option == "Y")
+			diagnose();
+
 	}
-	
+
 	private static void prescribe(int id_video) throws Exception {
 		System.out.println("Doses: ");
 		Integer doses = Integer.parseInt(reader.readLine());
@@ -535,7 +542,7 @@ public class Menu {
 		System.out.println("Notes: ");
 		String notes = reader.readLine();
 		System.out.println("Introduce id video: ");
-	
+
 		Prescription p = new Prescription(name, doses, duration, notes, dbman.getVideo(id_video));
 		dbman.addPrescription(p);
 

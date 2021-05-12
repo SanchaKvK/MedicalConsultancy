@@ -1,3 +1,4 @@
+
 package medicalConsultancy.db;
 
 import java.sql.Connection;
@@ -27,8 +28,7 @@ public class DBManager implements DBinterface {
 
 	private Connection c;
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-	
-	
+
 	@Override
 	public void connect() {
 		try {
@@ -52,20 +52,19 @@ public class DBManager implements DBinterface {
 		try {
 			stmt1 = c.createStatement();
 
-			String sql1 = " CREATE TABLE patient " + "(id_patient INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "name TEXT NOT NULL, " + "gender TEXT, " + "date_of_birth DATE NOT NULL, "
-					+ "id TEXT NOT NULL UNIQUE, " + "phone_number TEXT UNIQUE, " + "postcode TEXT)";
+			String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, "
+					+ "DNI TEXT UNIQUE, " + "phone_number TEXT UNIQUE, " + "postcode TEXT, "
+					+ "specialization TEXT , " + "name TEXT NOT NULL, " + "hospital TEXT, "
+					+ "email TEXT NOT NULL, " + "password BLOB NOT NULL)";
 
-			stmt1.executeUpdate(sql1);
-			sql1 = "CREATE TABLE doctor " + "(id_doctor INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "specialization TEXT NOT NULL, " + "name TEXT NOT NULL, " + "hospital TEXT)";
 			stmt1.executeUpdate(sql1);
 
 			sql1 = "CREATE TABLE videoconsultation " + "(id_video INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "consultation_date DATE NOT NULL, " + "consultation_time TIME NOT NULL, " + "duration INTEGER, "
 					+ "type_of_call TEXT, " + "notes TEXT, "
-					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, "
-					+ "id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL)";
+					+ "id_doctor INTEGER REFERENCES user(id) ON DELETE SET NULL, "
+					+ "id_patient INTEGER REFERENCES user(id) ON DELETE SET NULL)";
 
 			stmt1.executeUpdate(sql1);
 
@@ -81,15 +80,14 @@ public class DBManager implements DBinterface {
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE patient_pathology "
-					+ "(id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
+			sql1 = "CREATE TABLE patient_pathology " + "(id_patient INTEGER REFERENCES user(id) ON DELETE SET NULL, "
 					+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL, "
 					+ "PRIMARY KEY(id_patient,id_pathology))";
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE rating " + "(id_patient INTEGER REFERENCES patient(id_patient) ON DELETE SET NULL, "
-					+ "id_doctor INTEGER REFERENCES doctor(id_doctor) ON DELETE SET NULL, " + "score INTEGER, "
+			sql1 = "CREATE TABLE rating " + "(id_patient INTEGER REFERENCES user(user) ON DELETE SET NULL, "
+					+ "id_doctor INTEGER REFERENCES user(user) ON DELETE SET NULL, " + "score INTEGER, "
 					+ "review TEXT, " + "PRIMARY KEY(id_patient,id_doctor))";
 
 			stmt1.executeUpdate(sql1);
@@ -114,44 +112,6 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	
-	@Override
-	public void addPatient(Patient p) {
-		try {
-			String sql = "INSERT INTO patient (name , gender, date_of_birth, id, phone_number, postcode) VALUES(?,?,?,?,?,?)";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setString(1, p.getName());
-			ps.setString(2, p.getGender());
-			ps.setDate(3, p.getBirth());
-			ps.setString(4, p.getId());
-			ps.setString(5, p.getPhone_number());
-			ps.setString(6, p.getPostcode());
-
-			ps.executeUpdate();
-			ps.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	
-	
-	@Override
-	public void addDoctor(Doctor d) {
-
-		try {
-			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO doctor (name, specialization, hospital) VALUES ('" + d.getName() + "', '"
-					+ d.getSpecialization() + "','" + d.getHospital() + "')";
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-	
-	
 	@Override
 	public void addPathology(Pathology p) {
 
@@ -172,8 +132,8 @@ public class DBManager implements DBinterface {
 		try {
 			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, r.getDoc().getId_doctor());
-			ps.setInt(2, r.getPat().getId_patient());
+			ps.setInt(1, r.getDoc().getId());
+			ps.setInt(2, r.getPat().getId());
 			ps.setInt(3, r.getScore());
 			ps.setString(4, r.getReview());
 			ps.executeUpdate();
@@ -183,7 +143,6 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	
 	@Override
 	public void addVideo_consultation(Video_consultation v) {
 
@@ -194,8 +153,8 @@ public class DBManager implements DBinterface {
 			ps.setDate(1, v.getConsultation_date());
 			ps.setTime(2, v.getConsultatiton_time());
 			ps.setString(3, v.getType());
-			ps.setInt(4, v.getDoc().getId_doctor());
-			ps.setInt(5, v.getPat().getId_patient());
+			ps.setInt(4, v.getDoc().getId());
+			ps.setInt(5, v.getPat().getId());
 			ps.executeUpdate();
 			ps.close();
 		}
@@ -221,7 +180,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
 	@Override
 	public void diagnosePathology(int patient_id, int pathology_id) {
 		try {
@@ -241,23 +199,22 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public List<Doctor> searchDoctorByName(String name) {
 
 		List<Doctor> doctors = new ArrayList<>();
 
 		try {
-			String sql = "SELECT * FROM doctor WHERE name LIKE ?";
+			String sql = "SELECT * FROM users WHERE name LIKE ? AND role_name=?";
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setString(1, "%" + name + "%");
+			stmt.setString(2, "d");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 
-				Doctor doctor = new Doctor(rs.getInt("id_doctor"), rs.getString("specialization"), rs.getString("name"),
+				Doctor doctor = new Doctor(rs.getInt("id"), rs.getString("specialization"), rs.getString("name"),
 						rs.getString("hospital"));
-				doctor.setRatings(this.getRatingOfDoctor(doctor.getId_doctor()));
+				doctor.setRatings(this.getRatingOfDoctor(doctor.getId()));
 				doctors.add(doctor);
 			}
 			rs.close();
@@ -268,7 +225,6 @@ public class DBManager implements DBinterface {
 		return doctors;
 	}
 
-	
 	@Override
 	public List<Rating> getRatingOfDoctor(int id_doctor) {
 		List<Rating> ratings = new ArrayList<Rating>();
@@ -297,16 +253,17 @@ public class DBManager implements DBinterface {
 		List<Patient> patients = new ArrayList<Patient>();
 
 		try {
-			String sql = "SELECT * FROM patient WHERE name LIKE ?";
+			String sql = "SELECT * FROM users WHERE name LIKE ? AND role_name=?";
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setString(1, "%" + name + "%");
+			stmt.setString(2, "p");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 
-				Patient patient = new Patient(rs.getInt("id_patient"), rs.getString("name"), rs.getString("gender"),
-						rs.getDate("date_of_birth"), rs.getString("id"), rs.getString("phone_number"),
+				Patient patient = new Patient(rs.getInt("id"), rs.getString("name"), rs.getString("gender"),
+						rs.getDate("date_of_birth"), rs.getString("DNI"), rs.getString("phone_number"),
 						rs.getString("postcode"));
-				patient.setPathologies(getPathologiesOfPatient(patient.getId_patient()));
+				patient.setPathologies(getPathologiesOfPatient(patient.getId()));
 				patients.add(patient);
 			}
 			rs.close();
@@ -317,7 +274,6 @@ public class DBManager implements DBinterface {
 		return patients;
 	}
 
-	
 	@Override
 	public List<Pathology> getPathologiesOfPatient(int id_patient) {
 
@@ -372,23 +328,22 @@ public class DBManager implements DBinterface {
 	// Patient method will return a Patient with
 	// id,name,gender,birth,id,phone,postcode and pathologies.
 
-	
 	@Override
 	public Patient getPatient(int id_patient) {
 
 		try {
 
-			String sql = "SELECT*FROM patient WHERE id_patient=?";
+			String sql = "SELECT*FROM users WHERE id=?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_patient);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-
+				System.out.println(rs.getString("DNI"));
 				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"),
-						rs.getDate("date_of_birth"), rs.getString("id"), rs.getString("phone_number"),
+						rs.getDate("date_of_birth"), rs.getString("DNI"), rs.getString("phone_number"),
 						rs.getString("postcode"));
-				p.setPathologies(getPathologiesOfPatient(p.getId_patient()));
+				p.setPathologies(getPathologiesOfPatient(p.getId()));
 				return p;
 
 			}
@@ -402,13 +357,12 @@ public class DBManager implements DBinterface {
 
 	// Doctor method will return a Doctor with id,specialization,name and hospital.
 
-	
 	@Override
 	public Doctor getDoctor(int id_doctor) {
 
 		try {
 
-			String sql = "SELECT*FROM doctor WHERE id_doctor=?";
+			String sql = "SELECT * FROM users WHERE id=?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_doctor);
 			ResultSet rs = ps.executeQuery();
@@ -430,7 +384,6 @@ public class DBManager implements DBinterface {
 		return null;
 	}
 
-	
 	@Override
 	public Video_consultation getVideo(int id_video) {
 
@@ -484,7 +437,6 @@ public class DBManager implements DBinterface {
 		return prescriptions;
 	}
 
-	
 	@Override
 	public List<Video_consultation> getVideosOfPatient(int id_patient) {
 		List<Video_consultation> videos = new ArrayList<Video_consultation>();
@@ -509,8 +461,6 @@ public class DBManager implements DBinterface {
 		return videos;
 	}
 
-	
-	
 	@Override
 	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
 		Date d = Date.valueOf(LocalDate.now());
@@ -540,8 +490,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public List<Video_consultation> getPatientPreviousVideos(int id_patient) {
 		Date d = Date.valueOf(LocalDate.now());
@@ -571,8 +519,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public List<Video_consultation> getVideosOfDoctor(int id_doctor) {
 		List<Video_consultation> videos = new ArrayList<Video_consultation>();
@@ -597,8 +543,6 @@ public class DBManager implements DBinterface {
 		return videos;
 	}
 
-	
-	
 	@Override
 	public List<Video_consultation> getDoctorFutureVideos(int id_doctor) {
 		Date d = Date.valueOf(LocalDate.now());
@@ -628,8 +572,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor) {
 		Date d = Date.valueOf(LocalDate.now());
@@ -659,8 +601,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public void fireDoctor(int id) {
 		try {
@@ -674,7 +614,6 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	
 	@Override
 	public void deletePatient(int id) {
 		try {
@@ -688,7 +627,6 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	
 	@Override
 	public void deleteAppointment(int id) {
 		try {
@@ -702,9 +640,6 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	
-	
-	
 	@Override
 	public void changeAppointmentDate(Date d, int id) {
 		try {
@@ -721,8 +656,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public void changeAppointmentTime(Time t, int id) {
 		try {
@@ -739,8 +672,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
 	@Override
 	public List<Time> availableHours(int id_doctor, Date consultation_date) {
 		List<Time> hours = new ArrayList<Time>();
@@ -765,7 +696,7 @@ public class DBManager implements DBinterface {
 
 		return hours;
 	}
-	
+
 	public void changeVideoconsultationNotes(String notes, int id) {
 
 		try {
@@ -778,8 +709,7 @@ public class DBManager implements DBinterface {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
-
+		}
 
 	}
 
@@ -798,8 +728,5 @@ public class DBManager implements DBinterface {
 		}
 
 	}
-	
-	
-	
 
 }

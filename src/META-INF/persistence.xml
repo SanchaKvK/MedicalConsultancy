@@ -10,10 +10,15 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
  
 		<!-- Entity Class -->
-		<class>db.pojos.users.Role</class>
+	
 		<class>db.pojos.users.User</class>
+		<class>db.pojos.Doctor</class>
+		<class>db.pojos.Patient</class>
+		<class>db.pojos.Pathology</class>
+		<class>db.pojos.Video_consultation</class>
+		<class>db.pojos.Rating</class>
+		<class>db.pojos.Prescription</class>
 		
-
 		<properties>	
 			<!-- Connection properties -->
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />

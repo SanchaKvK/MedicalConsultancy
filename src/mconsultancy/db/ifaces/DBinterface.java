@@ -17,12 +17,7 @@ public interface DBinterface {
 	
 	// Closes the connection with the database
 	public void disconnect();
-	
-	//adds a patient to the database
-	public void addPatient(Patient p);
-	
-	//adds a doctor to the database
-	public void addDoctor(Doctor d);
+
 	
 	//adds a pathology to the database
 	public void addPathology(Pathology p);
