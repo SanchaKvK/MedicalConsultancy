@@ -372,8 +372,10 @@ public class Menu {
 		String review = reader.readLine();
 		System.out.println("Score(1-5): ");
 		Integer score = Integer.parseInt(reader.readLine());
+		System.out.println(dbman.getDoctor(id_doctor));
 
 		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
+		
 		dbman.addRating(rating);
 
 	}

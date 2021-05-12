@@ -63,8 +63,8 @@ public class DBManager implements DBinterface {
 			sql1 = "CREATE TABLE videoconsultation " + "(id_video INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "consultation_date DATE NOT NULL, " + "consultation_time TIME NOT NULL, " + "duration INTEGER, "
 					+ "type_of_call TEXT, " + "notes TEXT, "
-					+ "id_doctor INTEGER REFERENCES user(id) ON DELETE SET NULL, "
-					+ "id_patient INTEGER REFERENCES user(id) ON DELETE SET NULL)";
+					+ "id_doctor INTEGER REFERENCES users(id) ON DELETE SET NULL, "
+					+ "id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL)";
 
 			stmt1.executeUpdate(sql1);
 
@@ -80,14 +80,14 @@ public class DBManager implements DBinterface {
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE patient_pathology " + "(id_patient INTEGER REFERENCES user(id) ON DELETE SET NULL, "
+			sql1 = "CREATE TABLE patient_pathology " + "(id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL, "
 					+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL, "
 					+ "PRIMARY KEY(id_patient,id_pathology))";
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE rating " + "(id_patient INTEGER REFERENCES user(user) ON DELETE SET NULL, "
-					+ "id_doctor INTEGER REFERENCES user(user) ON DELETE SET NULL, " + "score INTEGER, "
+			sql1 = "CREATE TABLE rating " + "(id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL, "
+					+ "id_doctor INTEGER REFERENCES users(id) ON DELETE SET NULL, " + "score INTEGER, "
 					+ "review TEXT, " + "PRIMARY KEY(id_patient,id_doctor))";
 
 			stmt1.executeUpdate(sql1);
@@ -128,10 +128,11 @@ public class DBManager implements DBinterface {
 
 	@Override
 	public void addRating(Rating r) {
-
+		System.out.println(r.getDoc().getId());
 		try {
 			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
 			PreparedStatement ps = c.prepareStatement(sql);
+			
 			ps.setInt(1, r.getDoc().getId());
 			ps.setInt(2, r.getPat().getId());
 			ps.setInt(3, r.getScore());
@@ -261,7 +262,7 @@ public class DBManager implements DBinterface {
 			while (rs.next()) {
 
 				Patient patient = new Patient(rs.getInt("id"), rs.getString("name"), rs.getString("gender"),
-						rs.getDate("date_of_birth"), rs.getString("DNI"), rs.getString("phone_number"),
+						rs.getDate("birth"), rs.getString("DNI"), rs.getString("phone_number"),
 						rs.getString("postcode"));
 				patient.setPathologies(getPathologiesOfPatient(patient.getId()));
 				patients.add(patient);
@@ -333,15 +334,15 @@ public class DBManager implements DBinterface {
 
 		try {
 
-			String sql = "SELECT*FROM users WHERE id=?";
+			String sql = "SELECT * FROM users WHERE id=?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, id_patient);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				System.out.println(rs.getString("DNI"));
+				
 				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"),
-						rs.getDate("date_of_birth"), rs.getString("DNI"), rs.getString("phone_number"),
+						rs.getDate("birth"), rs.getString("DNI"), rs.getString("phone_number"),
 						rs.getString("postcode"));
 				p.setPathologies(getPathologiesOfPatient(p.getId()));
 				return p;
