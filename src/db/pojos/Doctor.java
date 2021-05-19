@@ -58,6 +58,8 @@ public class Doctor extends User implements Serializable {
 		this.name = name;
 		this.hospital = hospital;
 	}
+	
+
 
 	public Doctor(String specialization, String name, String hospital, List<Video_consultation> videos,
 			List<Rating> ratings) {

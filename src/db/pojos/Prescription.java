@@ -1,6 +1,7 @@
 package db.pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 @Entity
@@ -81,7 +82,14 @@ public Prescription(String name, Integer doses, Integer duration, String notes, 
 	}
 
 
-
+public Prescription(String name, Integer doses, Integer duration, String notes) {
+	super();
+	this.name = name;
+	this.doses = doses;
+	this.duration = duration;
+	this.notes = notes;
+	
+}
 
 
 

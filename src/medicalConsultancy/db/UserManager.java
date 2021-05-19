@@ -7,8 +7,10 @@ import java.util.List;
 import javax.persistence.*;
 
 import mconsultancy.db.ifaces.UserInterface;
-
+import db.pojos.Prescription;
+import db.pojos.Video_consultation;
 import db.pojos.users.User;
+
 
 public class UserManager implements UserInterface {
 
@@ -59,6 +61,54 @@ public class UserManager implements UserInterface {
 		}
 		return null;
 	}
+
+	@Override
+	public List<User> allEmergencyUsers(){
+		Query q = em.createNativeQuery("SELECT * FROM users WHERE role_name=? and specialization=?", User.class);
+		q.setParameter(1, "d");
+		q.setParameter(2, "emergency");
+		return (List<User>) q.getSingleResult();
+
+		
+		
+	}
+
+	@Override
+	public void addInfoVideo(int id_video, String notes, int duration, Prescription p) {
+		
+		Query q=em.createNativeQuery("SELECT * FROM videoconsultation WHERE id_video=?",Video_consultation.class);
+		q.setParameter(1, id_video);
+		Video_consultation vd= (Video_consultation) q.getSingleResult();
+		
+		em.getTransaction().begin();
+		vd.setDuration(duration);
+		vd.setNotes(notes);
+		vd.addPrescription(p);
+		p.setVd(vd);
+		
+		em.getTransaction().commit();
+		
+	}
+
+	@Override
+	public void addPrescription(Prescription p) {
+		
+		em.getTransaction().begin();
+		em.persist(p);
+		em.getTransaction().commit();
+		
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		
+		em.getTransaction().begin();
+		em.remove(user);
+		em.getTransaction().commit();
+		
+	}
+
+	
 
 	
 

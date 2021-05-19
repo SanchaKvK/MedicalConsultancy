@@ -21,7 +21,7 @@ public class Patient extends User implements Serializable {
 
 	private String name;
 	private String gender;
-	private Date date_of_birth;
+	private Date birth;
 	private String DNI;
 	private String phone_number;
 	private String postcode;
@@ -50,18 +50,19 @@ public class Patient extends User implements Serializable {
 		super(email, password, role);
 		this.name = name;
 		this.gender = gender;
-		this.date_of_birth = birth;
+		this.birth = birth;
 		this.DNI = iD;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
 	}
+
 
 	public Patient(Integer id, String email, byte[] password, String role, String name, String gender, Date birth,
 			String iD, String phone_number, String postcode) {
 		super(id, email, password, role);
 		this.name = name;
 		this.gender = gender;
-		this.date_of_birth = birth;
+		this.birth = birth;
 		this.DNI = iD;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
@@ -75,7 +76,7 @@ public class Patient extends User implements Serializable {
 		super(id);
 		this.name = name;
 		this.gender = gender;
-		this.date_of_birth = birth;
+		this.birth = birth;
 		this.DNI = iD2;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
@@ -85,7 +86,7 @@ public class Patient extends User implements Serializable {
 		super();
 		this.name = name;
 		this.gender = gender;
-		this.date_of_birth = birth;
+		this.birth = birth;
 		this.DNI = ID;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
@@ -98,7 +99,7 @@ public class Patient extends User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Patient [id_patient=" + super.getId() + ", name=" + name + ", gender=" + gender + ", birth=" + date_of_birth
+		return "Patient [id_patient=" + super.getId() + ", name=" + name + ", gender=" + gender + ", birth=" + birth
 				+ ", id=" + DNI + ", phone_number=" + phone_number + ", postcode=" + postcode + ", pathologies="
 				+ pathologies + "]";
 	}
@@ -144,11 +145,11 @@ public class Patient extends User implements Serializable {
 	}
 
 	public Date getBirth() {
-		return date_of_birth;
+		return birth;
 	}
 
 	public void setBirth(Date birth) {
-		this.date_of_birth = birth;
+		this.birth = birth;
 	}
 
 	public String getID() {

@@ -2,7 +2,8 @@ package mconsultancy.db.ifaces;
 
 import java.util.List;
 
-
+import db.pojos.Prescription;
+import db.pojos.Video_consultation;
 import db.pojos.users.User;
 
 public interface UserInterface {
@@ -23,5 +24,13 @@ public interface UserInterface {
 	public User checkPassword(String email, String password);
 
 
+	public List<User> allEmergencyUsers();
+	
+	public void addInfoVideo(int id_video, String notes, int duration, Prescription p);
 
+	public void addPrescription(Prescription p);
+	
+	public void deleteUser(User user);
+
+	
 }

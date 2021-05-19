@@ -33,7 +33,7 @@ public class DBManager implements DBinterface {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/MedicalConsultancy.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/med.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -53,25 +53,25 @@ public class DBManager implements DBinterface {
 			stmt1 = c.createStatement();
 
 			String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, "
-					+ "DNI TEXT UNIQUE, " + "phone_number TEXT UNIQUE, " + "postcode TEXT, "
-					+ "specialization TEXT , " + "name TEXT NOT NULL, " + "hospital TEXT, "
-					+ "email TEXT NOT NULL, " + "password BLOB NOT NULL)";
+					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, " + "DNI TEXT UNIQUE, "
+					+ "phone_number TEXT UNIQUE, " + "postcode TEXT, " + "specialization TEXT , "
+					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL, "
+					+ "photo BLOB)";
 
 			stmt1.executeUpdate(sql1);
 
 			sql1 = "CREATE TABLE videoconsultation " + "(id_video INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "consultation_date DATE NOT NULL, " + "consultation_time TIME NOT NULL, " + "duration INTEGER, "
 					+ "type_of_call TEXT, " + "notes TEXT, "
-					+ "id_doctor INTEGER REFERENCES users(id) ON DELETE SET NULL, "
-					+ "id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL)";
+					+ "id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL, "
+					+ "id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
 
 			stmt1.executeUpdate(sql1);
 
 			sql1 = "CREATE TABLE prescription " + "(id_prescription INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "doses INTEGER NOT NULL, " + "notes TEXT, " + "duration INTEGER NOT NULL, "
 					+ "name TEXT NOT NULL, "
-					+ "id_video INTEGER REFERENCES videoconsultation(id_video) ON DELETE SET NULL)";
+					+ "id_video INTEGER REFERENCES videoconsultation(id_video) ON UPDATE CASCADE ON DELETE SET NULL)";
 
 			stmt1.executeUpdate(sql1);
 
@@ -81,14 +81,15 @@ public class DBManager implements DBinterface {
 			stmt1.executeUpdate(sql1);
 
 			sql1 = "CREATE TABLE patient_pathology " + "(id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL, "
-					+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON DELETE SET NULL, "
+					+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON UPDATE CASCADE ON DELETE SET NULL, "
 					+ "PRIMARY KEY(id_patient,id_pathology))";
 
 			stmt1.executeUpdate(sql1);
 
-			sql1 = "CREATE TABLE rating " + "(id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL, "
-					+ "id_doctor INTEGER REFERENCES users(id) ON DELETE SET NULL, " + "score INTEGER, "
-					+ "review TEXT, " + "PRIMARY KEY(id_patient,id_doctor))";
+			sql1 = "CREATE TABLE rating "
+					+ "(id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL, "
+					+ "id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL, "
+					+ "score INTEGER, " + "review TEXT, " + "PRIMARY KEY(id_patient,id_doctor))";
 
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
@@ -132,7 +133,7 @@ public class DBManager implements DBinterface {
 		try {
 			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
 			PreparedStatement ps = c.prepareStatement(sql);
-			
+
 			ps.setInt(1, r.getDoc().getId());
 			ps.setInt(2, r.getPat().getId());
 			ps.setInt(3, r.getScore());
@@ -149,7 +150,7 @@ public class DBManager implements DBinterface {
 
 		try {
 
-			String sql = "INSERT INTO videoconsultation (consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
+			String sql = "INSERT INTO videoconsultation(consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, v.getConsultation_date());
 			ps.setTime(2, v.getConsultatiton_time());
@@ -340,10 +341,9 @@ public class DBManager implements DBinterface {
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				
-				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"),
-						rs.getDate("birth"), rs.getString("DNI"), rs.getString("phone_number"),
-						rs.getString("postcode"));
+
+				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"), rs.getDate("birth"),
+						rs.getString("DNI"), rs.getString("phone_number"), rs.getString("postcode"));
 				p.setPathologies(getPathologiesOfPatient(p.getId()));
 				return p;
 
@@ -727,6 +727,29 @@ public class DBManager implements DBinterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	@Override
+	public List<Doctor> searchDoctorType(String name) {
+		List<Doctor> doctors = new ArrayList<Doctor>();
+		try {
+			String sql = "SELECT * FROM user WHERE role_name=? AND specialist=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setString(1, "d");
+			ps.setString(2, name);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				doctors.add(this.getDoctor(rs.getInt("id_video")));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return doctors;
 
 	}
 

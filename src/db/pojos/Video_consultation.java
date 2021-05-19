@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+
+
 @Entity
 @Table(name="videoconsultation")
 public class Video_consultation implements Serializable {
@@ -23,7 +25,7 @@ public class Video_consultation implements Serializable {
 	private Date consultation_date;
 	private Time consultatiton_time;
 	private Integer duration;
-	private String type;
+	private String type_of_call;
 	private String notes;
 	@OneToMany(mappedBy="vd")
 	private List<Prescription>prescription;
@@ -49,7 +51,7 @@ public class Video_consultation implements Serializable {
 		super();
 		this.consultation_date = consultation_date;
 		this.consultatiton_time = consultatiton_time;
-		this.type = type;
+		this.type_of_call = type;
 		this.prescription=new ArrayList<Prescription>();
 	}
 
@@ -65,7 +67,7 @@ public class Video_consultation implements Serializable {
 		this.consultation_date = consultation_date;
 		this.consultatiton_time = consultatiton_time;
 		this.duration = duration;
-		this.type = type;
+		this.type_of_call = type;
 		this.notes = notes;
 		this.prescription=new ArrayList<Prescription>();
 	}
@@ -79,7 +81,7 @@ public class Video_consultation implements Serializable {
 		super();
 		this.consultation_date = consultation_date;
 		this.consultatiton_time = consultatiton_time;
-		this.type = type;
+		this.type_of_call = type;
 		this.doc = doc;
 		this.pat = pat;
 		this.prescription=new ArrayList<Prescription>();
@@ -97,7 +99,7 @@ public class Video_consultation implements Serializable {
 		this.consultation_date = consultation_date;
 		this.consultatiton_time = consultatiton_time;
 		this.duration = duration;
-		this.type = type;
+		this.type_of_call = type;
 		this.notes = notes;
 		this.doc = doc;
 		this.pat = pat;
@@ -116,7 +118,7 @@ public class Video_consultation implements Serializable {
 		this.consultation_date = consultation_date;
 		this.consultatiton_time = consultatiton_time;
 		this.duration = duration;
-		this.type = type;
+		this.type_of_call = type;
 		this.notes = notes;
 		this.prescription = prescription;
 		this.doc = doc;
@@ -135,7 +137,7 @@ public class Video_consultation implements Serializable {
 		this.consultation_date = consultation_date;
 		this.consultatiton_time = consultatiton_time;
 		this.duration = duration;
-		this.type = type;
+		this.type_of_call = type;
 		this.notes = notes;
 		this.prescription = prescription;
 		this.doc= doc;
@@ -157,7 +159,7 @@ public class Video_consultation implements Serializable {
 	@Override
 	public String toString() {
 		return "Video_consultation [id_video=" + id_video + ", consultation_date=" + consultation_date
-				+ ", consultatiton_time=" + consultatiton_time + ", duration=" + duration + ", type=" + type
+				+ ", consultatiton_time=" + consultatiton_time + ", duration=" + duration + ", type=" + type_of_call
 				+ ", notes=" + notes + ", prescription=" + prescription + ", doctor=" + doc.getName() + ", patient=" + pat.getName() + "]";
 	}
 
@@ -223,11 +225,11 @@ public class Video_consultation implements Serializable {
 	}
 
 	public String getType() {
-		return type;
+		return type_of_call;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.type_of_call = type;
 	}
 
 	public String getNotes() {
@@ -246,7 +248,12 @@ public class Video_consultation implements Serializable {
 		this.prescription = prescription;
 	}
 
-
+	// Additional method to add to a list
+	public void addPrescription(Prescription p) {
+		if (!this.prescription.contains(p)) {
+			this.prescription.add(p);
+		}
+	}
 
 	public Doctor getDoc() {
 		return doc;

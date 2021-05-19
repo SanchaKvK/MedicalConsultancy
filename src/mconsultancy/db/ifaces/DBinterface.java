@@ -102,5 +102,7 @@ public interface DBinterface {
 	
 	//updates the duration in a specific videoconsultation
 	public void changeVideoconsultationDuration(int duration, int id);
+	
+	public List<Doctor> searchDoctorType(String name);
 
 }

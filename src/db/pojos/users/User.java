@@ -33,6 +33,8 @@ public abstract class User {
 		super();
 		this.id = id;
 	}
+	
+
 
 	public User(String email, byte[] password, String role_name) {
 		super();
