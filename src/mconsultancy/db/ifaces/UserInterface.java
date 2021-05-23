@@ -31,6 +31,6 @@ public interface UserInterface {
 	public void addPrescription(Prescription p);
 	
 	public void deleteUser(User user);
-
+	public boolean checkEmail(String email);
 	
 }
