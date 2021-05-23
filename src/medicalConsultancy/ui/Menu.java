@@ -1,7 +1,10 @@
 package medicalConsultancy.ui;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.sql.Date;
@@ -506,15 +509,32 @@ public class Menu {
 
 		System.out.println("Hospital: ");
 		String hospital = reader.readLine();
+	
+		System.out.print("Do you want to add a photo? (Y/N): ");
+		String yesNo = reader.readLine();
 
-		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital);
+		if (yesNo.equalsIgnoreCase("N")) {
+		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital,null);
+		return d;
 
+		}else {
+			
+		System.out.print("Type the file name as it appears in photos, including extension: ");
+		String fileName = reader.readLine();
+		File photo = new File("./photos/" + fileName);
+		InputStream streamBlob = new FileInputStream(photo);
+		byte[] bytesBlob = new byte[streamBlob.available()];
+		streamBlob.read(bytesBlob);
+		streamBlob.close();
+		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital,bytesBlob);
 		return d;
 		
 		
 		}
-
+		
 	}
+
+
 
 	private static void diagnose() throws Exception {
 
