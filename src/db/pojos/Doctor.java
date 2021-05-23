@@ -24,6 +24,9 @@ public class Doctor extends User implements Serializable {
 	private List<Video_consultation> videos;
 	@OneToMany(mappedBy = "doc")
 	private List<Rating> ratings;
+	@Basic(fetch=FetchType.LAZY)
+	@Lob
+	private byte[] photo;
 
 	public Doctor() {
 		super();
@@ -33,51 +36,56 @@ public class Doctor extends User implements Serializable {
 	}
 
 	public Doctor(Integer id, String email, byte[] password, String role_name, String specialization, String name,
-			String hospital) {
+			String hospital, byte[] photo) {
 		super(id, email, password, role_name);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
 		this.videos = new ArrayList<Video_consultation>();
 		this.ratings = new ArrayList<Rating>();
+		this.photo = photo;
 	}
 
-	public Doctor(Integer id, String specialization, String name, String hospital) {
+	public Doctor(Integer id, String specialization, String name, String hospital, byte[] photo) {
 		super(id);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
 		this.videos = new ArrayList<Video_consultation>();
 		this.ratings = new ArrayList<Rating>();
+		this.photo = photo;
 	}
 
 	public Doctor(String email, byte[] password, String role_name, String specialization, String name,
-			String hospital) {
+			String hospital, byte[] photo) {
 		super(email, password, role_name);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
+		this.photo = photo;
 	}
 	
 
 
 	public Doctor(String specialization, String name, String hospital, List<Video_consultation> videos,
-			List<Rating> ratings) {
+			List<Rating> ratings, byte[] photo) {
 		super();
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
 		this.videos = videos;
 		this.ratings = ratings;
+		this.photo = photo;
 	}
 
-	public Doctor(String specialization, String name, String hospital) {
+	public Doctor(String specialization, String name, String hospital, byte[] photo) {
 		super();
 		this.specialization = specialization;
 		this.hospital = hospital;
 		this.name = name;
 		this.videos = new ArrayList<Video_consultation>();
 		this.ratings = new ArrayList<Rating>();
+		this.photo = photo;
 	}
 
 //Doctor prints ratings but not videos
@@ -151,6 +159,14 @@ public class Doctor extends User implements Serializable {
 
 	public void setHospital(String hospital) {
 		this.hospital = hospital;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
 	}
 
 }

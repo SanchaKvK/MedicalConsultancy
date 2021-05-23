@@ -438,8 +438,6 @@ public class Menu {
 		System.out.println("Review: ");
 		String review = reader.readLine();
 
-		Integer score = inputOutput.askScore();
-
 		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
 
 		dbman.addRating(rating);
@@ -512,6 +510,9 @@ public class Menu {
 		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital);
 
 		return d;
+		
+		
+		}
 
 	}
 
@@ -619,6 +620,26 @@ public class Menu {
 
 	private static void emergency() {
 
+		List<Doctor> doctors = dbman.searchDoctorType("Emergency:");
+		
+		int id_doctor=(int) (Math.random()*doctors.size());
+		
+		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
+		if (doctors == null) {
+			System.out.println("Right now we do not have an emergency doctor");
+			return;
+		}
+
+		int id_doctor = (int) (Math.random() * doctors.size());
+
+		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
+		if (doctors == null) {
+			System.out.println("Right now we do not have an emergency doctor");
+			return;
+		}
+
+		int id_doctor = (int) (Math.random() * doctors.size());
+
 		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
 		if (doctors == null) {
 			System.out.println("Right now we do not have an emergency doctor");
@@ -629,8 +650,8 @@ public class Menu {
 
 		LocalDate date = LocalDate.now();
 
-		LocalTime time = LocalTime.now();
 
+		LocalTime time = LocalTime.now();
 		Integer id_patient = user.getId();
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), Time.valueOf(time), "Medical emergencies",
