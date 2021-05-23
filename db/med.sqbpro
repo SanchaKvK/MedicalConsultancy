@@ -1,55 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/CEU/3º Curso/Bases de datos/Proyect/MedicalConsultancy/db/med.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure query browser pragmas" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2214"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainpathology"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE patient(
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-role_name TEXT NOT NULL,
-gender TEXT,
-birth DATE
-DNI TEXT UNIQUE,
-phone_number TEXT UNIQUE,
-postcode TEXT,
-specialization TEXT,
-name TEXT NOT NULL,
-hospital TEXT,
-email TEXT NOT NULL,
-password BLOB NOT NULL
-);
-
-
-CREATE TABLE videoconsultation(
-id_video INTEGER PRIMARY KEY AUTOINCREMENT,
-consultation_date DATE NOT NULL,
-consultation_time TIME NOT NULL,
-duration INTEGER,
-type_of_call TEXT,
-notes TEXT,
-id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
-id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL	
-);
-
-CREATE TABLE prescription(
-id_prescription INTEGER PRIMARY KEY AUTOINCREMENT,
-doses INTEGER NOT NULL,
-notes TEXT,
-duration INTEGER NOT NULL,
-name TEXT NOT NULL,
-id_video INTEGER REFERENCES videoconsultation(id_video) ON UPDATE CASCADE ON DELETE SET NULL
-);
-
-CREATE TABLE pathology(
-id_pathology INTEGER PRIMARY KEY AUTOINCREMENT,
-name TEXT NOT NULL,
-type TEXT
-);
-CREATE TABLE patient_pathology(
-id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
-id_pathology INTEGER REFERENCES pathology(id_pathology) ON UPDATE CASCADE ON DELETE SET NULL,
-PRIMARY KEY(id_patient,id_pathology)
-);
-
-CREATE TABLE rating(
-id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
-id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
-score INTEGER,
-review TEXT,
-PRIMARY KEY(id_patient,id_doctor)
-);
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/CEU/3º Curso/Bases de datos/Proyect/MedicalConsultancy/db/md.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure query browser pragmas" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2214"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainpathology"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE users(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+role_name TEXT NOT NULL,
+gender TEXT,
+birth DATE
+DNI TEXT UNIQUE,
+phone_number TEXT UNIQUE,
+postcode TEXT,
+specialization TEXT,
+name TEXT NOT NULL,
+hospital TEXT,
+email TEXT NOT NULL,
+password BLOB NOT NULL
+);
+
+
+CREATE TABLE videoconsultation(
+id_video INTEGER PRIMARY KEY AUTOINCREMENT,
+consultation_date DATE NOT NULL,
+consultation_time TIME NOT NULL,
+duration INTEGER,
+type_of_call TEXT,
+notes TEXT,
+id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
+id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL	
+);
+
+CREATE TABLE prescription(
+id_prescription INTEGER PRIMARY KEY AUTOINCREMENT,
+doses INTEGER NOT NULL,
+notes TEXT,
+duration INTEGER NOT NULL,
+name TEXT NOT NULL,
+id_video INTEGER REFERENCES videoconsultation(id_video) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+CREATE TABLE pathology(
+id_pathology INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT NOT NULL,
+type TEXT
+);
+CREATE TABLE patient_pathology(
+id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
+id_pathology INTEGER REFERENCES pathology(id_pathology) ON UPDATE CASCADE ON DELETE SET NULL,
+PRIMARY KEY(id_patient,id_pathology)
+);
+
+CREATE TABLE rating(
+id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
+id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL,
+score INTEGER,
+review TEXT,
+PRIMARY KEY(id_patient,id_doctor)
+);
 </sql><current_tab id="0"/></tab_sql></sqlb_project>

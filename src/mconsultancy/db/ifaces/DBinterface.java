@@ -55,6 +55,9 @@ public interface DBinterface {
 	//Shows a specific doctor
 	public Doctor getDoctor(int id_doctor);
 	
+	//Shows a specific pathology
+	public Pathology getPathology(int id_pathology);
+	
 	// Shows a specific videconsultation
 	public Video_consultation getVideo(int id_video);
 	

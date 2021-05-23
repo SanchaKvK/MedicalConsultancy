@@ -55,8 +55,7 @@ public class DBManager implements DBinterface {
 			String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, " + "DNI TEXT UNIQUE, "
 					+ "phone_number TEXT UNIQUE, " + "postcode TEXT, " + "specialization TEXT , "
-					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL, "
-					+ "photo BLOB)";
+					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL)";
 
 			stmt1.executeUpdate(sql1);
 
@@ -751,6 +750,28 @@ public class DBManager implements DBinterface {
 
 		return doctors;
 
+	}
+
+	@Override
+	public Pathology getPathology(int id_pathology) {
+		Pathology p = null;
+		try {
+
+			String sql = "SELECT*FROM pathology WHERE id_pathology=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_pathology);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+
+				p = new Pathology(id_pathology, rs.getString("name"), rs.getString("type"));
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return p;
 	}
 
 }
