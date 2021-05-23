@@ -27,6 +27,8 @@ public class inputOutput {
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
 
+	// it shows these three options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
 	public static Integer OptionMenuLoginRegister() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -58,6 +60,8 @@ public class inputOutput {
 
 	}
 
+	// it shows these two options. The user will not be able to exit the loop if the
+	// user enters options that are not there or if he/she enters letters.
 	public static Integer OptionMenuRegister() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -87,6 +91,8 @@ public class inputOutput {
 
 	}
 
+	// it shows these ten options. The user will not be able to exit the loop if the
+	// user enters options that are not there or if he/she enters letters.
 	public static Integer OptionMenuPatient() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -126,6 +132,9 @@ public class inputOutput {
 
 	}
 
+	// it shows these three options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
+
 	public static Integer OptionMenuVideo() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -157,6 +166,8 @@ public class inputOutput {
 
 	}
 
+	// it shows these eight options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
 	public static Integer OptionMenuDoctor() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -193,6 +204,8 @@ public class inputOutput {
 
 	}
 
+	// This function will ask the patient an email. The function will use checkEmail  function to comprobate if the email has already been created.
+	// If the email is already been created, the patient will be asked for a new  email until he introduces an email that is not in the database.
 	public static String askEmail() throws IOException {
 		String string = "";
 		Boolean state = false;
@@ -218,10 +231,10 @@ public class inputOutput {
 	// searchDoctor. It will return a list of doctors with that name.
 	// This list of doctors is the list doctors of the askDoctorId function.
 	// The user has to introduce the id_doctor of one of the doctors of the list
-	// doctors.
+	// doctors and it can't be a letter.
 	// It is possible that the user enters an id_doctor that exists in the database
 	// but it may not exist in the list of doctors, so, the user has to introduce
-	// an id_doctor that list doctors.
+	// an id_doctor of that list doctors.The function will return an Integer, which is the id_doctor of the one of the doctors of the doctors list. 
 	public static Integer askDoctorId(List<Doctor> doctors) throws IOException {
 		dbman.connect();
 		Integer id_doctor = -1;
@@ -257,6 +270,8 @@ public class inputOutput {
 
 	}
 
+	// it shows these twp options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
 	public static String askGender() throws IOException {
 		dbman.connect();
 		Integer option = -1;
@@ -296,6 +311,8 @@ public class inputOutput {
 
 	}
 
+	//We pass a list of patients to the function. This function will show all the patients of that list and the user has to introduce the id of one of those patients.
+	//If the option is not an id of the patients of the list or is a letter, the function will keep asking the user for a correct id until he introduce an id of the list of patients.
 	public static Integer askPatientId(List<Patient> patients) throws IOException {
 		dbman.connect();
 		Integer id_patient = -1;
@@ -330,6 +347,8 @@ public class inputOutput {
 
 	}
 
+	//We pass a list of pathologies to the function. This function will show all the pathologies of that list and the user has to introduce the id of one of those pathologies.
+	//If the option is not an id of the pathologies of the list or is a letter, the function will keep asking the user for a correct id until he introduce an id of the list of pathologies.	
 	public static Integer askPathologyId(List<Pathology> p) throws IOException {
 		dbman.connect();
 		Integer id_path = -1;
@@ -362,16 +381,9 @@ public class inputOutput {
 
 	}
 
-	// le paso una lista de videos , pues cuando el paciente seleccione un video,
-	// puede que
-	// ponga un id de un video que no sea suyo, o sea, que sea de otro paciente.
-	// asi que le paso una lista de los videos que esta escogiendo y si el id que
-	// escoge representa a uno de sus videos, le dejaré pasar.
-	// en cambio, si el id no corresponde a ningun de esos videos , ya bien sea
-	// porque no exista o porque si exista pero sea de otro paciente, pues eso no
-	// estara en la lista
-	// y no podrá pasar
 
+	//We pass a list of videos to the function. This function will show all the videos of that list and the user has to introduce the id of one of those videos.
+	//If the option is not an id of the videos of the list or is a letter, the function will keep asking the user for a correct id until he introduce an id of the list of videos.
 	public static Integer askVideoId(List<Video_consultation> vd) throws IOException {
 		dbman.connect();
 		Integer id_video = -1;
@@ -403,6 +415,9 @@ public class inputOutput {
 
 	}
 
+	// It will ask the user to introduce a score from 1 to 5. 
+	// The user will not be able to exit the loop if the user enters options that are not between 1 or 5 or if he/she enters letters.
+
 	public static Integer askScore() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -431,6 +446,9 @@ public class inputOutput {
 		return option;
 
 	}
+	
+	// it shows these two options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
 
 	public static boolean askYesNo() throws IOException {
 		Integer option = -55;
@@ -465,7 +483,8 @@ public class inputOutput {
 
 	}
 
-	// A phone number cant have letters
+	// It will ask the user to introduce a phone number
+	// The user will not be able to exit the loop if the user enters letters.
 	public static String askPhone() throws IOException {
 
 		String string = "";
@@ -477,7 +496,7 @@ public class inputOutput {
 			string = reader.readLine();
 			state = isNumeric(string);
 
-			if (state == false)
+			if (state == true)
 				break;
 
 		}
@@ -486,7 +505,8 @@ public class inputOutput {
 
 	}
 
-	// a name cant have letters
+	// It will ask the user to introduce a name
+	// The user will not be able to exit the loop if the user enters numbers.
 	public static String askName() throws IOException {
 
 		String string = "";
@@ -507,7 +527,8 @@ public class inputOutput {
 
 	}
 
-	// a specialization cant have letters
+	// It will ask the user to introduce a specialization
+	// The user will not be able to exit the loop if the user enters numbers.
 	public static String askSpecialization() throws IOException {
 
 		String string = "";
@@ -527,7 +548,10 @@ public class inputOutput {
 		return string;
 
 	}
-
+	// It will ask the user to introduce a date of an appointment
+	// The user will not be able to exit the loop if the user introduces a patron that is not yyyy-mm-dd or if the date of the appointment is in past dates.
+	//To comprobate that it follows a patron the function will use the isDate(string) function.
+	
 	public static LocalDate askDateAppointment() throws IOException {
 		String string = "";
 		Boolean state = false;
@@ -554,6 +578,10 @@ public class inputOutput {
 		return ld;
 
 	}
+	
+	// It will ask the user to introduce a date of birth
+	// The user will not be able to exit the loop if the user introduces a patron that is not yyyy-mm-dd or if the date of the birth is in future dates.
+	//To comprobate that it follows a patron the function will use the isDate(string) function.
 
 	public static LocalDate askBirth() throws IOException {
 		String string = "";
@@ -581,7 +609,8 @@ public class inputOutput {
 		return ld;
 
 	}
-
+	// it shows the size of list <time> hours options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
 	public static Integer availableHoursMenu(List<Time> hours) throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -615,6 +644,8 @@ public class inputOutput {
 
 	}
 
+	// It will ask the user to introduce a duration of a video consultation
+	// The user will not be able to exit the loop if the user enters letters or if the duration is less than 0 or bigger than 60.
 	public static Integer askDurationVideo() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -643,6 +674,8 @@ public class inputOutput {
 
 	}
 
+	// It will ask the user to introduce a dose of a medication
+	// The user will not be able to exit the loop if the user enters letters or if the dose is negative
 	public static Integer askDoses() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -671,6 +704,8 @@ public class inputOutput {
 
 	}
 
+	// It will ask the user to introduce a duration of medication
+	// The user will not be able to exit the loop if the user enters letters or if the duration is negative
 	public static Integer askDurationPrescription() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -698,7 +733,10 @@ public class inputOutput {
 		return option;
 
 	}
-
+	
+	
+	// it shows these 5 options. The user will not be able to exit the loop if
+	// the user enters options that are not there or if he/she enters letters.
 	public static String typeAppointment() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -744,6 +782,8 @@ public class inputOutput {
 
 	}
 
+	
+	//this function checks is a string is a number. Return true if it's a number and false if is a string.
 	public static boolean isNumeric(String string) {
 		int numero = 0;
 		try {
@@ -758,6 +798,7 @@ public class inputOutput {
 
 	}
 
+	//this function checks if a string can be converted to a date
 	public static boolean isDate(String string) {
 		LocalDate ld;
 		try {

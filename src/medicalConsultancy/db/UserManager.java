@@ -60,7 +60,7 @@ public class UserManager implements UserInterface {
 	public List<User> allEmergencyUsers() {
 		Query q = em.createNativeQuery("SELECT * FROM users WHERE role_name=? and specialization=?", User.class);
 		q.setParameter(1, "d");
-		q.setParameter(2, "emergency");
+		q.setParameter(2, "Medical emergencies");
 		return (List<User>) q.getSingleResult();
 
 	}

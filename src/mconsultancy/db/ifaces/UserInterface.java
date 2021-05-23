@@ -24,13 +24,19 @@ public interface UserInterface {
 	public User checkPassword(String email, String password);
 
 
+	//return a list of users  with the role_name=d and the specialization=Medical emergencies
 	public List<User> allEmergencyUsers();
 	
+	//updates a previous videoconsultation. Updates the duration, the prescription and the notes.
 	public void addInfoVideo(int id_video, String notes, int duration, Prescription p);
 
+	//add a prescription
 	public void addPrescription(Prescription p);
 	
+	//delete an user
 	public void deleteUser(User user);
+	
+	//checks if an email has already been created in the database. Returns true if it has already been created or false if not. 
 	public boolean checkEmail(String email);
 	
 }
