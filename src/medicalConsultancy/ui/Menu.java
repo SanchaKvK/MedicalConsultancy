@@ -1,7 +1,10 @@
 package medicalConsultancy.ui;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.sql.Date;
@@ -22,12 +25,12 @@ import db.pojos.Video_consultation;
 import db.pojos.users.User;
 import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
-import medicalConsultancy.db.UserManager;
+import medicalConsultancy.db.JPAUserManager;
 
 public class Menu {
 
 	private static User user;
-	private static UserInterface usman = new UserManager();
+	private static UserInterface usman = new JPAUserManager();
 	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -481,10 +484,28 @@ public class Menu {
 		String specialization = reader.readLine();
 		System.out.println("Hospital: ");
 		String hospital = reader.readLine();
+		
+		System.out.print("Do you want to add a photo? (Y/N): ");
+		String yesNo = reader.readLine();
 
-		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital);
-
+		if (yesNo.equalsIgnoreCase("N")) {
+		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital,null);
 		return d;
+
+		}else {
+			
+		System.out.print("Type the file name as it appears in photos, including extension: ");
+		String fileName = reader.readLine();
+		File photo = new File("./photos/" + fileName);
+		InputStream streamBlob = new FileInputStream(photo);
+		byte[] bytesBlob = new byte[streamBlob.available()];
+		streamBlob.read(bytesBlob);
+		streamBlob.close();
+		Doctor d = new Doctor(email, hash, "d", specialization, name, hospital,bytesBlob);
+		return d;
+		
+		
+		}
 
 	}
 
@@ -590,21 +611,18 @@ public class Menu {
 
 	private static void emergency() {
 
-		List<Doctor> doctors = dbman.searchDoctorType("Emergency");
+		List<Doctor> doctors = dbman.searchDoctorType("Emergency:");
 		
 		int id_doctor=(int) (Math.random()*doctors.size());
-		
-		
 		
 		LocalDate date = LocalDate.now();
 		
 		LocalTime time=LocalTime.now();
 
-
 		Integer id_patient = user.getId();
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date),Time.valueOf(time), "Emergency",
-				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
+		dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
 		dbman.addVideo_consultation(vd);
 		
 		

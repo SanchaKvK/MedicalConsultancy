@@ -12,7 +12,7 @@ import db.pojos.Video_consultation;
 import db.pojos.users.User;
 
 
-public class UserManager implements UserInterface {
+public class JPAUserManager implements UserInterface {
 
 	private EntityManager em;
 

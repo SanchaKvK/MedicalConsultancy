@@ -215,7 +215,7 @@ public class DBManager implements DBinterface {
 			while (rs.next()) {
 
 				Doctor doctor = new Doctor(rs.getInt("id"), rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"));
+						rs.getString("hospital"),rs.getBytes("photo"));
 				doctor.setRatings(this.getRatingOfDoctor(doctor.getId()));
 				doctors.add(doctor);
 			}
@@ -371,7 +371,7 @@ public class DBManager implements DBinterface {
 			if (rs.next()) {
 
 				return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"));
+						rs.getString("hospital"),rs.getBytes("pohto"));
 
 			}
 
