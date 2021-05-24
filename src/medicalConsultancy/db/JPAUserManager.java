@@ -108,6 +108,12 @@ public class JPAUserManager implements UserInterface {
 		
 	}
 
+	@Override
+	public boolean checkEmail(String email) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 
 	
