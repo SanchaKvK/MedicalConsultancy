@@ -7,13 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import medicalconsultancyxml.utils.*;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 
 @Entity
 @Table(name="videoconsultation")
+//@XmlAccessorType(XmlAccessType.FIELD)
+//@XmlRootElement(name = "Video_consultation")
 public class Video_consultation implements Serializable {
 
-	
 	/**
 	 * 
 	 */
@@ -21,8 +30,12 @@ public class Video_consultation implements Serializable {
 	@Id
 	@GeneratedValue(generator = "videoconsultation")
 	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
+	//@XmlAttribute
 	private Integer id_video;
+	//@XmlElement
+	//@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date consultation_date;
+	
 	private Time consultatiton_time;
 	private Integer duration;
 	private String type_of_call;
@@ -42,10 +55,6 @@ public class Video_consultation implements Serializable {
 		
 	}
 	
-	
-	
-	
-
 
 	public Video_consultation(Date consultation_date, Time consultatiton_time, String type) {
 		super();
