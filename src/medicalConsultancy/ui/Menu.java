@@ -27,7 +27,6 @@ import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
 import medicalConsultancy.db.JPAUserManager;
 
-
 import InputOutput.inputOutput;
 
 public class Menu {
@@ -513,8 +512,7 @@ public class Menu {
 		System.out.println("Hospital: ");
 		String hospital = reader.readLine();
 
-		System.out.print("Do you want to add a photo? (Y/N): ");
-		String yesNo = reader.readLine();
+		String yesNo = inputOutput.askPhoto();
 
 		if (yesNo.equalsIgnoreCase("N")) {
 			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, null);

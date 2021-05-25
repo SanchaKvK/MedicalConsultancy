@@ -18,7 +18,6 @@ import mconsultancy.db.ifaces.UserInterface;
 import medicalConsultancy.db.DBManager;
 import medicalConsultancy.db.JPAUserManager;
 
-
 public class inputOutput {
 
 	private static User user;
@@ -205,8 +204,10 @@ public class inputOutput {
 
 	}
 
-	// This function will ask the patient an email. The function will use checkEmail  function to comprobate if the email has already been created.
-	// If the email is already been created, the patient will be asked for a new  email until he introduces an email that is not in the database.
+	// This function will ask the patient an email. The function will use checkEmail
+	// function to comprobate if the email has already been created.
+	// If the email is already been created, the patient will be asked for a new
+	// email until he introduces an email that is not in the database.
 	public static String askEmail() throws IOException {
 		String string = "";
 		Boolean state = false;
@@ -235,7 +236,8 @@ public class inputOutput {
 	// doctors and it can't be a letter.
 	// It is possible that the user enters an id_doctor that exists in the database
 	// but it may not exist in the list of doctors, so, the user has to introduce
-	// an id_doctor of that list doctors.The function will return an Integer, which is the id_doctor of the one of the doctors of the doctors list. 
+	// an id_doctor of that list doctors.The function will return an Integer, which
+	// is the id_doctor of the one of the doctors of the doctors list.
 	public static Integer askDoctorId(List<Doctor> doctors) throws IOException {
 		dbman.connect();
 		Integer id_doctor = -1;
@@ -312,8 +314,12 @@ public class inputOutput {
 
 	}
 
-	//We pass a list of patients to the function. This function will show all the patients of that list and the user has to introduce the id of one of those patients.
-	//If the option is not an id of the patients of the list or is a letter, the function will keep asking the user for a correct id until he introduce an id of the list of patients.
+	// We pass a list of patients to the function. This function will show all the
+	// patients of that list and the user has to introduce the id of one of those
+	// patients.
+	// If the option is not an id of the patients of the list or is a letter, the
+	// function will keep asking the user for a correct id until he introduce an id
+	// of the list of patients.
 	public static Integer askPatientId(List<Patient> patients) throws IOException {
 		dbman.connect();
 		Integer id_patient = -1;
@@ -348,8 +354,12 @@ public class inputOutput {
 
 	}
 
-	//We pass a list of pathologies to the function. This function will show all the pathologies of that list and the user has to introduce the id of one of those pathologies.
-	//If the option is not an id of the pathologies of the list or is a letter, the function will keep asking the user for a correct id until he introduce an id of the list of pathologies.	
+	// We pass a list of pathologies to the function. This function will show all
+	// the pathologies of that list and the user has to introduce the id of one of
+	// those pathologies.
+	// If the option is not an id of the pathologies of the list or is a letter, the
+	// function will keep asking the user for a correct id until he introduce an id
+	// of the list of pathologies.
 	public static Integer askPathologyId(List<Pathology> p) throws IOException {
 		dbman.connect();
 		Integer id_path = -1;
@@ -382,9 +392,12 @@ public class inputOutput {
 
 	}
 
-
-	//We pass a list of videos to the function. This function will show all the videos of that list and the user has to introduce the id of one of those videos.
-	//If the option is not an id of the videos of the list or is a letter, the function will keep asking the user for a correct id until he introduce an id of the list of videos.
+	// We pass a list of videos to the function. This function will show all the
+	// videos of that list and the user has to introduce the id of one of those
+	// videos.
+	// If the option is not an id of the videos of the list or is a letter, the
+	// function will keep asking the user for a correct id until he introduce an id
+	// of the list of videos.
 	public static Integer askVideoId(List<Video_consultation> vd) throws IOException {
 		dbman.connect();
 		Integer id_video = -1;
@@ -416,8 +429,9 @@ public class inputOutput {
 
 	}
 
-	// It will ask the user to introduce a score from 1 to 5. 
-	// The user will not be able to exit the loop if the user enters options that are not between 1 or 5 or if he/she enters letters.
+	// It will ask the user to introduce a score from 1 to 5.
+	// The user will not be able to exit the loop if the user enters options that
+	// are not between 1 or 5 or if he/she enters letters.
 
 	public static Integer askScore() throws IOException {
 		Integer option = -55;
@@ -447,7 +461,7 @@ public class inputOutput {
 		return option;
 
 	}
-	
+
 	// it shows these two options. The user will not be able to exit the loop if
 	// the user enters options that are not there or if he/she enters letters.
 
@@ -528,6 +542,38 @@ public class inputOutput {
 
 	}
 
+	public static String askPhoto() throws IOException {
+		int option = -55;
+		String string = "";
+		Boolean state = false;
+
+		while (true) {
+			System.out.print("Do you want to add a photo? ");
+			System.out.println("1. Yes");
+			System.out.println("2. No");
+
+			string = reader.readLine();
+			state = isNumeric(string);
+
+			if (state == true) {
+				option = Integer.parseInt(string);
+				if (option < 1 || option > 2) {
+					System.out.println("Error: " + option + " is not an option");
+
+				}
+
+				else
+					break;
+
+			}
+		}
+		if (option == 1)
+			return "Y";
+		else
+			return "N";
+
+	}
+
 	// It will ask the user to introduce a specialization
 	// The user will not be able to exit the loop if the user enters numbers.
 	public static String askSpecialization() throws IOException {
@@ -550,9 +596,11 @@ public class inputOutput {
 
 	}
 	// It will ask the user to introduce a date of an appointment
-	// The user will not be able to exit the loop if the user introduces a patron that is not yyyy-mm-dd or if the date of the appointment is in past dates.
-	//To comprobate that it follows a patron the function will use the isDate(string) function.
-	
+	// The user will not be able to exit the loop if the user introduces a patron
+	// that is not yyyy-mm-dd or if the date of the appointment is in past dates.
+	// To comprobate that it follows a patron the function will use the
+	// isDate(string) function.
+
 	public static LocalDate askDateAppointment() throws IOException {
 		String string = "";
 		Boolean state = false;
@@ -579,10 +627,12 @@ public class inputOutput {
 		return ld;
 
 	}
-	
+
 	// It will ask the user to introduce a date of birth
-	// The user will not be able to exit the loop if the user introduces a patron that is not yyyy-mm-dd or if the date of the birth is in future dates.
-	//To comprobate that it follows a patron the function will use the isDate(string) function.
+	// The user will not be able to exit the loop if the user introduces a patron
+	// that is not yyyy-mm-dd or if the date of the birth is in future dates.
+	// To comprobate that it follows a patron the function will use the
+	// isDate(string) function.
 
 	public static LocalDate askBirth() throws IOException {
 		String string = "";
@@ -610,7 +660,9 @@ public class inputOutput {
 		return ld;
 
 	}
-	// it shows the size of list <time> hours options. The user will not be able to exit the loop if
+
+	// it shows the size of list <time> hours options. The user will not be able to
+	// exit the loop if
 	// the user enters options that are not there or if he/she enters letters.
 	public static Integer availableHoursMenu(List<Time> hours) throws IOException {
 		Integer option = -55;
@@ -646,7 +698,8 @@ public class inputOutput {
 	}
 
 	// It will ask the user to introduce a duration of a video consultation
-	// The user will not be able to exit the loop if the user enters letters or if the duration is less than 0 or bigger than 60.
+	// The user will not be able to exit the loop if the user enters letters or if
+	// the duration is less than 0 or bigger than 60.
 	public static Integer askDurationVideo() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -676,7 +729,8 @@ public class inputOutput {
 	}
 
 	// It will ask the user to introduce a dose of a medication
-	// The user will not be able to exit the loop if the user enters letters or if the dose is negative
+	// The user will not be able to exit the loop if the user enters letters or if
+	// the dose is negative
 	public static Integer askDoses() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -706,7 +760,8 @@ public class inputOutput {
 	}
 
 	// It will ask the user to introduce a duration of medication
-	// The user will not be able to exit the loop if the user enters letters or if the duration is negative
+	// The user will not be able to exit the loop if the user enters letters or if
+	// the duration is negative
 	public static Integer askDurationPrescription() throws IOException {
 		Integer option = -55;
 		String string = "";
@@ -734,8 +789,7 @@ public class inputOutput {
 		return option;
 
 	}
-	
-	
+
 	// it shows these 5 options. The user will not be able to exit the loop if
 	// the user enters options that are not there or if he/she enters letters.
 	public static String typeAppointment() throws IOException {
@@ -783,8 +837,8 @@ public class inputOutput {
 
 	}
 
-	
-	//this function checks is a string is a number. Return true if it's a number and false if is a string.
+	// this function checks is a string is a number. Return true if it's a number
+	// and false if is a string.
 	public static boolean isNumeric(String string) {
 		int numero = 0;
 		try {
@@ -799,7 +853,7 @@ public class inputOutput {
 
 	}
 
-	//this function checks if a string can be converted to a date
+	// this function checks if a string can be converted to a date
 	public static boolean isDate(String string) {
 		LocalDate ld;
 		try {
