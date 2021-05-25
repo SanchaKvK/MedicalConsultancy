@@ -502,7 +502,6 @@ public class Menu {
 		}
 
 	
-	
 	// OPTION 8 OF THE PATIENT MENU : TURN A PATIENT VIDEOCONSULTATION INTO AN XML FILE
 	
 			private static void JavaVideoConsultationtoXML () throws Exception{
@@ -519,9 +518,9 @@ public class Menu {
 				}
 				int id_video = inputOutput.askVideoId(vd);
 				
-				dbman.getVideo(id_video);
+				Video_consultation video = dbman.getVideo(id_video);
 				
-				marshaller.JavatoXMlVideoconsultation(dbman.getVideo(id_video));
+				marshaller.JavatoXMlVideoconsultation(video);
 				
 			}
 	
@@ -530,6 +529,23 @@ public class Menu {
 			
 			private static void JavaPrescriptiontoXML () throws Exception{
 			
+				XMLManager marshaller = null;
+				//do functions of getting prescriptions from a patient 
+				//
+				List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+				if (vd == null) {
+					System.out.println("You have no video-consultations to turn into XML");
+					return;
+				}
+				for (Video_consultation video_consultation : vd) {
+					System.out.println(video_consultation);
+				}
+				int id_video = inputOutput.askVideoId(vd);
+				
+				Video_consultation video = dbman.getVideo(id_video);
+				
+				marshaller.JavatoXMlVideoconsultation(video);
+				
 			
 			}
 			
@@ -788,7 +804,6 @@ public class Menu {
 		return dbman.searchPathologyByName(name);
 
 	}
-	
 	
 	
 }

@@ -541,8 +541,7 @@ public class DBManager implements DBinterface {
 		return p;
 	}
 
-
-
+	
 	@Override
 	public List<Prescription> getPrescriptionOfVideos(int id_video) {
 
