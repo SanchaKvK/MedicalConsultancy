@@ -11,7 +11,6 @@ import db.pojos.Prescription;
 import db.pojos.Video_consultation;
 import db.pojos.users.User;
 
-
 public class JPAUserManager implements UserInterface {
 
 	private EntityManager em;
@@ -22,7 +21,6 @@ public class JPAUserManager implements UserInterface {
 		em.getTransaction().begin();
 		em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
 		em.getTransaction().commit();
-		
 
 	}
 
@@ -32,8 +30,6 @@ public class JPAUserManager implements UserInterface {
 
 	}
 
-	
-
 	@Override
 	public void addUser(User user) {
 		em.getTransaction().begin();
@@ -41,8 +37,6 @@ public class JPAUserManager implements UserInterface {
 		em.getTransaction().commit();
 
 	}
-
-	
 
 	@Override
 	public User checkPassword(String email, String password) {
@@ -63,59 +57,65 @@ public class JPAUserManager implements UserInterface {
 	}
 
 	@Override
-	public List<User> allEmergencyUsers(){
+	public List<User> allEmergencyUsers() {
 		Query q = em.createNativeQuery("SELECT * FROM users WHERE role_name=? and specialization=?", User.class);
 		q.setParameter(1, "d");
 		q.setParameter(2, "emergency");
 		return (List<User>) q.getSingleResult();
 
-		
-		
 	}
 
 	@Override
 	public void addInfoVideo(int id_video, String notes, int duration, Prescription p) {
-		
-		Query q=em.createNativeQuery("SELECT * FROM videoconsultation WHERE id_video=?",Video_consultation.class);
+
+		Query q = em.createNativeQuery("SELECT * FROM videoconsultation WHERE id_video=?", Video_consultation.class);
 		q.setParameter(1, id_video);
-		Video_consultation vd= (Video_consultation) q.getSingleResult();
-		
+		Video_consultation vd = (Video_consultation) q.getSingleResult();
+
 		em.getTransaction().begin();
 		vd.setDuration(duration);
 		vd.setNotes(notes);
 		vd.addPrescription(p);
 		p.setVd(vd);
-		
+
 		em.getTransaction().commit();
-		
+
 	}
 
 	@Override
 	public void addPrescription(Prescription p) {
-		
+
 		em.getTransaction().begin();
 		em.persist(p);
 		em.getTransaction().commit();
-		
+
 	}
 
 	@Override
 	public void deleteUser(User user) {
-		
+
 		em.getTransaction().begin();
 		em.remove(user);
 		em.getTransaction().commit();
-		
+
 	}
 
 	@Override
 	public boolean checkEmail(String email) {
-		// TODO Auto-generated method stub
-		return false;
+
+		Query q = em.createNativeQuery("SELECT * FROM users WHERE email=?", User.class);
+		q.setParameter(1, email);
+		try {
+			Object user = q.getSingleResult();
+		} catch (NoResultException e) {
+			return false;
+		}
+		return true;
 	}
 
 	
 
 	
+
 
 }
