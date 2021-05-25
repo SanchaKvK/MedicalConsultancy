@@ -82,11 +82,6 @@ public class Video_consultation implements Serializable {
 		this.prescription=new ArrayList<Prescription>();
 	}
 
-
-
-
-
-
 	public Video_consultation(Date consultation_date, Time consultatiton_time, String type, Doctor doc, Patient pat) {
 		super();
 		this.consultation_date = consultation_date;
@@ -135,11 +130,6 @@ public class Video_consultation implements Serializable {
 		this.pat = pat;
 	}
 
-
-
-
-
-
 	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
 			String type, String notes, List<Prescription> prescription, Doctor doc, Patient pat) {
 		super();
@@ -155,13 +145,6 @@ public class Video_consultation implements Serializable {
 	}
 
 	
-	
-
-
-
-
-
-
 
 
 //Video_consultation prints doc,pat and prescription
@@ -169,7 +152,7 @@ public class Video_consultation implements Serializable {
 	@Override
 	public String toString() {
 		return "Video_consultation [id_video=" + id_video + ", consultation_date=" + consultation_date
-				+ ", consultatiton_time=" + consultation_time + ", duration=" + duration + ", type=" + type_of_call
+				+ ", consultation_time=" + consultation_time + ", duration=" + duration + ", type=" + type_of_call
 				+ ", notes=" + notes + ", prescription=" + prescription + ", doctor=" + doc.getName() + ", patient=" + pat.getName() + "]";
 	}
 

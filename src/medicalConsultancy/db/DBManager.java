@@ -112,6 +112,240 @@ public class DBManager implements DBinterface {
 		}
 	}
 
+	
+	//FUNCTION TO SHOW THE PATIENT IT'S PROFILE
+	
+	// Patient method will return a Patient with
+		// id,name,gender,birth,id,phone,postcode and pathologies.
+
+		@Override
+		public Patient getPatient(int id_patient) {
+
+			try {
+
+				String sql = "SELECT * FROM users WHERE id=?";
+				PreparedStatement ps = c.prepareStatement(sql);
+				ps.setInt(1, id_patient);
+				ResultSet rs = ps.executeQuery();
+
+				if (rs.next()) {
+
+					Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"), rs.getDate("birth"),
+							rs.getString("DNI"), rs.getString("phone_number"), rs.getString("postcode"));
+					p.setPathologies(getPathologiesOfPatient(p.getId()));
+					return p;
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+
+		}
+
+	
+	//FUNCTIONS TO SAVE A VIDEOCONSULTATION 
+	
+	
+	@Override
+	public void addVideo_consultation(Video_consultation v) {
+
+		try {
+			String sql = "INSERT INTO videoconsultation(consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setDate(1, v.getConsultation_date());
+			ps.setTime(2, v.getConsultatiton_time());
+			ps.setString(3, v.getType());
+			ps.setInt(4, v.getDoc().getId());
+			ps.setInt(5, v.getPat().getId());
+			ps.executeUpdate();
+			ps.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//FUNCTIONS TO CHANGE THE DATE OF A VIDEOCONSULTATION
+	
+	
+	@Override
+	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
+		Date d = Date.valueOf(LocalDate.now());
+
+		List<Video_consultation> vd = new ArrayList<Video_consultation>();
+
+		try {
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>? AND id_patient=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setDate(1, d);
+			ps.setInt(2, id_patient);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				vd.add(this.getVideo(rs.getInt("id_video")));
+
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vd;
+
+	}
+	
+	@Override
+	public Video_consultation getVideo(int id_video) {
+
+		try {
+			String sql = "SELECT*FROM videoconsultation WHERE id_video=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_video);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				Video_consultation v = new Video_consultation(rs.getInt("id_video"), rs.getDate("consultation_date"),
+						rs.getTime("consultation_time"), rs.getInt("duration"), rs.getString("type_of_call"),
+						rs.getString("notes"), this.getDoctor(rs.getInt("id_doctor")),
+						this.getPatient(rs.getInt("id_patient")));
+				v.setPrescription(this.getPrescriptionOfVideos(v.getId_video()));
+				return v;
+
+			}
+
+			rs.close();
+			ps.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	
+	@Override
+	public List<Time> availableHours(int id_doctor, Date consultation_date) {
+		List<Time> hours = new ArrayList<Time>();
+		LocalTime time = LocalTime.parse("09:00", formatterTime);
+
+		for (int i = 0; i < 11; i++) {
+			hours.add(Time.valueOf(time.plusHours(i)));
+		}
+		try {
+			String sql = "SELECT consultation_time FROM videoconsultation WHERE id_doctor=? AND consultation_date=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_doctor);
+			ps.setDate(2, consultation_date);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				hours.remove(rs.getTime("consultation_time"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return hours;
+	}
+	
+	@Override
+	public void changeAppointmentDate(Date d, int id) {
+		try {
+			String sql = "UPDATE videoconsultation SET consultation_date=? WHERE id_video=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setDate(1, d);
+			prep.setInt(2, id);
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+
+	@Override
+	public void changeAppointmentTime(Time t, int id) {
+		try {
+			String sql = "UPDATE videoconsultation SET consultation_time=? WHERE id_video=?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setTime(1, t);
+			prep.setInt(2, id);
+			prep.executeUpdate();
+			prep.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// Doctor method will return a Doctor with id,specialization,name and hospital.
+
+		@Override
+		public Doctor getDoctor(int id_doctor) {
+
+			try {
+
+				String sql = "SELECT * FROM users WHERE id=?";
+				PreparedStatement ps = c.prepareStatement(sql);
+				ps.setInt(1, id_doctor);
+				ResultSet rs = ps.executeQuery();
+
+				if (rs.next()) {
+
+					//return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
+						//	rs.getString("hospital"),rs.getBytes("photo"));
+					
+					return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
+							rs.getString("hospital"));
+
+				}
+
+				rs.close();
+				ps.close();
+			}
+
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	
+	
 	@Override
 	public void addPathology(Pathology p) {
 
@@ -144,26 +378,7 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	@Override
-	public void addVideo_consultation(Video_consultation v) {
-
-		try {
-			System.out.println("entro aqui");
-			String sql = "INSERT INTO videoconsultation(consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setDate(1, v.getConsultation_date());
-			ps.setTime(2, v.getConsultatiton_time());
-			ps.setString(3, v.getType());
-			ps.setInt(4, v.getDoc().getId());
-			ps.setInt(5, v.getPat().getId());
-			ps.executeUpdate();
-			ps.close();
-		}
-
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	@Override
 	public void addPrescription(Prescription p) {
@@ -326,97 +541,7 @@ public class DBManager implements DBinterface {
 		return p;
 	}
 
-	// Patient method will return a Patient with
-	// id,name,gender,birth,id,phone,postcode and pathologies.
 
-	@Override
-	public Patient getPatient(int id_patient) {
-
-		try {
-
-			String sql = "SELECT * FROM users WHERE id=?";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, id_patient);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-
-				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"), rs.getDate("birth"),
-						rs.getString("DNI"), rs.getString("phone_number"), rs.getString("postcode"));
-				p.setPathologies(getPathologiesOfPatient(p.getId()));
-				return p;
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-
-	}
-
-	// Doctor method will return a Doctor with id,specialization,name and hospital.
-
-	@Override
-	public Doctor getDoctor(int id_doctor) {
-
-		try {
-
-			String sql = "SELECT * FROM users WHERE id=?";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, id_doctor);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-
-				//return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-					//	rs.getString("hospital"),rs.getBytes("photo"));
-				
-				return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"));
-
-			}
-
-			rs.close();
-			ps.close();
-		}
-
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
-	public Video_consultation getVideo(int id_video) {
-
-		try {
-			String sql = "SELECT*FROM videoconsultation WHERE id_video=?";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, id_video);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-
-				Video_consultation v = new Video_consultation(rs.getInt("id_video"), rs.getDate("consultation_date"),
-						rs.getTime("consultation_time"), rs.getInt("duration"), rs.getString("type_of_call"),
-						rs.getString("notes"), this.getDoctor(rs.getInt("id_doctor")),
-						this.getPatient(rs.getInt("id_patient")));
-				v.setPrescription(this.getPrescriptionOfVideos(v.getId_video()));
-				return v;
-
-			}
-
-			rs.close();
-			ps.close();
-		}
-
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
 
 	@Override
 	public List<Prescription> getPrescriptionOfVideos(int id_video) {
@@ -464,34 +589,6 @@ public class DBManager implements DBinterface {
 		return videos;
 	}
 
-	@Override
-	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
-		Date d = Date.valueOf(LocalDate.now());
-
-		List<Video_consultation> vd = new ArrayList<Video_consultation>();
-
-		try {
-			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>? AND id_patient=?";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setDate(1, d);
-			ps.setInt(2, id_patient);
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next()) {
-				vd.add(this.getVideo(rs.getInt("id_video")));
-
-			}
-
-			rs.close();
-			ps.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return vd;
-
-	}
 
 	@Override
 	public List<Video_consultation> getPatientPreviousVideos(int id_patient) {
@@ -643,62 +740,6 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	@Override
-	public void changeAppointmentDate(Date d, int id) {
-		try {
-			String sql = "UPDATE videoconsultation SET consultation_date=? WHERE id_video=?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setDate(1, d);
-			prep.setInt(2, id);
-			prep.executeUpdate();
-			prep.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void changeAppointmentTime(Time t, int id) {
-		try {
-			String sql = "UPDATE videoconsultation SET consultation_time=? WHERE id_video=?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setTime(1, t);
-			prep.setInt(2, id);
-			prep.executeUpdate();
-			prep.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public List<Time> availableHours(int id_doctor, Date consultation_date) {
-		List<Time> hours = new ArrayList<Time>();
-		LocalTime time = LocalTime.parse("09:00", formatterTime);
-
-		for (int i = 0; i < 11; i++) {
-			hours.add(Time.valueOf(time.plusHours(i)));
-		}
-		try {
-			String sql = "SELECT consultation_time FROM videoconsultation WHERE id_doctor=? AND consultation_date=?";
-			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, id_doctor);
-			ps.setDate(2, consultation_date);
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next()) {
-				hours.remove(rs.getTime("consultation_time"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return hours;
-	}
 
 	public void changeVideoconsultationNotes(String notes, int id) {
 
