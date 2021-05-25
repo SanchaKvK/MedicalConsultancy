@@ -254,7 +254,6 @@ public class Menu {
 	
 	private static void makeAppointment() throws Exception {
 
-		System.out.println("Hola");
 		
 		List<Doctor> d = searchDoctor();
 		Integer id_doctor = inputOutput.askDoctorId(d);
@@ -272,10 +271,9 @@ public class Menu {
 		Integer id_patient = user.getId();
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
-				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
+		dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
 		dbman.addVideo_consultation(vd);
 		
-		System.out.println("Hola");
 
 	}
 	
@@ -289,13 +287,6 @@ public class Menu {
 		return dbman.searchDoctorByName(name);
 
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	private static void deleteAccount() {

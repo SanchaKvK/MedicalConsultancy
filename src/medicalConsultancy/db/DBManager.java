@@ -148,7 +148,7 @@ public class DBManager implements DBinterface {
 	public void addVideo_consultation(Video_consultation v) {
 
 		try {
-
+			System.out.println("entro aqui");
 			String sql = "INSERT INTO videoconsultation(consultation_date, consultation_time,type_of_call, id_doctor, id_patient) VALUES(?,?,?,?,?)";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, v.getConsultation_date());
@@ -206,14 +206,13 @@ public class DBManager implements DBinterface {
 		List<Doctor> doctors = new ArrayList<>();
 
 		try {
-			System.out.println("Hola estoy dentro de searchdoctorbyname");
 			String sql = "SELECT * FROM users WHERE name LIKE ? AND role_name=?";
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setString(1, "%" + name + "%");
 			stmt.setString(2, "d");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-//removed the rs.getblob since it was causing problems
+			//removed the rs.getblob since it was causing problems
 				Doctor doctor = new Doctor(rs.getInt("id"), rs.getString("specialization"), rs.getString("name"),
 						rs.getString("hospital"));
 				doctor.setRatings(this.getRatingOfDoctor(doctor.getId()));
@@ -370,8 +369,11 @@ public class DBManager implements DBinterface {
 
 			if (rs.next()) {
 
+				//return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
+					//	rs.getString("hospital"),rs.getBytes("photo"));
+				
 				return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"),rs.getBytes("pohto"));
+						rs.getString("hospital"));
 
 			}
 
