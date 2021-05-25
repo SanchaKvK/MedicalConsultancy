@@ -102,7 +102,7 @@ public class JPAUserManager implements UserInterface {
 
 	@Override
 	public boolean checkEmail(String email) {
-<<<<<<< HEAD
+
 		Query q = em.createNativeQuery("SELECT * FROM users WHERE email=?", User.class);
 		q.setParameter(1, email);
 		try {
@@ -112,14 +112,10 @@ public class JPAUserManager implements UserInterface {
 		}
 		return true;
 	}
-=======
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	
 
 	
->>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
+
 
 }
