@@ -1,31 +1,50 @@
 package medicalConsultancy.db;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 import db.pojos.Prescription;
 import db.pojos.Video_consultation;
-import mconsultancy.db.ifaces.XMLinterface;
+
+import java.io.File;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+
 
 public class XMLManager {
 
+	private JAXBContext jaxbC;
+	private Marshaller jaxbM;
+	
+	public void JavatoXMlVideoconsultation(Video_consultation vc) throws JAXBException {
+		jaxbC = JAXBContext.newInstance(Video_consultation.class);
+		jaxbM = jaxbC.createMarshaller();
+		jaxbM.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+		File file = new File("/MedicalConsultancy/src/medicalconsultancyxml/xmls/FirstXmlFile.xml");
+		jaxbM.marshal(vc,file);
+		jaxbM.marshal(vc,System.out);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	
+	
 	// Put entity manager and buffered reader here so it can be used
 		// in several methods
 		private static EntityManager em;
@@ -97,9 +116,6 @@ public class XMLManager {
 
 	}
 	
-	
-	
-	
 	public static void main(String[] args) throws Exception {
 			//In actual main 
 			//use function to print out all of the prescriptions that exist
@@ -125,5 +141,118 @@ public class XMLManager {
 
 		}*/
 	
+	
+	public static void main(String[] args) throws Exception {
+		
+		/*
+		
+		
+		//JDBC
+		
+		
+		System.out.println("Abriendo database+ creando tablas");
+		// PRIMERO VAMOS A INSERTAR 3 PRESCRIPTIONS
+		
+		Class.forName("org.sqlite.JDBC");
+		Connection c = DriverManager.getConnection("jdbc:sqlite:./db/med.db");
+		c.createStatement().execute("PRAGMA foreign_keys = ON");
+		
+		Statement stmt;
+		//CREAMOS TABLAS	
+		stmt = c.createStatement();
 
+		String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, " + "DNI TEXT UNIQUE, "
+				+ "phone_number TEXT UNIQUE, " + "postcode TEXT, " + "specialization TEXT , "
+				+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL "+" photo BLOB NULL)";
+
+		stmt.executeUpdate(sql1);
+
+		sql1 = "CREATE TABLE videoconsultation " + "(id_video INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "consultation_date DATE NOT NULL, " + "consultation_time TIME NOT NULL, " + "duration INTEGER, "
+				+ "type_of_call TEXT, " + "notes TEXT, "
+				+ "id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL, "
+				+ "id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL)";
+
+		stmt.executeUpdate(sql1);
+
+		sql1 = "CREATE TABLE prescription " + "(id_prescription INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "doses INTEGER NOT NULL, " + "notes TEXT, " + "duration INTEGER NOT NULL, "
+				+ "name TEXT NOT NULL, "
+				+ "id_video INTEGER REFERENCES videoconsultation(id_video) ON UPDATE CASCADE ON DELETE SET NULL)";
+
+		stmt.executeUpdate(sql1);
+
+		sql1 = "CREATE TABLE pathology " + "(id_pathology INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "name TEXT NOT NULL, " + "type TEXT)";
+
+		stmt.executeUpdate(sql1);
+
+		sql1 = "CREATE TABLE patient_pathology " + "(id_patient INTEGER REFERENCES users(id) ON DELETE SET NULL, "
+				+ "id_pathology INTEGER REFERENCES pathology(id_pathology) ON UPDATE CASCADE ON DELETE SET NULL, "
+				+ "PRIMARY KEY(id_patient,id_pathology))";
+
+		stmt.executeUpdate(sql1);
+
+		sql1 = "CREATE TABLE rating "
+				+ "(id_patient INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL, "
+				+ "id_doctor INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL, "
+				+ "score INTEGER, " + "review TEXT, " + "PRIMARY KEY(id_patient,id_doctor))";
+
+		stmt.executeUpdate(sql1);
+		stmt.close();
+
+		//INSERT vamos a usar prepared statement ya para ponerlo en el main asi. 
+
+		
+		System.out.println("Insertando varias prescriptions");
+		String sql = "INSERT INTO prescription (doses,notes,duration,name,id_video) " + "VALUES (?,?,?,?,?)";
+		PreparedStatement prep = c.prepareStatement(sql);
+		// PRIMER PRESCRIPTION
+		prep.setInt(1,3);
+		prep.setString(2, "First dose is the most important");
+		prep.setInt(3, 4);
+		prep.setString(4,"Ibuprofen");
+		prep.setInt(4, 12);
+		prep.executeUpdate();
+		//SEGUNDO PRESCRIPTION
+		prep.setInt(1,17);
+		prep.setString(2, "Dilute to take");
+		prep.setInt(3, 13);
+		prep.setString(4,"Metalgial");
+		prep.setInt(4, 12);
+		prep.executeUpdate();
+
+		//System.out.println("Choose a prescription");
+		// CREAR FUNCION PARA MOSTRAR PRESCRIPTIONS
+		 
+		
+		Statement stmt2 = c.createStatement();
+		String sql2 = "SELECT * FROM prescription";
+		ResultSet rs = stmt2.executeQuery(sql2);
+		while(rs.next()) {
+			Integer id = rs.getInt("id_prescription");
+			Integer doses = rs.getInt("doses");
+			String notes = rs.getString("notes");
+			Integer duration = rs.getInt("duration");
+			String name = rs.getString("name");
+			Integer idvideo = rs.getInt("id_video");
+			Prescription p = new Prescription(name,doses,duration,notes);
+			System.out.println(p);
+		}
+		
+		//ACCESO A LA BASE DE DATOS EN ESTE CASO LO HACEMOS MEDIANTE DE JDBC
+		rs.close();
+		stmt2.close();
+		//COGEMOS EL VALOR QUE QUIERA EL PACIENTE
+		//HACEMOS FUNCION METEMOS EL OBJETO DENTRO DE LA FUNCIOn
+		//CREAMOS LA FUNCION
+		//METEMOS VALORES 
+		prep.close();
+		c.close();*/
+		
+		
+	}
+	
+}
 	

@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import db.pojos.users.User;
-import medicalconsultancyxml.utils.SQLDateAdapter;
 
 @Entity
 @DiscriminatorValue("d")

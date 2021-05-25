@@ -4,18 +4,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.*;
-import javax.xml.*;
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.XmlType;
 
 
 @Entity
 @Table(name= "prescription")
-//@XmlRootElement(name = "Prescription")
-//@XmlAccessorType(XmlAccessType.FIELD)
-
+@XmlRootElement(name = "Prescription")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = { "name", "doses", "duration", "notes" })
 public class Prescription implements Serializable{
 
 	/**
@@ -28,7 +32,7 @@ public class Prescription implements Serializable{
 	    pkColumnName="name", valueColumnName="seq", pkColumnValue="prescription")
 	@XmlAttribute
 	private Integer id_prescription;
-	@XmlAttribute
+	@XmlElement
 	private String name;
 	@XmlElement
 	private Integer doses;
@@ -37,9 +41,8 @@ public class Prescription implements Serializable{
 	@XmlElement
 	private String notes;
 	@ManyToOne(fetch = FetchType.LAZY)
-
 	@JoinColumn(name = "id_video")
-	@XmlElement (name = "Video_Consultation")
+	@XmlTransient
 	private Video_consultation vd; 
 	
 	
@@ -55,14 +58,10 @@ public class Prescription implements Serializable{
 		
 	}
 	
-	
-
 
 	public Video_consultation getVd() {
 		return vd;
 	}
-
-
 
 
 	public void setVd(Video_consultation vd) {
@@ -139,8 +138,6 @@ public Prescription(Integer id_prescription, String name, Integer doses, Integer
 	}
 
 
-
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -157,8 +154,6 @@ public Prescription(Integer id_prescription, String name, Integer doses, Integer
 			return false;
 		return true;
 	}
-
-
 
 
 	public void setId_prescription(Integer id_prescription) {

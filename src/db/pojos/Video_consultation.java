@@ -5,48 +5,54 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import medicalconsultancyxml.utils.*;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import medicalconsultancyxml.utils.SQLDateAdapter;
 
+import javax.xml.bind.annotation.XmlType;
 
 @Entity
 @Table(name="videoconsultation")
-//@XmlAccessorType(XmlAccessType.FIELD)
-//@XmlRootElement(name = "Video_consultation")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Video_consultation")
+@XmlType(propOrder = { "consultation_date", "duration", "type_of_call", "prescription" })
 public class Video_consultation implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1367040608239901293L;
 	@Id
 	@GeneratedValue(generator = "videoconsultation")
 	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
-	//@XmlAttribute
+	@XmlAttribute
 	private Integer id_video;
-	//@XmlElement
-	//@XmlJavaTypeAdapter(SQLDateAdapter.class)
+	@XmlElement
+	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date consultation_date;
-	
-	private Time consultatiton_time;
+	@XmlTransient
+	private Time consultation_time;
+	@XmlElement
 	private Integer duration;
+	@XmlElement
 	private String type_of_call;
+	@XmlElement
 	private String notes;
 	@OneToMany(mappedBy="vd")
+	@XmlElement(name = "prescription")
+	@XmlElementWrapper(name = "prescriptions")
 	private List<Prescription>prescription;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_doctor")
+	@XmlTransient
 	private Doctor doc;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_patient")
+	@XmlTransient
 	private Patient pat;
 	
 	public Video_consultation() {
@@ -55,18 +61,13 @@ public class Video_consultation implements Serializable {
 		
 	}
 	
-
 	public Video_consultation(Date consultation_date, Time consultatiton_time, String type) {
 		super();
 		this.consultation_date = consultation_date;
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 		this.type_of_call = type;
 		this.prescription=new ArrayList<Prescription>();
 	}
-
-
-
-
 
 
 	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
@@ -74,7 +75,7 @@ public class Video_consultation implements Serializable {
 		super();
 		this.id_video = id_video;
 		this.consultation_date = consultation_date;
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 		this.duration = duration;
 		this.type_of_call = type;
 		this.notes = notes;
@@ -89,7 +90,7 @@ public class Video_consultation implements Serializable {
 	public Video_consultation(Date consultation_date, Time consultatiton_time, String type, Doctor doc, Patient pat) {
 		super();
 		this.consultation_date = consultation_date;
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 		this.type_of_call = type;
 		this.doc = doc;
 		this.pat = pat;
@@ -106,7 +107,7 @@ public class Video_consultation implements Serializable {
 		super();
 		this.id_video = id_video;
 		this.consultation_date = consultation_date;
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 		this.duration = duration;
 		this.type_of_call = type;
 		this.notes = notes;
@@ -125,7 +126,7 @@ public class Video_consultation implements Serializable {
 		super();
 		this.id_video = id_video;
 		this.consultation_date = consultation_date;
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 		this.duration = duration;
 		this.type_of_call = type;
 		this.notes = notes;
@@ -144,7 +145,7 @@ public class Video_consultation implements Serializable {
 		super();
 		this.id_video = id_video;
 		this.consultation_date = consultation_date;
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 		this.duration = duration;
 		this.type_of_call = type;
 		this.notes = notes;
@@ -168,7 +169,7 @@ public class Video_consultation implements Serializable {
 	@Override
 	public String toString() {
 		return "Video_consultation [id_video=" + id_video + ", consultation_date=" + consultation_date
-				+ ", consultatiton_time=" + consultatiton_time + ", duration=" + duration + ", type=" + type_of_call
+				+ ", consultatiton_time=" + consultation_time + ", duration=" + duration + ", type=" + type_of_call
 				+ ", notes=" + notes + ", prescription=" + prescription + ", doctor=" + doc.getName() + ", patient=" + pat.getName() + "]";
 	}
 
@@ -218,11 +219,11 @@ public class Video_consultation implements Serializable {
 	}
 
 	public Time getConsultatiton_time() {
-		return consultatiton_time;
+		return consultation_time;
 	}
 
 	public void setConsultatiton_time(Time consultatiton_time) {
-		this.consultatiton_time = consultatiton_time;
+		this.consultation_time = consultatiton_time;
 	}
 
 	public int getDuration() {
@@ -285,10 +286,5 @@ public class Video_consultation implements Serializable {
 	public void setPat(Patient pat) {
 		this.pat = pat;
 	}
-	
-	
-	
-	
-	
 	
 }
