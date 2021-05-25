@@ -26,7 +26,7 @@ import db.pojos.users.User;
 import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
 import medicalConsultancy.db.JPAUserManager;
-
+import medicalConsultancy.db.XMLManager;
 import InputOutput.inputOutput;
 
 public class Menu {
@@ -136,6 +136,8 @@ public class Menu {
 				return;
 			case 9:
 				emergency();
+			case 10:
+				JavaVideoConsultationtoXML ();
 				break;
 			case 0:
 				dbman.disconnect();
@@ -234,6 +236,68 @@ public class Menu {
 		}
 	}
 
+	
+	// OPTION 1 OF THE PATIENT MENU : VIEW THEIR OWN PROFILE INFORMATION
+	
+	
+	private static void getPatient() throws Exception {
+
+		Patient p = dbman.getPatient(user.getId());
+		System.out.println(dbman.getPatient(user.getId()));
+
+	}
+
+	
+	// OPTION 2 OF THE PATIENT MENU : MAKE AN APPOINTMENT
+	
+	
+	
+	private static void makeAppointment() throws Exception {
+
+		System.out.println("Hola");
+		
+		List<Doctor> d = searchDoctor();
+		Integer id_doctor = inputOutput.askDoctorId(d);
+
+		LocalDate date = inputOutput.askDateAppointment();
+
+		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+
+		int index = inputOutput.availableHoursMenu(hours);
+		if (index == 0)
+			return;
+
+		String type = inputOutput.typeAppointment();
+
+		Integer id_patient = user.getId();
+
+		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
+				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
+		dbman.addVideo_consultation(vd);
+		
+		System.out.println("Hola");
+
+	}
+	
+	//makes use of function searchDoctor()
+	
+	
+	private static List<Doctor> searchDoctor() throws Exception {
+
+		System.out.println("Introduce doctor name: ");
+		String name = reader.readLine();
+		return dbman.searchDoctorByName(name);
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private static void deleteAccount() {
 
 		usman.deleteUser(user);
@@ -456,13 +520,6 @@ public class Menu {
 
 	}
 
-	private static void getPatient() throws Exception {
-
-		Patient p = dbman.getPatient(user.getId());
-		System.out.println(dbman.getPatient(user.getId()));
-
-	}
-
 	private static Patient askPatient() throws Exception {
 
 		String email = inputOutput.askEmail();
@@ -552,13 +609,6 @@ public class Menu {
 
 	}
 
-	private static List<Doctor> searchDoctor() throws Exception {
-
-		System.out.println("Introduce doctor name: ");
-		String name = reader.readLine();
-		return dbman.searchDoctorByName(name);
-
-	}
 
 	private static List<Pathology> searchPathologies() throws Exception {
 		System.out.println("Introduce pathology`s name: ");
@@ -567,28 +617,7 @@ public class Menu {
 
 	}
 
-	private static void makeAppointment() throws Exception {
-
-		List<Doctor> d = searchDoctor();
-		Integer id_doctor = inputOutput.askDoctorId(d);
-
-		LocalDate date = inputOutput.askDateAppointment();
-
-		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
-
-		int index = inputOutput.availableHoursMenu(hours);
-		if (index == 0)
-			return;
-
-		String type = inputOutput.typeAppointment();
-
-		Integer id_patient = user.getId();
-
-		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
-				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
-		dbman.addVideo_consultation(vd);
-
-	}
+	
 
 	// to fill the information of previous appointments
 
@@ -618,6 +647,29 @@ public class Menu {
 			diagnose();
 
 	}
+	
+	//FUNCION VIDEOCONSULTATIONS A XML
+	
+	private static void JavaVideoConsultationtoXML () throws Exception{
+		
+		XMLManager marshaller = null;
+		
+		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+		if (vd == null) {
+			System.out.println("You have no video-consultations to turn into XML");
+			return;
+		}
+		for (Video_consultation video_consultation : vd) {
+			System.out.println(video_consultation);
+		}
+		int id_video = inputOutput.askVideoId(vd);
+		
+		dbman.getVideo(id_video);
+		
+		marshaller.JavatoXMlVideoconsultation(dbman.getVideo(id_video));
+		
+	}
+	
 
 	private static Prescription prescribe(int id_video) throws Exception {
 

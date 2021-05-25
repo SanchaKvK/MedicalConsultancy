@@ -113,9 +113,4 @@ public class JPAUserManager implements UserInterface {
 		return true;
 	}
 
-	
-
-	
-
-
 }

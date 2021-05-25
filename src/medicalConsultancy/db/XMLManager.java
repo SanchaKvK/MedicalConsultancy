@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 import db.pojos.Prescription;
 import db.pojos.Video_consultation;
 
+import java.awt.Menu;
 import java.io.File;
 
 import javax.persistence.EntityManager;
@@ -22,6 +23,8 @@ public class XMLManager {
 	private Marshaller jaxbM;
 	private Unmarshaller jaxbU;
 	private File file;
+	
+	
 	public void JavatoXMlVideoconsultation(Video_consultation vc) throws JAXBException {
 		jaxbC = JAXBContext.newInstance(Video_consultation.class);
 		jaxbM = jaxbC.createMarshaller();
@@ -174,7 +177,29 @@ public class XMLManager {
 		}*/
 	
 	
+	
+	/*
+	
+	
+	
+	
 	public static void main(String[] args) throws Exception {
+		
+		DBManager db = new DBManager();
+		db.connect();
+		JPAUserManager jdb = new JPAUserManager();
+		jdb.connect();
+		Prescription newprescription = Prescription()
+		jdb.addPrescription(null);
+		jdb.addInfoVideo(4, null, 4, null);
+		jdb.addPrescription(null);
+		
+		
+		
+		
+		
+		
+		
 		
 		/*
 		
@@ -284,7 +309,7 @@ public class XMLManager {
 		c.close();*/
 		
 		
-	}
+	/*	*/
 	
 }
 	

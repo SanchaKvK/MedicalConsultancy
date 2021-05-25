@@ -109,7 +109,7 @@ public class inputOutput {
 			System.out.println("7. Cancel appointment");
 			System.out.println("8. Delete account");
 			System.out.println("9. Emergency");
-
+			System.out.println("10. Write a videoconsultation into an XML file");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);

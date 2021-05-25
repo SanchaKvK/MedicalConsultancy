@@ -206,6 +206,7 @@ public class DBManager implements DBinterface {
 		List<Doctor> doctors = new ArrayList<>();
 
 		try {
+			System.out.println("Hola estoy dentro de searchdoctorbyname");
 			String sql = "SELECT * FROM users WHERE name LIKE ? AND role_name=?";
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setString(1, "%" + name + "%");
