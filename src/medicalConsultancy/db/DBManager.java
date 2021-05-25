@@ -213,9 +213,9 @@ public class DBManager implements DBinterface {
 			stmt.setString(2, "d");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-
+//removed the rs.getblob since it was causing problems
 				Doctor doctor = new Doctor(rs.getInt("id"), rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"),rs.getBytes("photo"));
+						rs.getString("hospital"));
 				doctor.setRatings(this.getRatingOfDoctor(doctor.getId()));
 				doctors.add(doctor);
 			}
