@@ -16,12 +16,13 @@ import db.pojos.users.User;
 import mconsultancy.db.ifaces.DBinterface;
 import mconsultancy.db.ifaces.UserInterface;
 import medicalConsultancy.db.DBManager;
-import medicalConsultancy.db.UserManager;
+import medicalConsultancy.db.JPAUserManager;
+
 
 public class inputOutput {
 
 	private static User user;
-	private static UserInterface usman = new UserManager();
+	private static UserInterface usman = new JPAUserManager();
 	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
