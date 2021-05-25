@@ -4,11 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.*;
+import javax.xml.*;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+
 @Entity
-@Table(name="prescription")
+@Table(name= "prescription")
+//@XmlRootElement(name = "Prescription")
+//@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Prescription implements Serializable{
 
-	
 	/**
 	 * 
 	 */
@@ -17,21 +26,27 @@ public class Prescription implements Serializable{
 	@GeneratedValue(generator="prescription")
 	@TableGenerator(name="prescription", table="sqlite_sequence",
 	    pkColumnName="name", valueColumnName="seq", pkColumnValue="prescription")
+	@XmlAttribute
 	private Integer id_prescription;
+	@XmlAttribute
 	private String name;
+	@XmlElement
 	private Integer doses;
+	@XmlElement
 	private Integer duration;
+	@XmlElement
 	private String notes;
 	@ManyToOne(fetch = FetchType.LAZY)
 
 	@JoinColumn(name = "id_video")
+	@XmlElement (name = "Video_Consultation")
 	private Video_consultation vd; 
 	
 	
 	public Integer getId_prescription() {
 		return id_prescription;
 	}
-	
+
 	
 	
 	
