@@ -55,7 +55,11 @@ public class DBManager implements DBinterface {
 			String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, " + "DNI TEXT UNIQUE, "
 					+ "phone_number TEXT UNIQUE, " + "postcode TEXT, " + "specialization TEXT , "
+<<<<<<< HEAD
 					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL, "+" photo BLOB)";
+=======
+					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL "+" photo BLOB)";
+>>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
 
 			stmt1.executeUpdate(sql1);
 
@@ -331,7 +335,7 @@ public class DBManager implements DBinterface {
 						//	rs.getString("hospital"),rs.getBytes("photo"));
 					
 					return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-							rs.getString("hospital"));
+							rs.getString("hospital"),rs.getBytes("photo"));
 
 				}
 
@@ -429,7 +433,7 @@ public class DBManager implements DBinterface {
 			while (rs.next()) {
 			//removed the rs.getblob since it was causing problems
 				Doctor doctor = new Doctor(rs.getInt("id"), rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"));
+						rs.getString("hospital"), rs.getBytes("photo"));
 				doctor.setRatings(this.getRatingOfDoctor(doctor.getId()));
 				doctors.add(doctor);
 			}

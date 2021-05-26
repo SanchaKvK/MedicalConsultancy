@@ -49,7 +49,7 @@ public class Doctor extends User implements Serializable {
 		this.photo = photo;
 	}
 
-	public Doctor(Integer id, String specialization, String name, String hospital) {
+	public Doctor(Integer id, String specialization, String name, String hospital, byte[] photo) {
 		//removed from this constructor the attribute photo because it was causing problems
 		//TODO correct photo issues and reintroduce it if needed
 		super(id);

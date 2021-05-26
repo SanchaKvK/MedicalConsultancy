@@ -11,8 +11,13 @@ specialization TEXT,
 name TEXT NOT NULL,
 hospital TEXT,
 email TEXT NOT NULL,
+<<<<<<< HEAD
 password BLOB NOT NULL,
 photo BLOB 
+=======
+password BLOB NOT NULL
+photo BLOB
+>>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
 
 );
 
