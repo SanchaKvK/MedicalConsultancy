@@ -577,11 +577,7 @@ public class inputOutput {
 		Boolean state = false;
 
 		while (true) {
-<<<<<<< HEAD
 			System.out.println("Do you want to add a photo? ");
-=======
-			System.out.print("Do you want to add a photo?");
->>>>>>> branch 'master' of https://github.com/SanchaKvK/MedicalConsultancy.git
 			System.out.println("1. Yes");
 			System.out.println("2. No");
 
