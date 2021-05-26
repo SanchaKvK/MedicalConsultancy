@@ -41,6 +41,8 @@ public class inputOutput {
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -72,6 +74,8 @@ public class inputOutput {
 			System.out.println("Are you a doctor? Press 2");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -116,6 +120,8 @@ public class inputOutput {
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -150,6 +156,8 @@ public class inputOutput {
 			System.out.println("3. View future videos");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -188,6 +196,8 @@ public class inputOutput {
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -255,6 +265,8 @@ public class inputOutput {
 			}
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				id_doctor = Integer.parseInt(string);
@@ -292,6 +304,8 @@ public class inputOutput {
 			System.out.println("2. Female");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -337,6 +351,8 @@ public class inputOutput {
 			}
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				id_patient = Integer.parseInt(string);
@@ -374,6 +390,8 @@ public class inputOutput {
 			System.out.println("Introduce id pathology:");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				id_path = Integer.parseInt(string);
@@ -412,6 +430,8 @@ public class inputOutput {
 			System.out.println("Introduce id video: ");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				id_video = Integer.parseInt(string);
@@ -446,6 +466,8 @@ public class inputOutput {
 
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -479,6 +501,8 @@ public class inputOutput {
 			System.out.println("2. No");
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -513,6 +537,8 @@ public class inputOutput {
 
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true)
 				break;
@@ -551,12 +577,14 @@ public class inputOutput {
 		Boolean state = false;
 
 		while (true) {
-			System.out.print("Do you want to add a photo? ");
+			System.out.println("Do you want to add a photo? ");
 			System.out.println("1. Yes");
 			System.out.println("2. No");
 
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 
 			if (state == true) {
 				option = Integer.parseInt(string);
@@ -589,6 +617,8 @@ public class inputOutput {
 
 			string = reader.readLine();
 			state = isNumeric(string);
+			if (state == true)
+				System.out.println("You have introduced numbers instead of letters");
 
 			if (state == false)
 				break;
@@ -681,7 +711,8 @@ public class inputOutput {
 			System.out.println("0. Back to menu");
 			string = reader.readLine();
 			state = isNumeric(string);
-
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 			if (state == true) {
 				option = Integer.parseInt(string);
 				if (option < 0 || option > hours.size()) {
@@ -712,7 +743,8 @@ public class inputOutput {
 			System.out.println("Introduce the duration of the video consultation: ");
 			string = reader.readLine();
 			state = isNumeric(string);
-
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 			if (state == true) {
 				option = Integer.parseInt(string);
 				if (option < 0 || option > 60) {
@@ -743,7 +775,8 @@ public class inputOutput {
 			System.out.println("Introduce doses ");
 			string = reader.readLine();
 			state = isNumeric(string);
-
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 			if (state == true) {
 				option = Integer.parseInt(string);
 				if (option < 0) {
@@ -774,7 +807,8 @@ public class inputOutput {
 			System.out.println("Introduce the duration of the medication ");
 			string = reader.readLine();
 			state = isNumeric(string);
-
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 			if (state == true) {
 				option = Integer.parseInt(string);
 				if (option < 0) {
@@ -809,7 +843,8 @@ public class inputOutput {
 			System.out.println("5. Review of results");
 			string = reader.readLine();
 			state = isNumeric(string);
-
+			if (state == false)
+				System.out.println("You have introduced string instead of numbers");
 			if (state == true) {
 				option = Integer.parseInt(string);
 				if (option < 0 || option > 5) {
@@ -850,7 +885,6 @@ public class inputOutput {
 
 			return true;
 		} catch (NumberFormatException ex) {
-			System.out.println("You have introduce string instead of numbers");
 			return false;
 		}
 

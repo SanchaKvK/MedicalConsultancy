@@ -33,7 +33,7 @@ public class DBManager implements DBinterface {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/med.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/xao.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -55,7 +55,7 @@ public class DBManager implements DBinterface {
 			String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, " + "DNI TEXT UNIQUE, "
 					+ "phone_number TEXT UNIQUE, " + "postcode TEXT, " + "specialization TEXT , "
-					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL "+" photo BLOB NULL)";
+					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL, "+" photo BLOB)";
 
 			stmt1.executeUpdate(sql1);
 

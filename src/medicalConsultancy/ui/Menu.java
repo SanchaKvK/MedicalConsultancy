@@ -92,7 +92,6 @@ public class Menu {
 
 		else if (us.getRole_name().equals("d")) {
 			user = us;
-			System.out.println(us);
 			doctorMenu();
 		} else if (us.getRole_name().equals("p")) {
 			user = us;

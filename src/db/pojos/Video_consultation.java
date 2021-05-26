@@ -20,39 +20,35 @@ import javax.xml.bind.annotation.XmlType;
 
 @Entity
 @Table(name="videoconsultation")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "Video_consultation")
-@XmlType(propOrder = { "consultation_date", "duration", "type_of_call", "prescription" })
+
 public class Video_consultation implements Serializable {
 
 	private static final long serialVersionUID = 1367040608239901293L;
 	@Id
 	@GeneratedValue(generator = "videoconsultation")
 	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
-	@XmlAttribute
+
 	private Integer id_video;
-	@XmlElement
-	@XmlJavaTypeAdapter(SQLDateAdapter.class)
+
 	private Date consultation_date;
-	@XmlTransient
+
 	private Time consultation_time;
-	@XmlElement
+
 	private Integer duration;
-	@XmlElement
+
 	private String type_of_call;
-	@XmlElement
+
 	private String notes;
 	@OneToMany(mappedBy="vd")
-	@XmlElement(name = "prescription")
-	@XmlElementWrapper(name = "prescriptions")
+
 	private List<Prescription>prescription;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_doctor")
-	@XmlTransient
+
 	private Doctor doc;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_patient")
-	@XmlTransient
+	
 	private Patient pat;
 	
 	public Video_consultation() {
