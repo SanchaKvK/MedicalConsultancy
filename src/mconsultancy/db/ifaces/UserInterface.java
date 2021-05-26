@@ -28,6 +28,7 @@ public interface UserInterface {
 	public List<User> allEmergencyUsers();
 	
 	//updates a previous videoconsultation. Updates the duration, the prescription and the notes.
+	
 	public void addInfoVideo(int id_video, String notes, int duration, Prescription p);
 
 	//add a prescription

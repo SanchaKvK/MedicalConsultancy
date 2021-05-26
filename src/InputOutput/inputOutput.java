@@ -107,9 +107,12 @@ public class inputOutput {
 			System.out.println("5. Rate a doctor");
 			System.out.println("6. Search doctor");
 			System.out.println("7. Cancel appointment");
-			System.out.println("8. Delete account");
-			System.out.println("9. Emergency");
-
+			System.out.println("8. Write a videoconsultation into an XML file");
+			System.out.println("9. Write a prescription into an XML file");
+			System.out.println("10. Write a videoconsultation from an XML file into a Java object");
+			System.out.println("11. Write a prescription from an XML file into a Java object");
+			System.out.println("12. Emergency");
+			System.out.println("13.Delete account ");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);

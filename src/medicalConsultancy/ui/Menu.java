@@ -26,7 +26,7 @@ import db.pojos.users.User;
 import mconsultancy.db.ifaces.DBinterface;
 import medicalConsultancy.db.DBManager;
 import medicalConsultancy.db.JPAUserManager;
-
+import medicalConsultancy.db.XMLManager;
 import InputOutput.inputOutput;
 
 public class Menu {
@@ -122,21 +122,30 @@ public class Menu {
 			case 5:
 				rate();
 				break;
-
 			case 6:
 				searchDoctor();
 				break;
-
 			case 7:
 				deleteVideoPatient();
 				break;
-
 			case 8:
-				deleteAccount();
-				return;
-			case 9:
-				emergency();
+				JavaVideoConsultationtoXML ();
 				break;
+			case 9:
+				JavaPrescriptiontoXML ();
+				break;
+			case 10:
+				XMLVideoConsultationtoJava ();
+				break;
+			case 11:
+				XMLPrescriptiontoJava ();
+			break;
+			case 12:
+				emergency();
+			break;
+			case 13:
+				deleteAccount();
+			break;
 			case 0:
 				dbman.disconnect();
 				usman.disconnect();
@@ -197,7 +206,6 @@ public class Menu {
 					getDoctor();
 					break;
 				case 2:
-
 					doctorGetPatient();
 					break;
 				case 3:
@@ -215,7 +223,7 @@ public class Menu {
 					break;
 
 				case 7:
-					addInfoVideoconsultation();
+				addInfoVideoconsultation();
 					break;
 
 				case 0:
@@ -234,234 +242,64 @@ public class Menu {
 		}
 	}
 
-	private static void deleteAccount() {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-		usman.deleteUser(user);
+	
+	
 
-	}
+	private static Doctor askDoctor() throws Exception {
 
-	// if you want to cancel an appointment
-	private static void deleteVideoDoctor() throws Exception {
-		List<Video_consultation> vd = dbman.getDoctorFutureVideos(user.getId());
-		if (vd == null) {
-			System.out.println("You have no future appointments");
-			return;
-		} else
-			dbman.deleteAppointment(inputOutput.askVideoId(vd));
+		String email = inputOutput.askEmail();
 
-	}
+		System.out.println("Introduce password:");
+		String password = reader.readLine();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		byte[] hash = md.digest();
 
-	// if you wanna change the appointment
-	private static void updateVideoDoctor() throws IOException {
+		System.out.println("Introduce doctor info: ");
 
-		int id_doctor = user.getId();
-		List<Video_consultation> vd = dbman.getDoctorFutureVideos(id_doctor);
-		if (vd == null) {
-			System.out.println("You have no future videos");
-			return;
-		}
-		for (Video_consultation video_consultation : vd) {
-			System.out.println(vd);
-		}
+		String name = inputOutput.askName();
 
-		int id_video = inputOutput.askVideoId(vd);
+		String specialization = inputOutput.askSpecialization();
 
-		LocalDate date = inputOutput.askDateAppointment();
+		System.out.println("Hospital: ");
+		String hospital = reader.readLine();
 
-		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+		String yesNo = inputOutput.askPhoto();
 
-		int index = inputOutput.availableHoursMenu(hours);
+		if (yesNo.equalsIgnoreCase("N")) {
+			
+			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, null);
+			return d;
 
-		if (index == 0)
-			return;
-		dbman.changeAppointmentDate(Date.valueOf(date), id_video);
-		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
-
-	}
-
-	private static void updateVideoPatient() throws Exception {
-
-		List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
-		if (vd == null) {
-			System.out.println("You have no future videos");
-			return;
-		}
-
-		int id_video = inputOutput.askVideoId(vd);
-
-		LocalDate date = inputOutput.askDateAppointment();
-
-		int id_doctor = dbman.getVideo(id_video).getDoc().getId();
-
-		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
-
-		int index = inputOutput.availableHoursMenu(hours);
-		if (index == 0) {
-			return;
-		}
-
-		dbman.changeAppointmentDate(Date.valueOf(date), id_video);
-		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
-
-	}
-
-	// if you want to cancel an appointment
-	private static void deleteVideoPatient() throws Exception {
-
-		List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
-		if (vd == null) {
-			System.out.println("You have no future video_consultations");
 		} else {
-			for (Video_consultation video_consultation : vd) {
-				System.out.println(vd);
 
-			}
-
-			dbman.deleteAppointment(inputOutput.askVideoId(vd));
-		}
-
-	}
-
-	private static void getDoctorRatings() throws Exception {
-
-		List<Rating> ratings = dbman.getRatingOfDoctor(user.getId());
-		if (ratings.isEmpty()) {
-			System.out.println("You have no ratings");
-			return;
-		}
-
-		else
-			for (Rating rating : ratings) {
-				System.out.println(rating);
-			}
-
-	}
-
-	private static void doctorGetPatient() throws IOException {
-
-		System.out.println("Introduce patient name: ");
-		String name = reader.readLine();
-		List<Patient> patients = dbman.searchPatientByName(name);
-		if (patients.isEmpty())
-			System.out.println("There are no patients with that name");
-		else
-			for (Patient patient : patients) {
-				System.out.println(patient);
-			}
-
-	}
-
-	private static void getFuturePatientVideos() throws Exception {
-
-		List<Video_consultation> l = dbman.getPatientFutureVideos(user.getId());
-		if (l == null) {
-			System.out.println("You have no future videos");
-			return;
-		}
-		for (Video_consultation video : l) {
-			System.out.println(video);
+			System.out.print("Type the file name as it appears in photos, including extension: ");
+			String fileName = reader.readLine();
+			File photo = new File("./photos/" + fileName);
+			InputStream streamBlob = new FileInputStream(photo);
+			byte[] bytesBlob = new byte[streamBlob.available()];
+			streamBlob.read(bytesBlob);
+			streamBlob.close();
+			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, bytesBlob);
+			return d;
 
 		}
 
 	}
 
-	private static void getPreviousPatientVideos() throws Exception {
-
-		List<Video_consultation> l = dbman.getPatientPreviousVideos(user.getId());
-		if (l == null) {
-			System.out.println("You have no previous videos");
-			return;
-		}
-		for (Video_consultation video : l) {
-			System.out.println(video);
-
-		}
-
-	}
-
-	private static void getAllPatientVideos() throws Exception {
-
-		List<Video_consultation> l = dbman.getVideosOfPatient(user.getId());
-		if (l == null) {
-			System.out.println("You have no videos");
-			return;
-		}
-		for (Video_consultation video : l) {
-			System.out.println(video);
-
-		}
-
-	}
-
-	private static void getFutureDoctorVideos() throws Exception {
-
-		List<Video_consultation> l = dbman.getDoctorFutureVideos(user.getId());
-		if (l == null) {
-			System.out.println("You have no future videos");
-			return;
-		}
-		for (Video_consultation video_consultation : l) {
-			System.out.println(video_consultation);
-		}
-
-	}
-
-	private static void getPreviousDoctorVideos() throws Exception {
-
-		List<Video_consultation> l = dbman.getDoctorPreviousVideos(user.getId());
-		if (l == null) {
-			System.out.println("You have no previous videos");
-			return;
-		}
-		for (Video_consultation video_consultation : l) {
-			System.out.println(video_consultation);
-		}
-
-	}
-
-	private static void getAllDoctorVideos() throws Exception {
-
-		List<Video_consultation> l = dbman.getVideosOfDoctor(user.getId());
-		if (l == null) {
-			System.out.println("You have no videos");
-			return;
-		}
-		for (Video_consultation video_consultation : l) {
-			System.out.println(video_consultation);
-		}
-
-	}
-
-	private static void rate() throws Exception {
-
-		Integer id_patient = user.getId();
-		List<Doctor> d = searchDoctor();
-
-		Integer id_doctor = inputOutput.askDoctorId(d);
-
-		Integer score = inputOutput.askScore();
-		System.out.println("Review: ");
-		String review = reader.readLine();
-
-		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
-
-		dbman.addRating(rating);
-
-	}
-
-	private static void getDoctor() throws Exception {
-
-		System.out.println(user.getId());
-		System.out.println(dbman.getDoctor(user.getId()));
-
-	}
-
-	private static void getPatient() throws Exception {
-
-		Patient p = dbman.getPatient(user.getId());
-		System.out.println(dbman.getPatient(user.getId()));
-
-	}
 
 	private static Patient askPatient() throws Exception {
 
@@ -493,82 +331,30 @@ public class Menu {
 
 	}
 
-	private static Doctor askDoctor() throws Exception {
+	
+	
+															// PATIENT MENU
+	
+	
+	
+	
+	// OPTION 1 OF THE PATIENT MENU : VIEW THEIR OWN PROFILE INFORMATION
+	
+	
+	private static void getPatient() throws Exception {
 
-		String email = inputOutput.askEmail();
-
-		System.out.println("Introduce password:");
-		String password = reader.readLine();
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update(password.getBytes());
-		byte[] hash = md.digest();
-
-		System.out.println("Introduce doctor info: ");
-
-		String name = inputOutput.askName();
-
-		String specialization = inputOutput.askSpecialization();
-
-		System.out.println("Hospital: ");
-		String hospital = reader.readLine();
-
-		String yesNo = inputOutput.askPhoto();
-
-		if (yesNo.equalsIgnoreCase("N")) {
-			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, null);
-			return d;
-
-		} else {
-
-			System.out.print("Type the file name as it appears in photos, including extension: ");
-			String fileName = reader.readLine();
-			File photo = new File("./photos/" + fileName);
-			InputStream streamBlob = new FileInputStream(photo);
-			byte[] bytesBlob = new byte[streamBlob.available()];
-			streamBlob.read(bytesBlob);
-			streamBlob.close();
-			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, bytesBlob);
-			return d;
-
-		}
+		Patient p = dbman.getPatient(user.getId());
+		System.out.println(dbman.getPatient(user.getId()));
 
 	}
 
-	private static void diagnose() throws Exception {
-
-		List<Patient> p = searchPatient();
-		Integer patient_id = inputOutput.askPatientId(p);
-		List<Pathology> path = searchPathologies();
-
-		Integer pathology_id = inputOutput.askPathologyId(path);
-		dbman.diagnosePathology(patient_id, pathology_id);
-	}
-
-	private static List<Patient> searchPatient() throws Exception {
-
-		System.out.println("Introduce patient name: ");
-		String name = reader.readLine();
-		return dbman.searchPatientByName(name);
-
-	}
-
-	private static List<Doctor> searchDoctor() throws Exception {
-
-		System.out.println("Introduce doctor name: ");
-		String name = reader.readLine();
-		return dbman.searchDoctorByName(name);
-
-	}
-
-	private static List<Pathology> searchPathologies() throws Exception {
-		System.out.println("Introduce pathology`s name: ");
-		String name = reader.readLine();
-		return dbman.searchPathologyByName(name);
-
-	}
-
+	
+	// OPTION 2 OF THE PATIENT MENU : MAKE AN APPOINTMENT
+	
+	
 	private static void makeAppointment() throws Exception {
 
+		
 		List<Doctor> d = searchDoctor();
 		Integer id_doctor = inputOutput.askDoctorId(d);
 
@@ -585,13 +371,371 @@ public class Menu {
 		Integer id_patient = user.getId();
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
+		dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
+		System.out.println("LA VIDEOCONSULTA NUEVA ES :"+vd);
+		dbman.addVideo_consultation(vd);
+		
+	}
+	
+	
+	private static List<Doctor> searchDoctor() throws Exception {
+
+		System.out.println("Introduce doctor name: ");
+		String name = reader.readLine();
+		return dbman.searchDoctorByName(name);
+
+	}
+	
+	// OPTION 3 OF THE PATIENT MENU : EDIT THE DATE OF AN APPOINTMENT 
+	
+
+	private static void updateVideoPatient() throws Exception {
+
+		List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
+		if (vd == null) {
+			System.out.println("You have no future videos");
+			return;
+		}
+
+		int id_video = inputOutput.askVideoId(vd);
+
+		LocalDate date = inputOutput.askDateAppointment();
+
+		int id_doctor = dbman.getVideo(id_video).getDoc().getId();
+
+		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+
+		int index = inputOutput.availableHoursMenu(hours);
+		if (index == 0) {
+			return;
+		}
+
+		dbman.changeAppointmentDate(Date.valueOf(date), id_video);
+		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
+
+	}
+
+	// OPTION 4 OF THE PATIENT MENU : VIEW VIDEOCONSULTATIONS
+	
+	private static void getAllPatientVideos() throws Exception {
+
+		List<Video_consultation> l = dbman.getVideosOfPatient(user.getId());
+		if (l == null) {
+			System.out.println("You have no videos");
+			return;
+		}
+		for (Video_consultation video : l) {
+			System.out.println(video);
+
+		}
+
+	}
+	
+	
+
+	private static void getPreviousPatientVideos() throws Exception {
+
+		List<Video_consultation> l = dbman.getPatientPreviousVideos(user.getId());
+		if (l == null) {
+			System.out.println("You have no previous videos");
+			return;
+		}
+		for (Video_consultation video : l) {
+			System.out.println(video);
+
+		}
+
+	}
+
+	
+	private static void getFuturePatientVideos() throws Exception {
+
+		List<Video_consultation> l = dbman.getPatientFutureVideos(user.getId());
+		if (l == null) {
+			System.out.println("You have no future videos");
+			return;
+		}
+		for (Video_consultation video : l) {
+			System.out.println(video);
+
+		}
+
+	}
+
+
+	// OPTION 5 OF THE PATIENT MENU : RATE A DOCTOR
+	
+	private static void rate() throws Exception {
+
+		Integer id_patient = user.getId();
+		List<Doctor> d = searchDoctor();
+
+		Integer id_doctor = inputOutput.askDoctorId(d);
+
+		Integer score = inputOutput.askScore();
+		System.out.println("Review: ");
+		String review = reader.readLine();
+
+		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
+
+		dbman.addRating(rating);
+
+	}
+	
+	
+	// OPTION 7 OF THE PATIENT MENU : DELETE A VIDEOCONSULTATION
+	
+	// if you want to cancel an appointment
+		private static void deleteVideoPatient() throws Exception {
+
+			List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
+			if (vd == null) {
+				System.out.println("You have no future video_consultations");
+			} else {
+				for (Video_consultation video_consultation : vd) {
+					System.out.println(vd);
+
+				}
+
+				dbman.deleteAppointment(inputOutput.askVideoId(vd));
+			}
+
+		}
+
+	
+	// OPTION 8 OF THE PATIENT MENU : TURN A PATIENT VIDEOCONSULTATION INTO AN XML FILE
+	
+			private static void JavaVideoConsultationtoXML () throws Exception{
+				
+				XMLManager marshaller = null;
+				
+				List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+				if (vd == null) {
+					System.out.println("You have no video-consultations to turn into XML");
+					return;
+				}
+				for (Video_consultation video_consultation : vd) {
+					System.out.println(video_consultation);
+				}
+				int id_video = inputOutput.askVideoId(vd);
+				
+				Video_consultation video = dbman.getVideo(id_video);
+				
+				marshaller.JavatoXMlVideoconsultation(video);
+				
+			}
+	
+	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
+			
+			
+			private static void JavaPrescriptiontoXML () throws Exception{
+			
+				XMLManager marshaller = null;
+				//do functions of getting prescriptions from a patient 
+				//
+				List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+				if (vd == null) {
+					System.out.println("You have no video-consultations to turn into XML");
+					return;
+				}
+				for (Video_consultation video_consultation : vd) {
+					System.out.println(video_consultation);
+				}
+				int id_video = inputOutput.askVideoId(vd);
+				
+				Video_consultation video = dbman.getVideo(id_video);
+				
+				marshaller.JavatoXMlVideoconsultation(video);
+				
+			
+			}
+			
+	
+	// OPTION 10 OF THE PATIENT MENU : TURN AN XML FILE WITH A VIDEOCONSULTATION INTO A JAVA VIDEOCONSULTATION OBJECT
+
+			private static void XMLVideoConsultationtoJava () throws Exception{
+			
+			}
+			
+	// OPTION 11 OF THE PATIENT MENU : TURN AN XML FILE WITH A PRESCRIPTION INTO A JAVA VIDEOCONSULTATION OBJECT
+				
+			private static void XMLPrescriptiontoJava () throws Exception{
+			}
+
+	// OPTION 12 OF THE PATIENT MENU : EMERGENCY OPTION 
+			
+	private static void emergency() {
+
+		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
+		if (doctors == null) {
+			System.out.println("Right now we do not have an emergency doctor");
+			return;
+		}
+
+		int id_doctor = (int) (Math.random() * doctors.size());
+
+		LocalDate date = LocalDate.now();
+
+		LocalTime time = LocalTime.now();
+		Integer id_patient = user.getId();
+
+		Video_consultation vd = new Video_consultation(Date.valueOf(date), Time.valueOf(time), "Medical emergencies",
 				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
 		dbman.addVideo_consultation(vd);
 
 	}
+	
+
+	// OPTION 13 OF THE PATIENT MENU : DELETE THE ACCOUNT
+	
+	
+	private static void deleteAccount() {
+
+		usman.deleteUser(user);
+
+	}
+	
+																// DOCTOR MENU
+	
+	
+	// OPTION 1 OF THE DOCTOR MENU : VIEW THEIR OWN PROFILE INFORMATION
+	
+	
+	private static void getDoctor() throws Exception {
+
+		System.out.println(user.getId());
+		System.out.println(dbman.getDoctor(user.getId()));
+
+	}
+	
+	// OPTION 2 OF THE DOCTOR MENU : VIEW A PATIENT'S INFORMATION
+	
+	
+	
+	private static void doctorGetPatient() throws IOException {
+
+		System.out.println("Introduce patient name: ");
+		String name = reader.readLine();
+		List<Patient> patients = dbman.searchPatientByName(name);
+		if (patients.isEmpty())
+			System.out.println("There are no patients with that name");
+		else
+			for (Patient patient : patients) {
+				System.out.println(patient);
+			}
+
+	}
+	
+	// OPTION 3 OF THE DOCTOR MENU : CHANGE A VIDEOCONSULTATION DATE 
+	
+	
+	private static void updateVideoDoctor() throws IOException {
+
+		int id_doctor = user.getId();
+		List<Video_consultation> vd = dbman.getDoctorFutureVideos(id_doctor);
+		if (vd == null) {
+			System.out.println("You have no future videos");
+			return;
+		}
+		for (Video_consultation video_consultation : vd) {
+			System.out.println(vd);
+		}
+
+		int id_video = inputOutput.askVideoId(vd);
+
+		LocalDate date = inputOutput.askDateAppointment();
+
+		List<Time> hours = dbman.availableHours(id_doctor, Date.valueOf(date));
+
+		int index = inputOutput.availableHoursMenu(hours);
+
+		if (index == 0)
+			return;
+		dbman.changeAppointmentDate(Date.valueOf(date), id_video);
+		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
+
+	}
+	
+	// OPTION 4 OF THE DOCTOR MENU : VIEW THEIR VIDEOCONSULTATIONS
+	
+
+
+
+	private static void getPreviousDoctorVideos() throws Exception {
+
+		List<Video_consultation> l = dbman.getDoctorPreviousVideos(user.getId());
+		if (l == null) {
+			System.out.println("You have no previous videos");
+			return;
+		}
+		for (Video_consultation video_consultation : l) {
+			System.out.println(video_consultation);
+		}
+
+	}
+
+	private static void getAllDoctorVideos() throws Exception {
+
+		List<Video_consultation> l = dbman.getVideosOfDoctor(user.getId());
+		if (l == null) {
+			System.out.println("You have no videos");
+			return;
+		}
+		for (Video_consultation video_consultation : l) {
+			System.out.println(video_consultation);
+		}
+
+	}
+	private static void getFutureDoctorVideos() throws Exception {
+
+		List<Video_consultation> l = dbman.getDoctorFutureVideos(user.getId());
+		if (l == null) {
+			System.out.println("You have no future videos");
+			return;
+		}
+		for (Video_consultation video_consultation : l) {
+			System.out.println(video_consultation);
+		}
+
+	}
+	
+	
+	
+	// OPTION 5 OF THE DOCTOR MENU : GET THEIR RATINGS
+	
+	private static void getDoctorRatings() throws Exception {
+
+		List<Rating> ratings = dbman.getRatingOfDoctor(user.getId());
+		if (ratings.isEmpty()) {
+			System.out.println("You have no ratings");
+			return;
+		}
+
+		else
+			for (Rating rating : ratings) {
+				System.out.println(rating);
+			}
+
+	}
+	
+	
+	// OPTION 5 OF THE DOCTOR MENU : CANCEL A VIDEOCONSULTATION
+	
+
+	private static void deleteVideoDoctor() throws Exception {
+		List<Video_consultation> vd = dbman.getDoctorFutureVideos(user.getId());
+		if (vd == null) {
+			System.out.println("You have no future appointments");
+			return;
+		} else
+			dbman.deleteAppointment(inputOutput.askVideoId(vd));
+
+	}
+
+	// OPTION 5 OF THE DOCTOR MENU : ADD MORE INFORMATION ON A VIDEOCONSULTATION
+	
 
 	// to fill the information of previous appointments
-
 	private static void addInfoVideoconsultation() throws Exception {
 
 		System.out.println("Videoconsultation information: ");
@@ -617,8 +761,8 @@ public class Menu {
 		if (optionDiagnose == true)
 			diagnose();
 
-	}
-
+	}	
+	
 	private static Prescription prescribe(int id_video) throws Exception {
 
 		Integer doses = inputOutput.askDoses();
@@ -634,26 +778,33 @@ public class Menu {
 		return p;
 
 	}
+	
+	private static void diagnose() throws Exception {
 
-	private static void emergency() {
+		List<Patient> p = searchPatient();
+		Integer patient_id = inputOutput.askPatientId(p);
+		List<Pathology> path = searchPathologies();
 
-		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
-		if (doctors == null) {
-			System.out.println("Right now we do not have an emergency doctor");
-			return;
-		}
-
-		int id_doctor = (int) (Math.random() * doctors.size());
-
-		LocalDate date = LocalDate.now();
-
-		LocalTime time = LocalTime.now();
-		Integer id_patient = user.getId();
-
-		Video_consultation vd = new Video_consultation(Date.valueOf(date), Time.valueOf(time), "Medical emergencies",
-				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
-		dbman.addVideo_consultation(vd);
-
+		Integer pathology_id = inputOutput.askPathologyId(path);
+		dbman.diagnosePathology(patient_id, pathology_id);
 	}
 
+
+	private static List<Patient> searchPatient() throws Exception {
+
+		System.out.println("Introduce patient name: ");
+		String name = reader.readLine();
+		return dbman.searchPatientByName(name);
+
+	}
+	
+	
+	private static List<Pathology> searchPathologies() throws Exception {
+		System.out.println("Introduce pathology`s name: ");
+		String name = reader.readLine();
+		return dbman.searchPathologyByName(name);
+
+	}
+	
+	
 }

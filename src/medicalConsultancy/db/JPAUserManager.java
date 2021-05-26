@@ -65,13 +65,13 @@ public class JPAUserManager implements UserInterface {
 
 	}
 
+
 	@Override
 	public void addInfoVideo(int id_video, String notes, int duration, Prescription p) {
 
 		Query q = em.createNativeQuery("SELECT * FROM videoconsultation WHERE id_video=?", Video_consultation.class);
 		q.setParameter(1, id_video);
 		Video_consultation vd = (Video_consultation) q.getSingleResult();
-
 		em.getTransaction().begin();
 		vd.setDuration(duration);
 		vd.setNotes(notes);
@@ -112,10 +112,5 @@ public class JPAUserManager implements UserInterface {
 		}
 		return true;
 	}
-
-	
-
-	
-
 
 }
