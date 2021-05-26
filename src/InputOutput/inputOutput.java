@@ -548,7 +548,7 @@ public class inputOutput {
 		Boolean state = false;
 
 		while (true) {
-			System.out.print("Do you want to add a photo? ");
+			System.out.print("Do you want to add a photo?");
 			System.out.println("1. Yes");
 			System.out.println("2. No");
 
