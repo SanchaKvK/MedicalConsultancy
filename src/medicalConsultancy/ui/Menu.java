@@ -128,23 +128,23 @@ public class Menu {
 				deleteVideoPatient();
 				break;
 			case 8:
-				JavaVideoConsultationtoXML ();
+				JavaVideoConsultationtoXML();
 				break;
 			case 9:
-				JavaPrescriptiontoXML ();
+				JavaPrescriptiontoXML();
 				break;
 			case 10:
-				XMLVideoConsultationtoJava ();
+				XMLVideoConsultationtoJava();
 				break;
 			case 11:
-				XMLPrescriptiontoJava ();
-			break;
+				XMLPrescriptiontoJava();
+				break;
 			case 12:
 				emergency();
-			break;
+				break;
 			case 13:
 				deleteAccount();
-			break;
+				break;
 			case 0:
 				dbman.disconnect();
 				usman.disconnect();
@@ -167,21 +167,23 @@ public class Menu {
 			switch (choice) {
 
 			case 1:
-				if (role_name == "d")
+
+				if (role_name.equals("d")) {
+
 					getAllDoctorVideos();
-				else
+				} else
 					getAllPatientVideos();
 
 				return;
 			case 2:
-				if (role_name == "d")
+				if (role_name.equals("d"))
 					getPreviousDoctorVideos();
 				else
 					getPreviousPatientVideos();
 
 				return;
 			case 3:
-				if (role_name == "d")
+				if (role_name.equals("d"))
 					getFutureDoctorVideos();
 				else
 					getFuturePatientVideos();
@@ -222,7 +224,7 @@ public class Menu {
 					break;
 
 				case 7:
-				addInfoVideoconsultation();
+					addInfoVideoconsultation();
 					break;
 
 				case 0:
@@ -240,22 +242,6 @@ public class Menu {
 			}
 		}
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
 
 	private static Doctor askDoctor() throws Exception {
 
@@ -279,7 +265,7 @@ public class Menu {
 		String yesNo = inputOutput.askPhoto();
 
 		if (yesNo.equalsIgnoreCase("N")) {
-			
+
 			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, null);
 			return d;
 
@@ -298,7 +284,6 @@ public class Menu {
 		}
 
 	}
-
 
 	private static Patient askPatient() throws Exception {
 
@@ -330,16 +315,10 @@ public class Menu {
 
 	}
 
-	
-	
-															// PATIENT MENU
-	
-	
-	
-	
+	// PATIENT MENU
+
 	// OPTION 1 OF THE PATIENT MENU : VIEW THEIR OWN PROFILE INFORMATION
-	
-	
+
 	private static void getPatient() throws Exception {
 
 		Patient p = dbman.getPatient(user.getId());
@@ -347,13 +326,10 @@ public class Menu {
 
 	}
 
-	
 	// OPTION 2 OF THE PATIENT MENU : MAKE AN APPOINTMENT
-	
-	
+
 	private static void makeAppointment() throws Exception {
 
-		
 		List<Doctor> d = searchDoctor();
 		Integer id_doctor = inputOutput.askDoctorId(d);
 
@@ -370,13 +346,12 @@ public class Menu {
 		Integer id_patient = user.getId();
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
-		dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
-		System.out.println("LA VIDEOCONSULTA NUEVA ES :"+vd);
+				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
+		System.out.println("LA VIDEOCONSULTA NUEVA ES :" + vd);
 		dbman.addVideo_consultation(vd);
-		
+
 	}
-	
-	
+
 	private static List<Doctor> searchDoctor() throws Exception {
 
 		System.out.println("Introduce doctor name: ");
@@ -384,9 +359,8 @@ public class Menu {
 		return dbman.searchDoctorByName(name);
 
 	}
-	
-	// OPTION 3 OF THE PATIENT MENU : EDIT THE DATE OF AN APPOINTMENT 
-	
+
+	// OPTION 3 OF THE PATIENT MENU : EDIT THE DATE OF AN APPOINTMENT
 
 	private static void updateVideoPatient() throws Exception {
 
@@ -415,7 +389,7 @@ public class Menu {
 	}
 
 	// OPTION 4 OF THE PATIENT MENU : VIEW VIDEOCONSULTATIONS
-	
+
 	private static void getAllPatientVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getVideosOfPatient(user.getId());
@@ -429,8 +403,6 @@ public class Menu {
 		}
 
 	}
-	
-	
 
 	private static void getPreviousPatientVideos() throws Exception {
 
@@ -446,7 +418,6 @@ public class Menu {
 
 	}
 
-	
 	private static void getFuturePatientVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getPatientFutureVideos(user.getId());
@@ -461,9 +432,8 @@ public class Menu {
 
 	}
 
-
 	// OPTION 5 OF THE PATIENT MENU : RATE A DOCTOR
-	
+
 	private static void rate() throws Exception {
 
 		Integer id_patient = user.getId();
@@ -480,89 +450,87 @@ public class Menu {
 		dbman.addRating(rating);
 
 	}
-	
-	
+
 	// OPTION 7 OF THE PATIENT MENU : DELETE A VIDEOCONSULTATION
-	
+
 	// if you want to cancel an appointment
-		private static void deleteVideoPatient() throws Exception {
+	private static void deleteVideoPatient() throws Exception {
 
-			List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
-			if (vd == null) {
-				System.out.println("You have no future video_consultations");
-			} else {
-				for (Video_consultation video_consultation : vd) {
-					System.out.println(vd);
+		List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
+		if (vd == null) {
+			System.out.println("You have no future video_consultations");
+		} else {
+			for (Video_consultation video_consultation : vd) {
+				System.out.println(vd);
 
-				}
-
-				dbman.deleteAppointment(inputOutput.askVideoId(vd));
 			}
 
+			dbman.deleteAppointment(inputOutput.askVideoId(vd));
 		}
 
-	
-	// OPTION 8 OF THE PATIENT MENU : TURN A PATIENT VIDEOCONSULTATION INTO AN XML FILE
-	
-			private static void JavaVideoConsultationtoXML () throws Exception{
-				
-				XMLManager marshaller = null;
-				
-				List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
-				if (vd == null) {
-					System.out.println("You have no video-consultations to turn into XML");
-					return;
-				}
-				for (Video_consultation video_consultation : vd) {
-					System.out.println(video_consultation);
-				}
-				int id_video = inputOutput.askVideoId(vd);
-				
-				Video_consultation video = dbman.getVideo(id_video);
-				
-				marshaller.JavatoXMlVideoconsultation(video);
-				
-			}
-	
+	}
+
+	// OPTION 8 OF THE PATIENT MENU : TURN A PATIENT VIDEOCONSULTATION INTO AN XML
+	// FILE
+
+	private static void JavaVideoConsultationtoXML() throws Exception {
+
+		XMLManager marshaller = null;
+
+		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+		if (vd == null) {
+			System.out.println("You have no video-consultations to turn into XML");
+			return;
+		}
+		for (Video_consultation video_consultation : vd) {
+			System.out.println(video_consultation);
+		}
+		int id_video = inputOutput.askVideoId(vd);
+
+		Video_consultation video = dbman.getVideo(id_video);
+
+		marshaller.JavatoXMlVideoconsultation(video);
+
+	}
+
 	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
-			
-			
-			private static void JavaPrescriptiontoXML () throws Exception{
-			
-				XMLManager marshaller = null;
-				//do functions of getting prescriptions from a patient 
-				//
-				List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
-				if (vd == null) {
-					System.out.println("You have no video-consultations to turn into XML");
-					return;
-				}
-				for (Video_consultation video_consultation : vd) {
-					System.out.println(video_consultation);
-				}
-				int id_video = inputOutput.askVideoId(vd);
-				
-				Video_consultation video = dbman.getVideo(id_video);
-				
-				marshaller.JavatoXMlVideoconsultation(video);
-				
-			
-			}
-			
-	
-	// OPTION 10 OF THE PATIENT MENU : TURN AN XML FILE WITH A VIDEOCONSULTATION INTO A JAVA VIDEOCONSULTATION OBJECT
 
-			private static void XMLVideoConsultationtoJava () throws Exception{
-			
-			}
-			
-	// OPTION 11 OF THE PATIENT MENU : TURN AN XML FILE WITH A PRESCRIPTION INTO A JAVA VIDEOCONSULTATION OBJECT
-				
-			private static void XMLPrescriptiontoJava () throws Exception{
-			}
+	private static void JavaPrescriptiontoXML() throws Exception {
 
-	// OPTION 12 OF THE PATIENT MENU : EMERGENCY OPTION 
-			
+		XMLManager marshaller = null;
+		// do functions of getting prescriptions from a patient
+		//
+		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+		if (vd == null) {
+			System.out.println("You have no video-consultations to turn into XML");
+			return;
+		}
+		for (Video_consultation video_consultation : vd) {
+			System.out.println(video_consultation);
+		}
+		int id_video = inputOutput.askVideoId(vd);
+
+		Video_consultation video = dbman.getVideo(id_video);
+
+		marshaller.JavatoXMlVideoconsultation(video);
+
+	}
+
+	// OPTION 10 OF THE PATIENT MENU : TURN AN XML FILE WITH A VIDEOCONSULTATION
+	// INTO A JAVA VIDEOCONSULTATION OBJECT
+
+	private static void XMLVideoConsultationtoJava() throws Exception {
+
+	}
+
+	// OPTION 11 OF THE PATIENT MENU : TURN AN XML FILE WITH A PRESCRIPTION INTO A
+	// JAVA VIDEOCONSULTATION OBJECT
+
+	private static void XMLPrescriptiontoJava() throws Exception {
+	}
+
+	// OPTION 12 OF THE PATIENT MENU : EMERGENCY OPTION
+
 	private static void emergency() {
 
 		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
@@ -583,34 +551,28 @@ public class Menu {
 		dbman.addVideo_consultation(vd);
 
 	}
-	
 
 	// OPTION 13 OF THE PATIENT MENU : DELETE THE ACCOUNT
-	
-	
+
 	private static void deleteAccount() {
 
 		usman.deleteUser(user);
 
 	}
-	
-																// DOCTOR MENU
-	
-	
+
+	// DOCTOR MENU
+
 	// OPTION 1 OF THE DOCTOR MENU : VIEW THEIR OWN PROFILE INFORMATION
-	
-	
+
 	private static void getDoctor() throws Exception {
 
 		System.out.println(user.getId());
 		System.out.println(dbman.getDoctor(user.getId()));
 
 	}
-	
+
 	// OPTION 2 OF THE DOCTOR MENU : VIEW A PATIENT'S INFORMATION
-	
-	
-	
+
 	private static void doctorGetPatient() throws IOException {
 
 		System.out.println("Introduce patient name: ");
@@ -624,10 +586,9 @@ public class Menu {
 			}
 
 	}
-	
-	// OPTION 3 OF THE DOCTOR MENU : CHANGE A VIDEOCONSULTATION DATE 
-	
-	
+
+	// OPTION 3 OF THE DOCTOR MENU : CHANGE A VIDEOCONSULTATION DATE
+
 	private static void updateVideoDoctor() throws IOException {
 
 		int id_doctor = user.getId();
@@ -637,7 +598,7 @@ public class Menu {
 			return;
 		}
 		for (Video_consultation video_consultation : vd) {
-			System.out.println(vd);
+			System.out.println(video_consultation);
 		}
 
 		int id_video = inputOutput.askVideoId(vd);
@@ -654,16 +615,13 @@ public class Menu {
 		dbman.changeAppointmentTime(hours.get(index - 1), id_video);
 
 	}
-	
+
 	// OPTION 4 OF THE DOCTOR MENU : VIEW THEIR VIDEOCONSULTATIONS
-	
-
-
 
 	private static void getPreviousDoctorVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getDoctorPreviousVideos(user.getId());
-		if (l == null) {
+		if (l.isEmpty()) {
 			System.out.println("You have no previous videos");
 			return;
 		}
@@ -676,6 +634,7 @@ public class Menu {
 	private static void getAllDoctorVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getVideosOfDoctor(user.getId());
+
 		if (l == null) {
 			System.out.println("You have no videos");
 			return;
@@ -685,6 +644,7 @@ public class Menu {
 		}
 
 	}
+
 	private static void getFutureDoctorVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getDoctorFutureVideos(user.getId());
@@ -697,11 +657,9 @@ public class Menu {
 		}
 
 	}
-	
-	
-	
+
 	// OPTION 5 OF THE DOCTOR MENU : GET THEIR RATINGS
-	
+
 	private static void getDoctorRatings() throws Exception {
 
 		List<Rating> ratings = dbman.getRatingOfDoctor(user.getId());
@@ -716,10 +674,8 @@ public class Menu {
 			}
 
 	}
-	
-	
+
 	// OPTION 5 OF THE DOCTOR MENU : CANCEL A VIDEOCONSULTATION
-	
 
 	private static void deleteVideoDoctor() throws Exception {
 		List<Video_consultation> vd = dbman.getDoctorFutureVideos(user.getId());
@@ -732,7 +688,6 @@ public class Menu {
 	}
 
 	// OPTION 5 OF THE DOCTOR MENU : ADD MORE INFORMATION ON A VIDEOCONSULTATION
-	
 
 	// to fill the information of previous appointments
 	private static void addInfoVideoconsultation() throws Exception {
@@ -760,8 +715,8 @@ public class Menu {
 		if (optionDiagnose == true)
 			diagnose();
 
-	}	
-	
+	}
+
 	private static Prescription prescribe(int id_video) throws Exception {
 
 		Integer doses = inputOutput.askDoses();
@@ -777,7 +732,7 @@ public class Menu {
 		return p;
 
 	}
-	
+
 	private static void diagnose() throws Exception {
 
 		List<Patient> p = searchPatient();
@@ -788,7 +743,6 @@ public class Menu {
 		dbman.diagnosePathology(patient_id, pathology_id);
 	}
 
-
 	private static List<Patient> searchPatient() throws Exception {
 
 		System.out.println("Introduce patient name: ");
@@ -796,14 +750,12 @@ public class Menu {
 		return dbman.searchPatientByName(name);
 
 	}
-	
-	
+
 	private static List<Pathology> searchPathologies() throws Exception {
 		System.out.println("Introduce pathology`s name: ");
 		String name = reader.readLine();
 		return dbman.searchPathologyByName(name);
 
 	}
-	
-	
+
 }

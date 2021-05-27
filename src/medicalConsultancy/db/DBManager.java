@@ -33,7 +33,7 @@ public class DBManager implements DBinterface {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/xao.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/medicalConsultancy.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
