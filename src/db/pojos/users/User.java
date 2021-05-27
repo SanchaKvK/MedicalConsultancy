@@ -102,7 +102,6 @@ public abstract class User {
 	
 	
 	
-
 	public String getRole_name() {
 		return role_name;
 	}

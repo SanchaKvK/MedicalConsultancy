@@ -92,7 +92,6 @@ public class Menu {
 
 		else if (us.getRole_name().equals("d")) {
 			user = us;
-			System.out.println(us);
 			doctorMenu();
 		} else if (us.getRole_name().equals("p")) {
 			user = us;
@@ -280,6 +279,7 @@ public class Menu {
 		String yesNo = inputOutput.askPhoto();
 
 		if (yesNo.equalsIgnoreCase("N")) {
+			
 			Doctor d = new Doctor(email, hash, "d", specialization, name, hospital, null);
 			return d;
 

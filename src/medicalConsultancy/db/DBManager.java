@@ -33,7 +33,7 @@ public class DBManager implements DBinterface {
 	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/med.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/xao.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
@@ -55,7 +55,8 @@ public class DBManager implements DBinterface {
 			String sql1 = "CREATE TABLE users " + "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ "role_name TEXT NOT NULL, " + "gender TEXT, " + "birth DATE, " + "DNI TEXT UNIQUE, "
 					+ "phone_number TEXT UNIQUE, " + "postcode TEXT, " + "specialization TEXT , "
-					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL "+" photo BLOB NULL)";
+					+ "name TEXT NOT NULL, " + "hospital TEXT, " + "email TEXT NOT NULL, " + "password BLOB NOT NULL, "
+					+ " photo BLOB)";
 
 			stmt1.executeUpdate(sql1);
 
@@ -112,42 +113,39 @@ public class DBManager implements DBinterface {
 		}
 	}
 
-	
-	//FUNCTION TO SHOW THE PATIENT IT'S PROFILE
-	
+	// FUNCTION TO SHOW THE PATIENT IT'S PROFILE
+
 	// Patient method will return a Patient with
-		// id,name,gender,birth,id,phone,postcode and pathologies.
+	// id,name,gender,birth,id,phone,postcode and pathologies.
 
-		@Override
-		public Patient getPatient(int id_patient) {
+	@Override
+	public Patient getPatient(int id_patient) {
 
-			try {
+		try {
 
-				String sql = "SELECT * FROM users WHERE id=?";
-				PreparedStatement ps = c.prepareStatement(sql);
-				ps.setInt(1, id_patient);
-				ResultSet rs = ps.executeQuery();
+			String sql = "SELECT * FROM users WHERE id=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_patient);
+			ResultSet rs = ps.executeQuery();
 
-				if (rs.next()) {
+			if (rs.next()) {
 
-					Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"), rs.getDate("birth"),
-							rs.getString("DNI"), rs.getString("phone_number"), rs.getString("postcode"));
-					p.setPathologies(getPathologiesOfPatient(p.getId()));
-					return p;
+				Patient p = new Patient(id_patient, rs.getString("name"), rs.getString("gender"), rs.getDate("birth"),
+						rs.getString("DNI"), rs.getString("phone_number"), rs.getString("postcode"));
+				p.setPathologies(getPathologiesOfPatient(p.getId()));
+				return p;
 
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-			return null;
 
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
 
-	
-	//FUNCTIONS TO SAVE A VIDEOCONSULTATION 
-	
-	
+	}
+
+	// FUNCTIONS TO SAVE A VIDEOCONSULTATION
+
 	@Override
 	public void addVideo_consultation(Video_consultation v) {
 
@@ -167,11 +165,9 @@ public class DBManager implements DBinterface {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	//FUNCTIONS TO CHANGE THE DATE OF A VIDEOCONSULTATION
-	
-	
+
+	// FUNCTIONS TO CHANGE THE DATE OF A VIDEOCONSULTATION
+
 	@Override
 	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
 		Date d = Date.valueOf(LocalDate.now());
@@ -200,7 +196,7 @@ public class DBManager implements DBinterface {
 		return vd;
 
 	}
-	
+
 	@Override
 	public Video_consultation getVideo(int id_video) {
 
@@ -232,7 +228,6 @@ public class DBManager implements DBinterface {
 		return null;
 	}
 
-	
 	@Override
 	public List<Time> availableHours(int id_doctor, Date consultation_date) {
 		List<Time> hours = new ArrayList<Time>();
@@ -257,7 +252,7 @@ public class DBManager implements DBinterface {
 
 		return hours;
 	}
-	
+
 	@Override
 	public void changeAppointmentDate(Date d, int id) {
 		try {
@@ -273,9 +268,6 @@ public class DBManager implements DBinterface {
 		}
 
 	}
-	
-	
-	
 
 	@Override
 	public void changeAppointmentTime(Time t, int id) {
@@ -293,59 +285,39 @@ public class DBManager implements DBinterface {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	// Doctor method will return a Doctor with id,specialization,name and hospital.
 
-		@Override
-		public Doctor getDoctor(int id_doctor) {
+	@Override
+	public Doctor getDoctor(int id_doctor) {
 
-			try {
+		try {
 
-				String sql = "SELECT * FROM users WHERE id=?";
-				PreparedStatement ps = c.prepareStatement(sql);
-				ps.setInt(1, id_doctor);
-				ResultSet rs = ps.executeQuery();
+			String sql = "SELECT * FROM users WHERE id=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_doctor);
+			ResultSet rs = ps.executeQuery();
 
-				if (rs.next()) {
+			if (rs.next()) {
 
-					//return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-						//	rs.getString("hospital"),rs.getBytes("photo"));
-					
-					return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
-							rs.getString("hospital"));
+				// return new Doctor(id_doctor, rs.getString("specialization"),
+				// rs.getString("name"),
+				// rs.getString("hospital"),rs.getBytes("photo"));
 
-				}
+				return new Doctor(id_doctor, rs.getString("specialization"), rs.getString("name"),
+						rs.getString("hospital"), rs.getBytes("photo"));
 
-				rs.close();
-				ps.close();
 			}
 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
+			rs.close();
+			ps.close();
 		}
-	
-	
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@Override
 	public void addPathology(Pathology p) {
 
@@ -377,8 +349,6 @@ public class DBManager implements DBinterface {
 			e.printStackTrace();
 		}
 	}
-
-	
 
 	@Override
 	public void addPrescription(Prescription p) {
@@ -427,9 +397,9 @@ public class DBManager implements DBinterface {
 			stmt.setString(2, "d");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-			//removed the rs.getblob since it was causing problems
+				// removed the rs.getblob since it was causing problems
 				Doctor doctor = new Doctor(rs.getInt("id"), rs.getString("specialization"), rs.getString("name"),
-						rs.getString("hospital"));
+						rs.getString("hospital"), rs.getBytes("photo"));
 				doctor.setRatings(this.getRatingOfDoctor(doctor.getId()));
 				doctors.add(doctor);
 			}
@@ -541,7 +511,6 @@ public class DBManager implements DBinterface {
 		return p;
 	}
 
-	
 	@Override
 	public List<Prescription> getPrescriptionOfVideos(int id_video) {
 
@@ -587,7 +556,6 @@ public class DBManager implements DBinterface {
 
 		return videos;
 	}
-
 
 	@Override
 	public List<Video_consultation> getPatientPreviousVideos(int id_patient) {
@@ -738,7 +706,6 @@ public class DBManager implements DBinterface {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void changeVideoconsultationNotes(String notes, int id) {
 
