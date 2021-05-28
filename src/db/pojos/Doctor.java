@@ -27,7 +27,7 @@ public class Doctor extends User implements Serializable {
 	private List<Video_consultation> videos;
 	@OneToMany(mappedBy = "doc")
 	private List<Rating> ratings;
-	@Basic(fetch=FetchType.LAZY)
+	@Basic(fetch = FetchType.LAZY)
 	@Lob
 	private byte[] photo;
 
@@ -50,8 +50,9 @@ public class Doctor extends User implements Serializable {
 	}
 
 	public Doctor(Integer id, String specialization, String name, String hospital, byte[] photo) {
-		//removed from this constructor the attribute photo because it was causing problems
-		//TODO correct photo issues and reintroduce it if needed
+		// removed from this constructor the attribute photo because it was causing
+		// problems
+		// TODO correct photo issues and reintroduce it if needed
 		super(id);
 		this.specialization = specialization;
 		this.name = name;
@@ -61,16 +62,14 @@ public class Doctor extends User implements Serializable {
 		this.photo = photo;
 	}
 
-	public Doctor(String email, byte[] password, String role_name, String specialization, String name,
-			String hospital, byte[] photo) {
+	public Doctor(String email, byte[] password, String role_name, String specialization, String name, String hospital,
+			byte[] photo) {
 		super(email, password, role_name);
 		this.specialization = specialization;
 		this.name = name;
 		this.hospital = hospital;
 		this.photo = photo;
 	}
-	
-
 
 	public Doctor(String specialization, String name, String hospital, List<Video_consultation> videos,
 			List<Rating> ratings, byte[] photo) {
@@ -98,7 +97,7 @@ public class Doctor extends User implements Serializable {
 	@Override
 	public String toString() {
 		return "Doctor [id_doctor=" + super.getId() + ", specialization=" + specialization + ", name=" + name
-				+ ", hospital=" + hospital + ", ratings=" + ratings + "role_name=" + super.getRole_name() + "]";
+				+ ", hospital=" + hospital + ", ]";
 	}
 
 	@Override

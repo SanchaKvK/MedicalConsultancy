@@ -171,8 +171,9 @@ public class Menu {
 				if (role_name.equals("d")) {
 
 					getAllDoctorVideos();
-				} else
+				} else {
 					getAllPatientVideos();
+				}
 
 				return;
 			case 2:
@@ -331,6 +332,10 @@ public class Menu {
 	private static void makeAppointment() throws Exception {
 
 		List<Doctor> d = searchDoctor();
+		if (d.isEmpty()) {
+			System.out.println("There is no doctor with that name");
+			return;
+		}
 		Integer id_doctor = inputOutput.askDoctorId(d);
 
 		LocalDate date = inputOutput.askDateAppointment();
@@ -365,7 +370,7 @@ public class Menu {
 	private static void updateVideoPatient() throws Exception {
 
 		List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
-		if (vd == null) {
+		if (vd.isEmpty()) {
 			System.out.println("You have no future videos");
 			return;
 		}
@@ -393,7 +398,7 @@ public class Menu {
 	private static void getAllPatientVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getVideosOfPatient(user.getId());
-		if (l == null) {
+		if (l.isEmpty()) {
 			System.out.println("You have no videos");
 			return;
 		}
@@ -407,7 +412,7 @@ public class Menu {
 	private static void getPreviousPatientVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getPatientPreviousVideos(user.getId());
-		if (l == null) {
+		if (l.isEmpty()) {
 			System.out.println("You have no previous videos");
 			return;
 		}
@@ -421,7 +426,7 @@ public class Menu {
 	private static void getFuturePatientVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getPatientFutureVideos(user.getId());
-		if (l == null) {
+		if (l.isEmpty()) {
 			System.out.println("You have no future videos");
 			return;
 		}
@@ -438,6 +443,10 @@ public class Menu {
 
 		Integer id_patient = user.getId();
 		List<Doctor> d = searchDoctor();
+		if (d.isEmpty()) {
+			System.out.println("There is no doctor with that name");
+			return;
+		}
 
 		Integer id_doctor = inputOutput.askDoctorId(d);
 
@@ -457,11 +466,11 @@ public class Menu {
 	private static void deleteVideoPatient() throws Exception {
 
 		List<Video_consultation> vd = dbman.getPatientFutureVideos(user.getId());
-		if (vd == null) {
+		if (vd.isEmpty()) {
 			System.out.println("You have no future video_consultations");
 		} else {
 			for (Video_consultation video_consultation : vd) {
-				System.out.println(vd);
+				System.out.println(video_consultation);
 
 			}
 
@@ -593,7 +602,7 @@ public class Menu {
 
 		int id_doctor = user.getId();
 		List<Video_consultation> vd = dbman.getDoctorFutureVideos(id_doctor);
-		if (vd == null) {
+		if (vd.isEmpty()) {
 			System.out.println("You have no future videos");
 			return;
 		}
@@ -635,7 +644,7 @@ public class Menu {
 
 		List<Video_consultation> l = dbman.getVideosOfDoctor(user.getId());
 
-		if (l == null) {
+		if (l.isEmpty()) {
 			System.out.println("You have no videos");
 			return;
 		}
@@ -648,7 +657,7 @@ public class Menu {
 	private static void getFutureDoctorVideos() throws Exception {
 
 		List<Video_consultation> l = dbman.getDoctorFutureVideos(user.getId());
-		if (l == null) {
+		if (l.isEmpty()) {
 			System.out.println("You have no future videos");
 			return;
 		}
@@ -679,7 +688,7 @@ public class Menu {
 
 	private static void deleteVideoDoctor() throws Exception {
 		List<Video_consultation> vd = dbman.getDoctorFutureVideos(user.getId());
-		if (vd == null) {
+		if (vd.isEmpty()) {
 			System.out.println("You have no future appointments");
 			return;
 		} else
@@ -694,7 +703,7 @@ public class Menu {
 
 		System.out.println("Videoconsultation information: ");
 		List<Video_consultation> vd = dbman.getDoctorPreviousVideos(user.getId());
-		if (vd == null) {
+		if (vd.isEmpty()) {
 			System.out.println("You have no previous video consultations");
 			return;
 		}
@@ -736,8 +745,16 @@ public class Menu {
 	private static void diagnose() throws Exception {
 
 		List<Patient> p = searchPatient();
+		if (p.isEmpty()) {
+			System.out.println("There is no patient with that name");
+			return;
+		}
 		Integer patient_id = inputOutput.askPatientId(p);
 		List<Pathology> path = searchPathologies();
+		if (path.isEmpty()) {
+			System.out.println("There is no pathology with that name");
+			return;
+		}
 
 		Integer pathology_id = inputOutput.askPathologyId(path);
 		dbman.diagnosePathology(patient_id, pathology_id);

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.pojos.Doctor;
@@ -22,7 +23,6 @@ public class inputOutput {
 
 	private static User user;
 	private static UserInterface usman = new JPAUserManager();
-	private static DBinterface dbman = new DBManager();
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
@@ -237,6 +237,7 @@ public class inputOutput {
 				System.out.println("Error: " + string + " is already in use");
 
 		}
+		usman.disconnect();
 
 		return string;
 
@@ -252,11 +253,15 @@ public class inputOutput {
 	// an id_doctor of that list doctors.The function will return an Integer, which
 	// is the id_doctor of the one of the doctors of the doctors list.
 	public static Integer askDoctorId(List<Doctor> doctors) throws IOException {
-		dbman.connect();
+
 		Integer id_doctor = -1;
 		String string = "";
 		Boolean state = false;
+		List<Integer> ids = new ArrayList<Integer>();
+		for (int i = 0; i < doctors.size(); i++) {
 
+			ids.add(doctors.get(i).getId());
+		}
 		while (true) {
 
 			System.out.println("Introduce id doctor:");
@@ -270,8 +275,8 @@ public class inputOutput {
 
 			if (state == true) {
 				id_doctor = Integer.parseInt(string);
-				if (dbman.getDoctor(id_doctor) == null || !doctors.contains(dbman.getDoctor(id_doctor))) {
-					System.out.println("Error: " + "This id_doctor" + id_doctor
+				if (!ids.contains(id_doctor)) {
+					System.out.println("Error: " + "This id_doctor " + id_doctor
 							+ " does not exist in the list of doctors that you have searched with that name");
 
 				}
@@ -282,7 +287,6 @@ public class inputOutput {
 			}
 
 		}
-		dbman.disconnect();
 
 		return id_doctor;
 
@@ -291,7 +295,7 @@ public class inputOutput {
 	// it shows these twp options. The user will not be able to exit the loop if
 	// the user enters options that are not there or if he/she enters letters.
 	public static String askGender() throws IOException {
-		dbman.connect();
+
 		Integer option = -1;
 		String string = "";
 		String gender = "";
@@ -325,8 +329,7 @@ public class inputOutput {
 			gender = "Male";
 		else
 			gender = "Female";
-		dbman.disconnect();
-
+		
 		return gender;
 
 	}
@@ -338,10 +341,16 @@ public class inputOutput {
 	// function will keep asking the user for a correct id until he introduce an id
 	// of the list of patients.
 	public static Integer askPatientId(List<Patient> patients) throws IOException {
-		dbman.connect();
+
 		Integer id_patient = -1;
 		String string = "";
 		Boolean state = false;
+
+		List<Integer> ids = new ArrayList<Integer>();
+		for (int i = 0; i < patients.size(); i++) {
+
+			ids.add(patients.get(i).getId());
+		}
 
 		while (true) {
 
@@ -356,8 +365,8 @@ public class inputOutput {
 
 			if (state == true) {
 				id_patient = Integer.parseInt(string);
-				if (dbman.getPatient(id_patient) == null || !patients.contains(dbman.getPatient(id_patient))) {
-					System.out.println("Error: " + "This id_patient" + id_patient
+				if (!ids.contains(id_patient)) {
+					System.out.println("Error: " + "This id_patient " + id_patient
 							+ " does not exist in the list of patients that you have searched with that name");
 
 				}
@@ -368,7 +377,7 @@ public class inputOutput {
 			}
 
 		}
-		dbman.disconnect();
+
 		return id_patient;
 
 	}
@@ -380,11 +389,15 @@ public class inputOutput {
 	// function will keep asking the user for a correct id until he introduce an id
 	// of the list of pathologies.
 	public static Integer askPathologyId(List<Pathology> p) throws IOException {
-		dbman.connect();
+
 		Integer id_path = -1;
 		String string = "";
 		Boolean state = false;
+		List<Integer> ids = new ArrayList<Integer>();
+		for (int i = 0; i < p.size(); i++) {
 
+			ids.add(p.get(i).getId_pathology());
+		}
 		while (true) {
 
 			System.out.println("Introduce id pathology:");
@@ -395,8 +408,8 @@ public class inputOutput {
 
 			if (state == true) {
 				id_path = Integer.parseInt(string);
-				if (dbman.getPathology(id_path) == null || !p.contains(dbman.getPathology(id_path))) {
-					System.out.println("Error: " + "This id_pathology" + id_path
+				if (!ids.contains(id_path)) {
+					System.out.println("Error: " + "This id_pathology " + id_path
 							+ " does not exist in the list of pathologies that you have searched with that name");
 
 				}
@@ -407,7 +420,6 @@ public class inputOutput {
 			}
 
 		}
-		dbman.disconnect();
 
 		return id_path;
 
@@ -420,11 +432,15 @@ public class inputOutput {
 	// function will keep asking the user for a correct id until he introduce an id
 	// of the list of videos.
 	public static Integer askVideoId(List<Video_consultation> vd) throws IOException {
-		dbman.connect();
+
 		Integer id_video = -1;
 		String string = "";
 		Boolean state = false;
+		List<Integer> ids = new ArrayList<Integer>();
+		for (int i = 0; i < vd.size(); i++) {
 
+			ids.add(vd.get(i).getId_video());
+		}
 		while (true) {
 
 			System.out.println("Introduce id video: ");
@@ -435,7 +451,7 @@ public class inputOutput {
 
 			if (state == true) {
 				id_video = Integer.parseInt(string);
-				if (vd.contains(dbman.getVideo(id_video))) {
+				if (!ids.contains(id_video)) {
 					System.out.println("Error: " + "This id_video " + id_video + " does not exist");
 
 				}
@@ -446,7 +462,6 @@ public class inputOutput {
 			}
 
 		}
-		dbman.disconnect();
 
 		return id_video;
 
