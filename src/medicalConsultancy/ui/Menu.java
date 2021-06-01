@@ -37,11 +37,12 @@ public class Menu {
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
+	private static XMLManager xmltransitionobject;
+
 
 	public static void main(String[] args) throws Exception {
 		dbman.connect();
 		usman.connect();
-
 		do {
 
 			int choice = inputOutput.OptionMenuLoginRegister();
@@ -113,6 +114,7 @@ public class Menu {
 				makeAppointment();
 				break;
 			case 3:
+				getAllPatientVideos();
 				updateVideoPatient();
 				break;
 			case 4:
@@ -128,6 +130,7 @@ public class Menu {
 				deleteVideoPatient();
 				break;
 			case 8:
+				getAllPatientVideos();
 				JavaVideoConsultationtoXML();
 				break;
 			case 9:
@@ -219,11 +222,9 @@ public class Menu {
 				case 5:
 					getDoctorRatings();
 					break;
-
 				case 6:
 					deleteVideoDoctor();
 					break;
-
 				case 7:
 					addInfoVideoconsultation();
 					break;
@@ -352,7 +353,6 @@ public class Menu {
 
 		Video_consultation vd = new Video_consultation(Date.valueOf(date), hours.get(index - 1), type,
 				dbman.getDoctor(id_doctor), dbman.getPatient(id_patient));
-		System.out.println("LA VIDEOCONSULTA NUEVA ES :" + vd);
 		dbman.addVideo_consultation(vd);
 
 	}
@@ -460,6 +460,7 @@ public class Menu {
 
 	}
 
+	
 	// OPTION 7 OF THE PATIENT MENU : DELETE A VIDEOCONSULTATION
 
 	// if you want to cancel an appointment
@@ -475,6 +476,7 @@ public class Menu {
 			}
 
 			dbman.deleteAppointment(inputOutput.askVideoId(vd));
+			System.out.println("The videoconsultation appointment has been removed");
 		}
 
 	}
@@ -484,44 +486,25 @@ public class Menu {
 
 	private static void JavaVideoConsultationtoXML() throws Exception {
 
-		XMLManager marshaller = null;
-
-		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
-		if (vd == null) {
-			System.out.println("You have no video-consultations to turn into XML");
-			return;
-		}
-		for (Video_consultation video_consultation : vd) {
-			System.out.println(video_consultation);
-		}
-		int id_video = inputOutput.askVideoId(vd);
-
-		Video_consultation video = dbman.getVideo(id_video);
-
-		marshaller.JavatoXMlVideoconsultation(video);
-
+			List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+			if (vd.isEmpty()) {
+				System.out.println("You have no videos to turn into an XML file");
+				return;
+			}
+			int id_video = inputOutput.askVideoId(vd);
+			Video_consultation video = dbman.getVideo(id_video);
+			xmltransitionobject.JavatoXMlVideoconsultation(video);
+		
 	}
 
 	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
 
 	private static void JavaPrescriptiontoXML() throws Exception {
 
-		XMLManager marshaller = null;
-		// do functions of getting prescriptions from a patient
-		//
-		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
-		if (vd == null) {
-			System.out.println("You have no video-consultations to turn into XML");
-			return;
-		}
-		for (Video_consultation video_consultation : vd) {
-			System.out.println(video_consultation);
-		}
-		int id_video = inputOutput.askVideoId(vd);
 
-		Video_consultation video = dbman.getVideo(id_video);
+		//Video_consultation video = dbman.getVideo(id_video);
 
-		marshaller.JavatoXMlVideoconsultation(video);
+		//marshaller.JavatoXMlVideoconsultation(video);
 
 	}
 
