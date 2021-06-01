@@ -701,7 +701,7 @@ public class Menu {
 	
 
 		Integer duration = inputOutput.askDurationVideo();
-		System.out.println("Introduce the doctor's notes: ");
+		System.out.println("Introduce the doctor's notes on the videoconsultation: ");
 		String notes = reader.readLine();
 		System.out.println("Introduce the prescription: ");
 		Prescription p = prescribe();
@@ -722,7 +722,7 @@ public class Menu {
 		Integer duration = inputOutput.askDurationPrescription();
 		System.out.println("Name: ");
 		String name = reader.readLine();
-		System.out.println("Notes: ");
+		System.out.println("Notes regarding the prescription: ");
 		String notes = reader.readLine();
 
 		Prescription p = new Prescription(name, doses, duration, notes);
