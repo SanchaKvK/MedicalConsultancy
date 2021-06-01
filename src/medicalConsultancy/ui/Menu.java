@@ -684,6 +684,8 @@ public class Menu {
 	// to fill the information of previous appointments
 	private static void addInfoVideoconsultation() throws Exception {
 
+		
+
 		System.out.println("Videoconsultation information: ");
 		List<Video_consultation> vd = dbman.getDoctorPreviousVideos(user.getId());
 		if (vd.isEmpty()) {
@@ -695,13 +697,17 @@ public class Menu {
 			System.out.println(video_consultation);
 		}
 		int id_video = inputOutput.askVideoId(vd);
+		Video_consultation v=dbman.getVideo(id_video);
+	
 
 		Integer duration = inputOutput.askDurationVideo();
 		System.out.println("Introduce the doctor's notes: ");
 		String notes = reader.readLine();
 		System.out.println("Introduce the prescription: ");
-		Prescription p = prescribe(id_video);
-		usman.addInfoVideo(id_video, notes, duration, p);
+		Prescription p = prescribe();
+		usman.addInfoVideo(v, notes, duration, p);
+	
+
 
 		Boolean optionDiagnose = inputOutput.askYesNo();
 		if (optionDiagnose == true)
@@ -709,7 +715,7 @@ public class Menu {
 
 	}
 
-	private static Prescription prescribe(int id_video) throws Exception {
+	private static Prescription prescribe() throws Exception {
 
 		Integer doses = inputOutput.askDoses();
 
@@ -720,6 +726,7 @@ public class Menu {
 		String notes = reader.readLine();
 
 		Prescription p = new Prescription(name, doses, duration, notes);
+		dbman.addPrescription(p);
 		return p;
 
 	}

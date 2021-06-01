@@ -2,6 +2,7 @@ package medicalConsultancy.db;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -56,6 +57,10 @@ public class JPAUserManager implements UserInterface {
 		return null;
 	}
 
+
+	
+	
+
 	@Override
 	public List<User> allEmergencyUsers() {
 		Query q = em.createNativeQuery("SELECT * FROM users WHERE role_name=? and specialization=?", User.class);
@@ -65,13 +70,9 @@ public class JPAUserManager implements UserInterface {
 
 	}
 
-
 	@Override
-	public void addInfoVideo(int id_video, String notes, int duration, Prescription p) {
+	public void addInfoVideo(Video_consultation vd, String notes, int duration, Prescription p) {
 
-		Query q = em.createNativeQuery("SELECT * FROM videoconsultation WHERE id_video=?", Video_consultation.class);
-		q.setParameter(1, id_video);
-		Video_consultation vd = (Video_consultation) q.getSingleResult();
 		em.getTransaction().begin();
 		vd.setDuration(duration);
 		vd.setNotes(notes);

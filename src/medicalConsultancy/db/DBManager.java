@@ -355,9 +355,8 @@ public class DBManager implements DBinterface {
 
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO prescription(doses, notes, duration, name, id_video) VALUES (" + p.getDoses()
-					+ ",'" + p.getNotes() + "'," + p.getDuration() + ",'" + p.getName() + "'," + p.getVd().getId_video()
-					+ ")";
+			String sql = "INSERT INTO prescription(doses, notes, duration, name) VALUES (" + p.getDoses()
+					+ ",'" + p.getNotes() + "'," + p.getDuration() + ",'" + p.getName() + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (Exception e) {
@@ -648,11 +647,11 @@ public class DBManager implements DBinterface {
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
-			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<=? AND id_doctor=? AND consultation_time<?";
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<=? AND id_doctor=?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, d);
 			ps.setInt(2, id_doctor);
-			ps.setTime(3,t);
+	
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

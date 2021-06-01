@@ -34,7 +34,7 @@ public class Video_consultation implements Serializable {
 	@XmlElement
 	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date consultation_date;
-	@XmlTransient
+	@XmlElement
 	private Time consultation_time;
 	@XmlElement
 	private Integer duration;

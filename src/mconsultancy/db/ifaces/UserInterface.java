@@ -29,7 +29,7 @@ public interface UserInterface {
 	
 	//updates a previous videoconsultation. Updates the duration, the prescription and the notes.
 	
-	public void addInfoVideo(int id_video, String notes, int duration, Prescription p);
+	public void addInfoVideo(Video_consultation vd, String notes, int duration, Prescription p);
 
 	//add a prescription
 	public void addPrescription(Prescription p);
