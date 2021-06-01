@@ -17,6 +17,9 @@ import javax.xml.bind.annotation.XmlType;
 
 @Entity
 @Table(name= "prescription")
+@XmlRootElement(name = "Prescription")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = { "name", "doses", "duration", "notes" })
 
 public class Prescription implements Serializable{
 
@@ -28,21 +31,20 @@ public class Prescription implements Serializable{
 	@GeneratedValue(generator="prescription")
 	@TableGenerator(name="prescription", table="sqlite_sequence",
 	    pkColumnName="name", valueColumnName="seq", pkColumnValue="prescription")
-
+	@XmlAttribute
 	private Integer id_prescription;
-
+	@XmlElement
 	private String name;
-	
+	@XmlElement
 	private Integer doses;
-
+	@XmlElement
 	private Integer duration;
-	
+	@XmlElement
 	private String notes;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_video")
-
+	@XmlTransient
 	private Video_consultation vd; 
-	
 	
 	public Integer getId_prescription() {
 		return id_prescription;
