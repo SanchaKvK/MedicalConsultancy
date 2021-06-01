@@ -720,8 +720,6 @@ public class Menu {
 		String notes = reader.readLine();
 
 		Prescription p = new Prescription(name, doses, duration, notes);
-		dbman.addPrescription(p);
-		System.out.println("SE ha añadido el prescription");
 		return p;
 
 	}
