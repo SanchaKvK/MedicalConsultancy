@@ -721,6 +721,7 @@ public class Menu {
 
 		Prescription p = new Prescription(name, doses, duration, notes);
 		dbman.addPrescription(p);
+		System.out.println("SE ha añadido el prescription");
 		return p;
 
 	}

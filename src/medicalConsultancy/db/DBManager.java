@@ -642,14 +642,17 @@ public class DBManager implements DBinterface {
 	@Override
 	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor) {
 		Date d = Date.valueOf(LocalDate.now());
-
+		System.out.println("La date de ahora mismo es:"+d);
+		Time t = Time.valueOf(LocalTime.now());
+		System.out.println("La time de ahora mismo es:"+t);
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
-			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<? AND id_doctor=?";
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<=? AND id_doctor=? AND consultation_time<?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, d);
 			ps.setInt(2, id_doctor);
+			ps.setTime(3,t);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
