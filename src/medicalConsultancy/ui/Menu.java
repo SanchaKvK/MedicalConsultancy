@@ -39,10 +39,10 @@ public class Menu {
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
 	private static XMLManager xmltransitionobject;
 
-
 	public static void main(String[] args) throws Exception {
 		dbman.connect();
 		usman.connect();
+
 		do {
 
 			int choice = inputOutput.OptionMenuLoginRegister();
@@ -55,6 +55,7 @@ public class Menu {
 				break;
 			case 0:
 				dbman.disconnect();
+				usman.disconnect();
 				System.exit(0);
 				break;
 			default:
@@ -114,7 +115,6 @@ public class Menu {
 				makeAppointment();
 				break;
 			case 3:
-				getAllPatientVideos();
 				updateVideoPatient();
 				break;
 			case 4:
@@ -228,7 +228,9 @@ public class Menu {
 				case 7:
 					addInfoVideoconsultation();
 					break;
-
+				case 8:
+					diagnose();
+					break;
 				case 0:
 					dbman.disconnect();
 					usman.disconnect();
@@ -460,7 +462,6 @@ public class Menu {
 
 	}
 
-	
 	// OPTION 7 OF THE PATIENT MENU : DELETE A VIDEOCONSULTATION
 
 	// if you want to cancel an appointment
@@ -486,25 +487,24 @@ public class Menu {
 
 	private static void JavaVideoConsultationtoXML() throws Exception {
 
-			List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
-			if (vd.isEmpty()) {
-				System.out.println("You have no videos to turn into an XML file");
-				return;
-			}
-			int id_video = inputOutput.askVideoId(vd);
-			Video_consultation video = dbman.getVideo(id_video);
-			xmltransitionobject.JavatoXMlVideoconsultation(video);
-		
+		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+		if (vd.isEmpty()) {
+			System.out.println("You have no videos to turn into an XML file");
+			return;
+		}
+		int id_video = inputOutput.askVideoId(vd);
+		Video_consultation video = dbman.getVideo(id_video);
+		xmltransitionobject.JavatoXMlVideoconsultation(video);
+
 	}
 
 	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
 
 	private static void JavaPrescriptiontoXML() throws Exception {
 
+		// Video_consultation video = dbman.getVideo(id_video);
 
-		//Video_consultation video = dbman.getVideo(id_video);
-
-		//marshaller.JavatoXMlVideoconsultation(video);
+		// marshaller.JavatoXMlVideoconsultation(video);
 
 	}
 
@@ -684,10 +684,8 @@ public class Menu {
 	// to fill the information of previous appointments
 	private static void addInfoVideoconsultation() throws Exception {
 
-		
-
 		System.out.println("Videoconsultation information: ");
-		List<Video_consultation> vd = dbman.getDoctorPreviousVideos(user.getId());
+		List<Video_consultation> vd = dbman.getVideosOfDoctor(user.getId());
 		if (vd.isEmpty()) {
 			System.out.println("You have no previous video consultations");
 			return;
@@ -697,17 +695,17 @@ public class Menu {
 			System.out.println(video_consultation);
 		}
 		int id_video = inputOutput.askVideoId(vd);
-		Video_consultation v=dbman.getVideo(id_video);
-	
+		Video_consultation v = dbman.getVideo(id_video);
 
 		Integer duration = inputOutput.askDurationVideo();
 		System.out.println("Introduce the doctor's notes on the videoconsultation: ");
+		dbman.changeVideoconsultationDuration(duration, id_video);
+
 		String notes = reader.readLine();
 		System.out.println("Introduce the prescription: ");
-		Prescription p = prescribe();
-		usman.addInfoVideo(v, notes, duration, p);
-	
+		dbman.changeVideoconsultationNotes(notes, id_video);
 
+		prescribe(v);
 
 		Boolean optionDiagnose = inputOutput.askYesNo();
 		if (optionDiagnose == true)
@@ -715,7 +713,7 @@ public class Menu {
 
 	}
 
-	private static Prescription prescribe() throws Exception {
+	private static void prescribe(Video_consultation v) throws Exception {
 
 		Integer doses = inputOutput.askDoses();
 
@@ -725,9 +723,8 @@ public class Menu {
 		System.out.println("Notes regarding the prescription: ");
 		String notes = reader.readLine();
 
-		Prescription p = new Prescription(name, doses, duration, notes);
+		Prescription p = new Prescription(name, doses, duration, notes, v);
 		dbman.addPrescription(p);
-		return p;
 
 	}
 
@@ -738,15 +735,20 @@ public class Menu {
 			System.out.println("There is no patient with that name");
 			return;
 		}
-		Integer patient_id = inputOutput.askPatientId(p);
+		Integer id_patient = inputOutput.askPatientId(p);
 		List<Pathology> path = searchPathologies();
+
 		if (path.isEmpty()) {
 			System.out.println("There is no pathology with that name");
 			return;
 		}
 
-		Integer pathology_id = inputOutput.askPathologyId(path);
-		dbman.diagnosePathology(patient_id, pathology_id);
+		Integer id_pathology = inputOutput.askPathologyId(path);
+		Patient patient = usman.getPatient(id_patient);
+		Pathology pathology = usman.getPathology(id_pathology);
+		System.out.println(patient);
+		System.out.println(pathology);
+		usman.diagnose(patient, pathology);
 	}
 
 	private static List<Patient> searchPatient() throws Exception {
@@ -760,7 +762,8 @@ public class Menu {
 	private static List<Pathology> searchPathologies() throws Exception {
 		System.out.println("Introduce pathology`s name: ");
 		String name = reader.readLine();
-		return dbman.searchPathologyByName(name);
+		List<Pathology> p = dbman.searchPathologyByName(name);
+		return p;
 
 	}
 

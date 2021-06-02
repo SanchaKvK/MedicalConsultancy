@@ -32,9 +32,9 @@ public class Patient extends User implements Serializable {
 	private List<Rating> ratings;
 
 	@ManyToMany
-	@JoinTable(name="patient_pathology",
-		joinColumns={@JoinColumn(name="id_patient", referencedColumnName="id")},
-	    inverseJoinColumns={@JoinColumn(name="id_pathology", referencedColumnName="id_pathology")})
+	@JoinTable(name = "patient_pathology", joinColumns = {
+			@JoinColumn(name = "id_patient", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "id_pathology", referencedColumnName = "id_pathology") })
 	private List<Pathology> pathologies;
 
 	public Patient() {
@@ -55,7 +55,6 @@ public class Patient extends User implements Serializable {
 		this.phone_number = phone_number;
 		this.postcode = postcode;
 	}
-
 
 	public Patient(Integer id, String email, byte[] password, String role, String name, String gender, Date birth,
 			String iD, String phone_number, String postcode) {
@@ -114,6 +113,11 @@ public class Patient extends User implements Serializable {
 
 	public List<Rating> getRatings() {
 		return ratings;
+	}
+
+	public void addPathology(Pathology p) {
+		if (!this.pathologies.contains(p))
+			this.pathologies.add(p);
 	}
 
 	public void setRatings(List<Rating> ratings) {

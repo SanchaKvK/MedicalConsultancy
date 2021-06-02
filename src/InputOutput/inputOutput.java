@@ -193,6 +193,7 @@ public class inputOutput {
 			System.out.println("5. View my ratings");
 			System.out.println("6. Cancel Appointment");
 			System.out.println("7. Add videoconsultation information");
+			System.out.println("8. Diagnose");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
@@ -201,7 +202,7 @@ public class inputOutput {
 
 			if (state == true) {
 				option = Integer.parseInt(string);
-				if (option < 0 || option > 13) {
+				if (option < 0 || option > 8) {
 					System.out.println("Error: " + option + " is not an option");
 
 				}
@@ -329,7 +330,7 @@ public class inputOutput {
 			gender = "Male";
 		else
 			gender = "Female";
-		
+
 		return gender;
 
 	}
@@ -401,6 +402,10 @@ public class inputOutput {
 		while (true) {
 
 			System.out.println("Introduce id pathology:");
+			for (Pathology paths : p) {
+				System.out.println(paths);
+
+			}
 			string = reader.readLine();
 			state = isNumeric(string);
 			if (state == false)

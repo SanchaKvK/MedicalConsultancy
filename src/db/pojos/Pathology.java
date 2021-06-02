@@ -8,47 +8,42 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name="pathology")
+@Table(name = "pathology")
 
-public class Pathology implements Serializable{
+public class Pathology implements Serializable {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7155856944921964272L;
 	@Id
-	@GeneratedValue(generator="pathology")
-	@TableGenerator(name="pathology", table="sqlite_sequence",
-	    pkColumnName="name", valueColumnName="seq", pkColumnValue="pathology")
+	@GeneratedValue(generator = "pathology")
+	@TableGenerator(name = "pathology", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "pathology")
 	private Integer id_pathology;
 	private String name;
 	private String type;
-	@ManyToMany(mappedBy="pathologies")
-	private List<Patient>patients;
+	@ManyToMany(mappedBy = "pathologies")
+	private List<Patient> patients;
+
 	public Pathology() {
 		super();
-		
+
 	}
-	
-	
-	//used in the application
+
+	// used in the application
 	public Pathology(Integer id_pathology, String name, String type) {
 		super();
 		this.id_pathology = id_pathology;
 		this.name = name;
 		this.type = type;
-		this.patients= new ArrayList<Patient>();
+		this.patients = new ArrayList<Patient>();
 	}
-
-
 
 	public Pathology(String name, String type) {
 		super();
 		this.name = name;
 		this.type = type;
 	}
-
 
 	public Pathology(Integer id_pathology, String name, String type, List<Patient> patients) {
 		super();
@@ -57,13 +52,13 @@ public class Pathology implements Serializable{
 		this.type = type;
 		this.patients = patients;
 	}
-	
-	
-	//Pathology doesnt print patients
+
+	// Pathology doesnt print patients
 	@Override
 	public String toString() {
 		return "Pathology [id_pathology=" + id_pathology + ", name=" + name + ", type=" + type + "]";
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -71,6 +66,7 @@ public class Pathology implements Serializable{
 		result = prime * result + ((id_pathology == null) ? 0 : id_pathology.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -87,31 +83,43 @@ public class Pathology implements Serializable{
 			return false;
 		return true;
 	}
+
 	public Integer getId_pathology() {
 		return id_pathology;
 	}
+
 	public void setId_pathology(Integer id_pathology) {
 		this.id_pathology = id_pathology;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
+
 	public List<Patient> getPatients() {
 		return patients;
 	}
+
 	public void setPatients(List<Patient> patients) {
 		this.patients = patients;
 	}
-	
-	
-	
+
+	public void addPatient(Patient p) {
+		if (!this.patients.contains(p))
+			this.patients.add(p);
+
+	}
+
 }

@@ -109,4 +109,7 @@ public interface DBinterface {
 	public List<Doctor> searchDoctorType(String name);
 	
 
+	
+	
+
 }

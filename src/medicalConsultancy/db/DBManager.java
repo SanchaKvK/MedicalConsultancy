@@ -354,11 +354,15 @@ public class DBManager implements DBinterface {
 	public void addPrescription(Prescription p) {
 
 		try {
-			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO prescription(doses, notes, duration, name) VALUES (" + p.getDoses()
-					+ ",'" + p.getNotes() + "'," + p.getDuration() + ",'" + p.getName() + "')";
-			stmt.executeUpdate(sql);
-			stmt.close();
+			String sql = "INSERT INTO prescription(doses,notes,duration,name,id_video) VALUES(?,?,?,?,?)";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, p.getDoses());
+			ps.setString(2, p.getNotes());
+			ps.setInt(3, p.getDuration());
+			ps.setString(4, p.getName());
+			ps.setInt(5, p.getVd().getId_video());
+			ps.executeUpdate();
+			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -487,7 +491,7 @@ public class DBManager implements DBinterface {
 	public List<Pathology> searchPathologyByName(String name) {
 		List<Pathology> p = new ArrayList<Pathology>();
 		try {
-			String sql = "SELECT*FROM pathology WHERE name LIKE ?";
+			String sql = "SELECT * FROM pathology WHERE name LIKE ?";
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setString(1, "%" + name + "%");
 			ResultSet rs = stmt.executeQuery();
@@ -641,9 +645,9 @@ public class DBManager implements DBinterface {
 	@Override
 	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor) {
 		Date d = Date.valueOf(LocalDate.now());
-		System.out.println("La date de ahora mismo es:"+d);
+		System.out.println("La date de ahora mismo es:" + d);
 		Time t = Time.valueOf(LocalTime.now());
-		System.out.println("La time de ahora mismo es:"+t);
+		System.out.println("La time de ahora mismo es:" + t);
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
@@ -651,7 +655,7 @@ public class DBManager implements DBinterface {
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, d);
 			ps.setInt(2, id_doctor);
-	
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

@@ -3,11 +3,14 @@ package medicalConsultancy.db;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.*;
 
 import mconsultancy.db.ifaces.UserInterface;
+import db.pojos.Pathology;
+import db.pojos.Patient;
 import db.pojos.Prescription;
 import db.pojos.Video_consultation;
 import db.pojos.users.User;
@@ -57,38 +60,12 @@ public class JPAUserManager implements UserInterface {
 		return null;
 	}
 
-
-	
-	
-
 	@Override
 	public List<User> allEmergencyUsers() {
 		Query q = em.createNativeQuery("SELECT * FROM users WHERE role_name=? and specialization=?", User.class);
 		q.setParameter(1, "d");
 		q.setParameter(2, "emergency");
 		return (List<User>) q.getSingleResult();
-
-	}
-
-	@Override
-	public void addInfoVideo(Video_consultation vd, String notes, int duration, Prescription p) {
-
-		em.getTransaction().begin();
-		vd.setDuration(duration);
-		vd.setNotes(notes);
-		vd.addPrescription(p);
-		p.setVd(vd);
-
-		em.getTransaction().commit();
-
-	}
-
-	@Override
-	public void addPrescription(Prescription p) {
-
-		em.getTransaction().begin();
-		em.persist(p);
-		em.getTransaction().commit();
 
 	}
 
@@ -112,6 +89,45 @@ public class JPAUserManager implements UserInterface {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void diagnose(Patient p, Pathology path) {
+
+		em.getTransaction().begin();
+		p.addPathology(path);
+		path.addPatient(p);
+		em.getTransaction().commit();
+	}
+
+	@Override
+	public Patient getPatient(int id_patient) {
+
+		Object patient;
+		Query q = em.createNativeQuery("SELECT * FROM users WHERE id=?", Patient.class);
+		q.setParameter(1, id_patient);
+		try {
+			patient = q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+
+		return (Patient) patient;
+	}
+
+	@Override
+	public Pathology getPathology(int id_pathology) {
+		Object path;
+		Query q = em.createNativeQuery("SELECT * FROM pathology WHERE id_pathology=?", Pathology.class);
+		q.setParameter(1, id_pathology);
+		try {
+			path = q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+
+		return (Pathology) path;
+		
 	}
 
 }
