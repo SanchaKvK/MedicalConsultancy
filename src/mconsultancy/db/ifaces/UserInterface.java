@@ -40,4 +40,5 @@ public interface UserInterface {
 	public Patient getPatient(int id_patient);
 
 	public Pathology getPathology(int id_pathology);
+
 }

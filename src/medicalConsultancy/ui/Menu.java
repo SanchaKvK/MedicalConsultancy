@@ -707,9 +707,6 @@ public class Menu {
 
 		prescribe(v);
 
-		Boolean optionDiagnose = inputOutput.askYesNo();
-		if (optionDiagnose == true)
-			diagnose();
 
 	}
 
@@ -744,10 +741,14 @@ public class Menu {
 		}
 
 		Integer id_pathology = inputOutput.askPathologyId(path);
+
 		Patient patient = usman.getPatient(id_patient);
 		Pathology pathology = usman.getPathology(id_pathology);
-		System.out.println(patient);
-		System.out.println(pathology);
+		
+		if (patient.getPathologies().contains(pathology)) {
+			System.out.println("The patient already has this disease");
+			return;
+		}
 		usman.diagnose(patient, pathology);
 	}
 
