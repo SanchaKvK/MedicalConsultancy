@@ -106,7 +106,12 @@ public interface DBinterface {
 	//updates the duration in a specific videoconsultation
 	public void changeVideoconsultationDuration(int duration, int id);
 	
+	//Search a doctor by type of specialization
 	public List<Doctor> searchDoctorType(String name);
+	
+	
+	//check if there is a rating associated with that doctor and that patient. Return true if there is a rating and false if there is not. 
+	public Boolean checkIfRating(int id_doctor, int id_patient) ;
 	
 
 	

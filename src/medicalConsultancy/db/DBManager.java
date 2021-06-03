@@ -830,4 +830,26 @@ public class DBManager implements DBinterface {
 		return p;
 	}
 
+	@Override
+	public Boolean checkIfRating(int id_doctor, int id_patient) {
+
+		try {
+
+			String sql = "SELECT* FROM rating WHERE id_patient=? and id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_patient);
+			ps.setInt(2, id_doctor);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+
+	}
+
 }

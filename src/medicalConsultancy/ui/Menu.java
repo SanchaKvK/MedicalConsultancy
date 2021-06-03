@@ -124,7 +124,7 @@ public class Menu {
 				rate();
 				break;
 			case 6:
-				searchDoctor();
+				System.out.println(searchDoctor());
 				break;
 			case 7:
 				deleteVideoPatient();
@@ -452,11 +452,19 @@ public class Menu {
 
 		Integer id_doctor = inputOutput.askDoctorId(d);
 
+		Patient patient = dbman.getPatient(id_patient);
+		Doctor doctor = dbman.getDoctor(id_doctor);
+		
+		if (dbman.checkIfRating(id_doctor, id_patient)) {
+			System.out.println("You have already rated this doctor");
+			return;
+		}
+
 		Integer score = inputOutput.askScore();
 		System.out.println("Review: ");
 		String review = reader.readLine();
 
-		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
+		Rating rating = new Rating(doctor, patient, score, review);
 
 		dbman.addRating(rating);
 
@@ -707,7 +715,6 @@ public class Menu {
 
 		prescribe(v);
 
-
 	}
 
 	private static void prescribe(Video_consultation v) throws Exception {
@@ -744,7 +751,7 @@ public class Menu {
 
 		Patient patient = usman.getPatient(id_patient);
 		Pathology pathology = usman.getPathology(id_pathology);
-		
+
 		if (patient.getPathologies().contains(pathology)) {
 			System.out.println("The patient already has this disease");
 			return;
