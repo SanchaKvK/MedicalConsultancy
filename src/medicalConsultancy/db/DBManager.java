@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import db.pojos.Doctor;
 import db.pojos.Pathology;
@@ -171,7 +172,7 @@ public class DBManager implements DBinterface {
 	@Override
 	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
 		Date actualDate = Date.valueOf(LocalDate.now());
-		Time actualTime= Time.valueOf(LocalTime.now());
+		Time actualTime = Time.valueOf(LocalTime.now());
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
@@ -192,7 +193,7 @@ public class DBManager implements DBinterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		for (int i = 0; i < vd.size(); i++) {
 			LocalDate date = vd.get(i).getConsultation_date().toLocalDate();
 			LocalTime time = vd.get(i).getConsultatiton_time().toLocalTime();
@@ -259,15 +260,14 @@ public class DBManager implements DBinterface {
 
 		// if the consultation date is the same as the actual date, the hours before the
 		// actual hour doesnt count as available hours.
-		if (consultation_date.toLocalDate().equals(LocalDate.now())) {
 
-			for (int i = 0; i < hours.size(); i++) {
+		Iterator<Time> it = hours.iterator();
+		while (it.hasNext()) {
 
-				if (hours.get(i).toLocalTime().isBefore(LocalTime.now())) {
-					hours.remove(i);
-				}
-			}
+			if (it.next().toLocalTime().isBefore(LocalTime.now()))
+				it.remove();
 		}
+
 		return hours;
 	}
 
@@ -650,7 +650,7 @@ public class DBManager implements DBinterface {
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, actualDate);
 			ps.setInt(2, id_doctor);
-		
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -664,7 +664,7 @@ public class DBManager implements DBinterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		for (int i = 0; i < vd.size(); i++) {
 			LocalDate date = vd.get(i).getConsultation_date().toLocalDate();
 			LocalTime time = vd.get(i).getConsultatiton_time().toLocalTime();
@@ -688,7 +688,6 @@ public class DBManager implements DBinterface {
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setDate(1, actualDate);
 			ps.setInt(2, id_doctor);
-	
 
 			ResultSet rs = ps.executeQuery();
 
