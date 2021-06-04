@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import db.pojos.Doctor;
 import db.pojos.Pathology;
@@ -170,14 +171,14 @@ public class DBManager implements DBinterface {
 
 	@Override
 	public List<Video_consultation> getPatientFutureVideos(int id_patient) {
-		Date d = Date.valueOf(LocalDate.now());
-
+		Date actualDate = Date.valueOf(LocalDate.now());
+		Time actualTime = Time.valueOf(LocalTime.now());
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
-			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>? AND id_patient=?";
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>=? AND id_patient=?";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setDate(1, d);
+			ps.setDate(1, actualDate);
 			ps.setInt(2, id_patient);
 			ResultSet rs = ps.executeQuery();
 
@@ -191,6 +192,18 @@ public class DBManager implements DBinterface {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isBefore(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
 		}
 
 		return vd;
@@ -248,6 +261,18 @@ public class DBManager implements DBinterface {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		// if the consultation date is the same as the actual date, the hours before the
+		// actual hour doesnt count as available hours.
+
+		if (consultation_date.toLocalDate().equals(LocalDate.now())) {
+			Iterator<Time> it = hours.iterator();
+			while (it.hasNext()) {
+
+				if (it.next().toLocalTime().isBefore(LocalTime.now()))
+					it.remove();
+			}
 		}
 
 		return hours;
@@ -562,15 +587,17 @@ public class DBManager implements DBinterface {
 
 	@Override
 	public List<Video_consultation> getPatientPreviousVideos(int id_patient) {
-		Date d = Date.valueOf(LocalDate.now());
+		Date actualDate = Date.valueOf(LocalDate.now());
+		Time actualTime = Time.valueOf(LocalTime.now());
 
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
-			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<? AND id_patient=?";
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<=? AND id_patient=?";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setDate(1, d);
+			ps.setDate(1, actualDate);
 			ps.setInt(2, id_patient);
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -585,6 +612,17 @@ public class DBManager implements DBinterface {
 			e.printStackTrace();
 		}
 
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isAfter(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
+		}
 		return vd;
 
 	}
@@ -615,15 +653,17 @@ public class DBManager implements DBinterface {
 
 	@Override
 	public List<Video_consultation> getDoctorFutureVideos(int id_doctor) {
-		Date d = Date.valueOf(LocalDate.now());
+		Date actualDate = Date.valueOf(LocalDate.now());
+		Time actualTime = Time.valueOf(LocalTime.now());
 
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
-			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>? AND id_doctor=?";
+			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date>=? AND id_doctor=?";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setDate(1, d);
+			ps.setDate(1, actualDate);
 			ps.setInt(2, id_doctor);
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -636,6 +676,18 @@ public class DBManager implements DBinterface {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isBefore(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
 		}
 
 		return vd;
@@ -644,16 +696,15 @@ public class DBManager implements DBinterface {
 
 	@Override
 	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor) {
-		Date d = Date.valueOf(LocalDate.now());
-		System.out.println("La date de ahora mismo es:" + d);
-		Time t = Time.valueOf(LocalTime.now());
-		System.out.println("La time de ahora mismo es:" + t);
+		Date actualDate = Date.valueOf(LocalDate.now());
+		Time actualTime = Time.valueOf(LocalTime.now());
+
 		List<Video_consultation> vd = new ArrayList<Video_consultation>();
 
 		try {
 			String sql = "SELECT id_video FROM videoconsultation WHERE consultation_date<=? AND id_doctor=?";
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setDate(1, d);
+			ps.setDate(1, actualDate);
 			ps.setInt(2, id_doctor);
 
 			ResultSet rs = ps.executeQuery();
@@ -669,36 +720,22 @@ public class DBManager implements DBinterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isAfter(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
+		}
 
 		return vd;
 
 	}
 
-	@Override
-	public void fireDoctor(int id) {
-		try {
-			String sql = "DELETE FROM doctor WHERE id_doctor = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void deletePatient(int id) {
-		try {
-			String sql = "DELETE FROM patient WHERE id_patient = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void deleteAppointment(int id) {
@@ -788,6 +825,28 @@ public class DBManager implements DBinterface {
 		}
 
 		return p;
+	}
+
+	@Override
+	public Boolean checkIfRating(int id_doctor, int id_patient) {
+
+		try {
+
+			String sql = "SELECT* FROM rating WHERE id_patient=? and id_doctor=?";
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, id_patient);
+			ps.setInt(2, id_doctor);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next())
+				return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+
 	}
 
 }

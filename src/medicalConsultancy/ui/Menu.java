@@ -124,7 +124,10 @@ public class Menu {
 				rate();
 				break;
 			case 6:
-				searchDoctor();
+				List<Doctor> d = searchDoctor();
+				for (Doctor doctor : d) {
+					System.out.println(doctor);
+				}
 				break;
 			case 7:
 				deleteVideoPatient();
@@ -452,11 +455,19 @@ public class Menu {
 
 		Integer id_doctor = inputOutput.askDoctorId(d);
 
+		Patient patient = dbman.getPatient(id_patient);
+		Doctor doctor = dbman.getDoctor(id_doctor);
+
+		if (dbman.checkIfRating(id_doctor, id_patient)) {
+			System.out.println("You have already rated this doctor");
+			return;
+		}
+
 		Integer score = inputOutput.askScore();
 		System.out.println("Review: ");
 		String review = reader.readLine();
 
-		Rating rating = new Rating(dbman.getDoctor(id_doctor), dbman.getPatient(id_patient), score, review);
+		Rating rating = new Rating(doctor, patient, score, review);
 
 		dbman.addRating(rating);
 
@@ -674,8 +685,15 @@ public class Menu {
 		if (vd.isEmpty()) {
 			System.out.println("You have no future appointments");
 			return;
-		} else
-			dbman.deleteAppointment(inputOutput.askVideoId(vd));
+		} else {
+			for (Video_consultation video_consultation : vd) {
+				System.out.println(video_consultation);
+			}
+		}
+
+		int id_video = inputOutput.askVideoId(vd);
+		dbman.deleteAppointment(id_video);
+		System.out.println("The videoconsultation appointment has been removed");
 
 	}
 
@@ -706,10 +724,6 @@ public class Menu {
 		dbman.changeVideoconsultationNotes(notes, id_video);
 
 		prescribe(v);
-
-		Boolean optionDiagnose = inputOutput.askYesNo();
-		if (optionDiagnose == true)
-			diagnose();
 
 	}
 
@@ -744,10 +758,14 @@ public class Menu {
 		}
 
 		Integer id_pathology = inputOutput.askPathologyId(path);
+
 		Patient patient = usman.getPatient(id_patient);
 		Pathology pathology = usman.getPathology(id_pathology);
-		System.out.println(patient);
-		System.out.println(pathology);
+
+		if (patient.getPathologies().contains(pathology)) {
+			System.out.println("The patient already has this disease");
+			return;
+		}
 		usman.diagnose(patient, pathology);
 	}
 

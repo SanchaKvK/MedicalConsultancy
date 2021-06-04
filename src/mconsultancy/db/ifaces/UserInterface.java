@@ -35,9 +35,13 @@ public interface UserInterface {
 	// it has already been created or false if not.
 	public boolean checkEmail(String email);
 
+   //diagnoses a patient with a pathology
 	public void diagnose(Patient p, Pathology path);
-
+	
+	//returns a pacient that has that id_patient
 	public Patient getPatient(int id_patient);
 
+	//returns a pathology that has that id_pathology
 	public Pathology getPathology(int id_pathology);
+
 }

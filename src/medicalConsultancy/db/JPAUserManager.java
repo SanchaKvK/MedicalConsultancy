@@ -127,7 +127,7 @@ public class JPAUserManager implements UserInterface {
 		}
 
 		return (Pathology) path;
-		
+
 	}
 
 }
