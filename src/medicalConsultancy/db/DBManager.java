@@ -194,11 +194,16 @@ public class DBManager implements DBinterface {
 			e.printStackTrace();
 		}
 
-		for (int i = 0; i < vd.size(); i++) {
-			LocalDate date = vd.get(i).getConsultation_date().toLocalDate();
-			LocalTime time = vd.get(i).getConsultatiton_time().toLocalTime();
-			if (date.equals(actualDate) && time.isBefore(actualTime.toLocalTime()))
-				vd.remove(i);
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isBefore(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
 		}
 
 		return vd;
@@ -261,11 +266,13 @@ public class DBManager implements DBinterface {
 		// if the consultation date is the same as the actual date, the hours before the
 		// actual hour doesnt count as available hours.
 
-		Iterator<Time> it = hours.iterator();
-		while (it.hasNext()) {
+		if (consultation_date.toLocalDate().equals(LocalDate.now())) {
+			Iterator<Time> it = hours.iterator();
+			while (it.hasNext()) {
 
-			if (it.next().toLocalTime().isBefore(LocalTime.now()))
-				it.remove();
+				if (it.next().toLocalTime().isBefore(LocalTime.now()))
+					it.remove();
+			}
 		}
 
 		return hours;
@@ -604,11 +611,17 @@ public class DBManager implements DBinterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for (int i = 0; i < vd.size(); i++) {
-			LocalDate date = vd.get(i).getConsultation_date().toLocalDate();
-			LocalTime time = vd.get(i).getConsultatiton_time().toLocalTime();
-			if (date.equals(actualDate) && time.isAfter(actualTime.toLocalTime()))
-				vd.remove(i);
+
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isAfter(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
 		}
 		return vd;
 
@@ -665,11 +678,16 @@ public class DBManager implements DBinterface {
 			e.printStackTrace();
 		}
 
-		for (int i = 0; i < vd.size(); i++) {
-			LocalDate date = vd.get(i).getConsultation_date().toLocalDate();
-			LocalTime time = vd.get(i).getConsultatiton_time().toLocalTime();
-			if (date.equals(actualDate) && time.isBefore(actualTime.toLocalTime()))
-				vd.remove(i);
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
+
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isBefore(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
 		}
 
 		return vd;
@@ -702,12 +720,16 @@ public class DBManager implements DBinterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Video_consultation v = null;
+		Iterator<Video_consultation> it = vd.iterator();
+		while (it.hasNext()) {
+			v = it.next();
 
-		for (int i = 0; i < vd.size(); i++) {
-			LocalDate date = vd.get(i).getConsultation_date().toLocalDate();
-			LocalTime time = vd.get(i).getConsultatiton_time().toLocalTime();
-			if (date.equals(actualDate) && time.isAfter(actualTime.toLocalTime()))
-				vd.remove(i);
+			if (v.getConsultation_date().toLocalDate().equals(actualDate.toLocalDate())
+					&& v.getConsultatiton_time().toLocalTime().isAfter(actualTime.toLocalTime())) {
+				it.remove();
+			}
+
 		}
 
 		return vd;
@@ -843,7 +865,7 @@ public class DBManager implements DBinterface {
 
 			if (rs.next())
 				return true;
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
