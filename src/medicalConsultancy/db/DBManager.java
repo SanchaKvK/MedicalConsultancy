@@ -736,31 +736,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-	@Override
-	public void fireDoctor(int id) {
-		try {
-			String sql = "DELETE FROM doctor WHERE id_doctor = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void deletePatient(int id) {
-		try {
-			String sql = "DELETE FROM patient WHERE id_patient = ?";
-			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, id);
-			prep.executeUpdate();
-			prep.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void deleteAppointment(int id) {

@@ -124,7 +124,10 @@ public class Menu {
 				rate();
 				break;
 			case 6:
-				System.out.println(searchDoctor());
+				List<Doctor> d = searchDoctor();
+				for (Doctor doctor : d) {
+					System.out.println(doctor);
+				}
 				break;
 			case 7:
 				deleteVideoPatient();
@@ -454,7 +457,7 @@ public class Menu {
 
 		Patient patient = dbman.getPatient(id_patient);
 		Doctor doctor = dbman.getDoctor(id_doctor);
-		
+
 		if (dbman.checkIfRating(id_doctor, id_patient)) {
 			System.out.println("You have already rated this doctor");
 			return;
@@ -682,8 +685,15 @@ public class Menu {
 		if (vd.isEmpty()) {
 			System.out.println("You have no future appointments");
 			return;
-		} else
-			dbman.deleteAppointment(inputOutput.askVideoId(vd));
+		} else {
+			for (Video_consultation video_consultation : vd) {
+				System.out.println(video_consultation);
+			}
+		}
+
+		int id_video = inputOutput.askVideoId(vd);
+		dbman.deleteAppointment(id_video);
+		System.out.println("The videoconsultation appointment has been removed");
 
 	}
 

@@ -82,11 +82,6 @@ public interface DBinterface {
 	////Shows the past videconsultations of a specific doctor
 	public List<Video_consultation> getDoctorPreviousVideos(int id_doctor);
 	
-	//fire a doctor
-	public void fireDoctor(int id);
-	
-	//delete a patient
-	public void deletePatient(int id);
 	
 	//delete an appointment
 	public void deleteAppointment(int id);
