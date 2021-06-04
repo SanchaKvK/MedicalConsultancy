@@ -45,7 +45,6 @@ public class Prescription implements Serializable{
 	@JoinColumn(name = "id_video")
 	@XmlTransient
 	private Video_consultation vd; 
-	
 	public Integer getId_prescription() {
 		return id_prescription;
 	}

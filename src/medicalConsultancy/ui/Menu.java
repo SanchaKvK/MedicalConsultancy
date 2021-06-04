@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
+
 import mconsultancy.db.ifaces.UserInterface;
 import db.pojos.Doctor;
 import db.pojos.Pathology;
@@ -37,7 +39,7 @@ public class Menu {
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
-	private static XMLManager xmltransitionobject;
+	private static XMLManager xmltransitionobject = new XMLManager();
 
 	public static void main(String[] args) throws Exception {
 		dbman.connect();
@@ -496,8 +498,10 @@ public class Menu {
 	// OPTION 8 OF THE PATIENT MENU : TURN A PATIENT VIDEOCONSULTATION INTO AN XML
 	// FILE
 
-	private static void JavaVideoConsultationtoXML() throws Exception {
+	private static void JavaVideoConsultationtoXML(){
 
+		
+		try {
 		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
 		if (vd.isEmpty()) {
 			System.out.println("You have no videos to turn into an XML file");
@@ -505,9 +509,17 @@ public class Menu {
 		}
 		int id_video = inputOutput.askVideoId(vd);
 		Video_consultation video = dbman.getVideo(id_video);
+		if(video.getPrescription()==null) {
+			System.out.println("A videoconsultation with a prescription must be used to be turned into an XML file");
+		}
 		xmltransitionobject.JavatoXMlVideoconsultation(video);
 
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
+	}
+		
 
 	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
 

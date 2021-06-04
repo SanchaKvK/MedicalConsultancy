@@ -5,28 +5,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import db.pojos.users.User;
 
 @Entity
 @DiscriminatorValue("d")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Doctor")
 public class Doctor extends User implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1691412521236621262L;
-
+	@XmlElement
 	private String specialization;
+	@XmlElement
 	private String name;
+	@XmlElement
 	private String hospital;
+	@XmlTransient
 	@OneToMany(mappedBy = "doc")
 	private List<Video_consultation> videos;
 	@OneToMany(mappedBy = "doc")
+	@XmlTransient
 	private List<Rating> ratings;
+	@XmlTransient
 	@Basic(fetch = FetchType.LAZY)
 	@Lob
 	private byte[] photo;

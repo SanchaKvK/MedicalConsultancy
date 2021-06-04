@@ -18,24 +18,58 @@ import javax.xml.bind.Unmarshaller;
 
 
 public class XMLManager {
-
 	private JAXBContext jaxbC;
 	private Marshaller jaxbM;
 	private File file;
 	
-	public void JavatoXMlVideoconsultation(Video_consultation vc) throws JAXBException {
-	// Create the JAXBContext
-	JAXBContext jaxbC = JAXBContext.newInstance(Video_consultation.class);
+	public void JavatoXMlVideoconsultation(Video_consultation vc) {
+		
+		
+	try {
+		
+		// Create the JAXBContext
+		System.out.println("Estamos dentro de la funcion y la videoconsulta es:"+vc);
+	jaxbC = JAXBContext.newInstance(Video_consultation.class);
 	// Get the marshaller
 	Marshaller marshaller = jaxbC.createMarshaller();
 	// Pretty formatting
 	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
-	File file = new File("./medicalconsultancyxml.utils/Sample-report.xml");
+	
+	marshaller.marshal(vc, System.out);
+	file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml");
 	marshaller.marshal(vc, file);
 	// Printout
-	marshaller.marshal(vc, System.out);
 	
+	}catch(JAXBException e) {
+		e.printStackTrace();
 	}
+	
+}
+	
+	public void JavatoXMlPrescription(Prescription p) {
+		
+		
+	try {
+		
+		// Create the JAXBContext
+	jaxbC = JAXBContext.newInstance(Prescription.class);
+	// Get the marshaller
+	Marshaller marshaller = jaxbC.createMarshaller();
+	// Pretty formatting
+	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+	
+	marshaller.marshal(p, System.out);
+	file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample_prescription.xml");
+	marshaller.marshal(p, file);
+	// Printout
+	}catch(JAXBException e) {
+		e.printStackTrace();
+	}
+	
+}
+	
+	
+	
 	
 }
 	

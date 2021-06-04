@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import medicalconsultancyxml.utils.SQLDateAdapter;
+import medicalconsultancyxml.utils.SQLTimeAdapter;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -22,19 +23,20 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name="videoconsultation")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Video_consultation")
-@XmlType(propOrder = { "consultation_date", "duration", "type_of_call", "prescription" })
 public class Video_consultation implements Serializable {
 
 	private static final long serialVersionUID = 1367040608239901293L;
 	@Id
 	@GeneratedValue(generator = "videoconsultation")
-	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
+	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence",
+	pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
 	@XmlAttribute
 	private Integer id_video;
 	@XmlElement
 	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date consultation_date;
 	@XmlElement
+	@XmlJavaTypeAdapter(SQLTimeAdapter.class)
 	private Time consultation_time;
 	@XmlElement
 	private Integer duration;
@@ -48,11 +50,11 @@ public class Video_consultation implements Serializable {
 	private List<Prescription>prescription;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_doctor")
-	@XmlTransient
+	@XmlElement
 	private Doctor doc;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_patient")
-	@XmlTransient
+	@XmlElement
 	private Patient pat;
 	
 	public Video_consultation() {
