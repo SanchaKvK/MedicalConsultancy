@@ -125,7 +125,7 @@ public class inputOutput {
 
 			if (state == true) {
 				option = Integer.parseInt(string);
-				if (option < 0 || option > 9) {
+				if (option < 0 || option > 13) {
 					System.out.println("Error: " + option + " is not an option");
 
 				}

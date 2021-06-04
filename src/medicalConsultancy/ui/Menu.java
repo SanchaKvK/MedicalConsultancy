@@ -139,6 +139,7 @@ public class Menu {
 				JavaVideoConsultationtoXML();
 				break;
 			case 9:
+				getAllPatientVideos();
 				JavaPrescriptiontoXML();
 				break;
 			case 10:
@@ -524,10 +525,25 @@ public class Menu {
 	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
 
 	private static void JavaPrescriptiontoXML() throws Exception {
+		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+		if (vd.isEmpty()) {
+			System.out.println("You have no prescriptions to turn into an XML file");
+			return;
+		}
+		int id_video = inputOutput.askVideoId(vd);
+		Video_consultation video = dbman.getVideo(id_video);
+		if(video.getPrescription()==null) {
+			System.out.println("A videoconsultation with a prescription must be used to be turned into an XML file");
+		}
+		else {
+			
 
-		// Video_consultation video = dbman.getVideo(id_video);
-
-		// marshaller.JavatoXMlVideoconsultation(video);
+			List<Prescription> prescriptions = dbman.getPrescriptionOfVideos(id_video);
+			for (int i=0;i<prescriptions.size();i++) {
+			      
+				xmltransitionobject.JavatoXMlPrescription(prescriptions.get(i));
+			    }
+		}
 
 	}
 
@@ -535,7 +551,8 @@ public class Menu {
 	// INTO A JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLVideoConsultationtoJava() throws Exception {
-
+		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation();
+		dbman.addVideo_consultation(v);
 	}
 
 	// OPTION 11 OF THE PATIENT MENU : TURN AN XML FILE WITH A PRESCRIPTION INTO A

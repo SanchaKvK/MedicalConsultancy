@@ -8,8 +8,10 @@ import db.pojos.Video_consultation;
 
 import java.awt.Menu;
 import java.io.File;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
@@ -21,10 +23,10 @@ public class XMLManager {
 	private JAXBContext jaxbC;
 	private Marshaller jaxbM;
 	private File file;
-	
+	private Unmarshaller unmarshaller;
+
+
 	public void JavatoXMlVideoconsultation(Video_consultation vc) {
-		
-		
 	try {
 		
 		// Create the JAXBContext
@@ -47,8 +49,6 @@ public class XMLManager {
 }
 	
 	public void JavatoXMlPrescription(Prescription p) {
-		
-		
 	try {
 		
 		// Create the JAXBContext
@@ -67,6 +67,45 @@ public class XMLManager {
 	}
 	
 }
+	
+	public Video_consultation XMLtoJavaVideoconsultation(){
+		 
+		Video_consultation v = new Video_consultation();
+		try {
+			jaxbC = JAXBContext.newInstance(Video_consultation.class);
+			// Get the unmarshaller
+				unmarshaller = jaxbC.createUnmarshaller();
+
+				// Use the Unmarshaller to unmarshal the XML document from a file
+				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml");
+				 v = (Video_consultation) unmarshaller.unmarshal(file);
+				 return v;
+				} catch (JAXBException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return v;
+	}
+
+/*
+public Prescription XMLtoJavaPrescription(){
+		
+	}
+	
+*/	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
