@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name="videoconsultation")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Video_consultation")
+@XmlType(propOrder = {"consultation_date", "consultation_time", "type_of_call","prescription","doc"})
 public class Video_consultation implements Serializable {
 
 	private static final long serialVersionUID = 1367040608239901293L;
@@ -30,7 +31,7 @@ public class Video_consultation implements Serializable {
 	@GeneratedValue(generator = "videoconsultation")
 	@TableGenerator(name = "videoconsultation", table = "sqlite_sequence",
 	pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "videoconsultation")
-	@XmlAttribute
+	@XmlTransient
 	private Integer id_video;
 	@XmlElement
 	@XmlJavaTypeAdapter(SQLDateAdapter.class)
@@ -38,11 +39,11 @@ public class Video_consultation implements Serializable {
 	@XmlElement
 	@XmlJavaTypeAdapter(SQLTimeAdapter.class)
 	private Time consultation_time;
-	@XmlElement
+	@XmlAttribute
 	private Integer duration;
 	@XmlElement
 	private String type_of_call;
-	@XmlElement
+	@XmlAttribute
 	private String notes;
 	@OneToMany(mappedBy="vd")
 	@XmlElement(name = "prescription")
@@ -54,7 +55,7 @@ public class Video_consultation implements Serializable {
 	private Doctor doc;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_patient")
-	@XmlElement
+	@XmlTransient
 	private Patient pat;
 	
 	public Video_consultation() {
@@ -93,9 +94,6 @@ public class Video_consultation implements Serializable {
 		this.pat = pat;
 		this.prescription=new ArrayList<Prescription>();
 	}
-
-
-
 
 
 

@@ -30,7 +30,6 @@ public class XMLManager {
 	try {
 		
 		// Create the JAXBContext
-		System.out.println("Estamos dentro de la funcion y la videoconsulta es:"+vc);
 	jaxbC = JAXBContext.newInstance(Video_consultation.class);
 	// Get the marshaller
 	Marshaller marshaller = jaxbC.createMarshaller();
@@ -75,10 +74,10 @@ public class XMLManager {
 			jaxbC = JAXBContext.newInstance(Video_consultation.class);
 			// Get the unmarshaller
 				unmarshaller = jaxbC.createUnmarshaller();
-
 				// Use the Unmarshaller to unmarshal the XML document from a file
 				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml");
 				 v = (Video_consultation) unmarshaller.unmarshal(file);
+				 System.out.println("El objeto videoconsulta que sacamos de XML es :"+v);
 				 return v;
 				} catch (JAXBException e) {
 					// TODO Auto-generated catch block

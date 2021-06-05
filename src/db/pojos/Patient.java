@@ -11,38 +11,40 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import db.pojos.users.User;
 
 @Entity
 @DiscriminatorValue("p")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "Patient")
+//@XmlRootElement(name = "Patient")
+//@XmlType(propOrder = { "name", "gender", "birth", "DNI","phone_number","postcode"})
 public class Patient extends User implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2012426771680446727L;
-	@XmlElement
+	//@XmlElement
 	private String name;
-	@XmlElement
+	//@XmlElement
 	private String gender;
-	@XmlElement
+	//@XmlElement
 	private Date birth;
-	@XmlElement
+	//@XmlElement
 	private String DNI;
-	@XmlElement
+	//@XmlElement
 	private String phone_number;
-	@XmlElement
+	//@XmlElement
 	private String postcode;
-	@XmlTransient
+	//@XmlTransient
 	@OneToMany(mappedBy = "pat")
 	private List<Video_consultation> videos;
 	@OneToMany(mappedBy = "pat")
-	@XmlTransient
+	//@XmlTransient
 	private List<Rating> ratings;
-	@XmlTransient
+	//@XmlTransient
 	@ManyToMany
 	@JoinTable(name = "patient_pathology", joinColumns = {
 			@JoinColumn(name = "id_patient", referencedColumnName = "id") }, inverseJoinColumns = {
