@@ -67,7 +67,7 @@ public class XMLManager {
 }
 	
 	public Video_consultation XMLtoJavaVideoconsultation(Patient p){		 
-		Video_consultation v= new Video_consultation(p);
+		Video_consultation v= new Video_consultation();
 		try {
 			jaxbC = JAXBContext.newInstance(Video_consultation.class);
 			// Get the unmarshaller
@@ -75,6 +75,7 @@ public class XMLManager {
 				// Use the Unmarshaller to unmarshal the XML document from a file
 				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckvideoconsultation.xml");
 				 v = (Video_consultation) unmarshaller.unmarshal(file);
+				 v.setPat(p);
 				 System.out.println("duracion"+v.getDuration()+"tiempo"+v.getConsultation_date()+"consultation time"+v.getConsultatiton_time()+"doctor"+v.getDoc()+"patient"+v.getPat());
 				} catch (JAXBException e) {
 					// TODO Auto-generated catch block
