@@ -130,4 +130,25 @@ public class JPAUserManager implements UserInterface {
 
 	}
 
+	@Override
+	public Boolean checkPathologyTable() {
+		Object path;
+		Query q = em.createNativeQuery("SELECT * FROM pathology", Pathology.class);
+		try {
+			path = q.getSingleResult();
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		}
+
+	}
+
+	@Override
+	public void addPathology(Pathology p) {
+		em.getTransaction().begin();
+		em.persist(p);
+		em.getTransaction().commit();
+
+	}
+
 }

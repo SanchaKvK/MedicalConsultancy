@@ -68,6 +68,9 @@ public class Patient extends User implements Serializable {
 		this.DNI = iD;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+		this.pathologies = new ArrayList<Pathology>();
 	}
 
 	public Patient(Integer id, String email, byte[] password, String role, String name, String gender, Date birth,
@@ -93,6 +96,9 @@ public class Patient extends User implements Serializable {
 		this.DNI = iD2;
 		this.phone_number = phone_number;
 		this.postcode = postcode;
+		this.videos = new ArrayList<Video_consultation>();
+		this.ratings = new ArrayList<Rating>();
+		this.pathologies = new ArrayList<Pathology>();
 	}
 
 	public Patient(String name, String gender, Date birth, String ID, String phone_number, String postcode) {

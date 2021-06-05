@@ -43,6 +43,7 @@ public class Pathology implements Serializable {
 		super();
 		this.name = name;
 		this.type = type;
+		this.patients=new ArrayList<Patient>();
 	}
 
 	public Pathology(Integer id_pathology, String name, String type, List<Patient> patients) {

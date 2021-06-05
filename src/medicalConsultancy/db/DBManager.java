@@ -38,6 +38,7 @@ public class DBManager implements DBinterface {
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened");
 			this.createTables();
+			
 
 		} catch (SQLException sqlE) {
 			System.out.println("There was a database exception");
@@ -359,7 +360,6 @@ public class DBManager implements DBinterface {
 
 	@Override
 	public void addRating(Rating r) {
-		System.out.println(r.getDoc().getId());
 		try {
 			String sql = "INSERT INTO rating (id_doctor,id_patient,score,review) VALUES(?,?,?,?)";
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -736,7 +736,6 @@ public class DBManager implements DBinterface {
 
 	}
 
-
 	@Override
 	public void deleteAppointment(int id) {
 		try {
@@ -786,10 +785,10 @@ public class DBManager implements DBinterface {
 	public List<Doctor> searchDoctorType(String name) {
 		List<Doctor> doctors = new ArrayList<Doctor>();
 		try {
-			String sql = "SELECT * FROM user WHERE role_name=? AND specialist=?";
+			String sql = "SELECT * FROM users WHERE role_name=? AND specialization=?";
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setString(1, "d");
-			ps.setString(2, name);
+			ps.setString(2, "%" + name + "%");
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -848,5 +847,7 @@ public class DBManager implements DBinterface {
 		return false;
 
 	}
+
+	
 
 }
