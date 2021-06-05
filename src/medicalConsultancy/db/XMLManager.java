@@ -76,7 +76,6 @@ public class XMLManager {
 				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckvideoconsultation.xml");
 				 v = (Video_consultation) unmarshaller.unmarshal(file);
 				 v.setPat(p);
-				 System.out.println("duracion"+v.getDuration()+"tiempo"+v.getConsultation_date()+"consultation time"+v.getConsultatiton_time()+"doctor"+v.getDoc()+"patient"+v.getPat());
 				} catch (JAXBException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -84,10 +83,28 @@ public class XMLManager {
 				return v;
 	}
 
-/*
+
 public Prescription XMLtoJavaPrescription(){	
+	Prescription p= new Prescription();
+	try {
+		jaxbC = JAXBContext.newInstance(Prescription.class);
+		// Get the unmarshaller
+			unmarshaller = jaxbC.createUnmarshaller();
+			// Use the Unmarshaller to unmarshal the XML document from a file
+			file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckprescription.xml");
+			 p = (Prescription) unmarshaller.unmarshal(file);
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return p;
+	
+	
+	
+	
+	
 	}
-*/	
+	
 	
 	
 }

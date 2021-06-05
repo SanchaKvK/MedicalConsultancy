@@ -8,7 +8,7 @@
    <!ELEMENT doses (#PCDATA)>
 ]>
 
-<Prescription duration="3" notes="Take after meals">
+<Prescription duration="3" notes="Take after meals x2">
     <name>Ibuprofen</name>
     <doses>4</doses>
 </Prescription>

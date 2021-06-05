@@ -552,7 +552,6 @@ public class Menu {
 
 	private static void XMLVideoConsultationtoJava() throws Exception {
 		Patient patient = dbman.getPatient(user.getId());
-		System.out.println("Patient+"+patient);
 		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation(patient);
 		dbman.addVideo_consultation(v);
 	}
@@ -561,6 +560,8 @@ public class Menu {
 	// JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLPrescriptiontoJava() throws Exception {
+		Prescription p = xmltransitionobject.XMLtoJavaPrescription();
+		dbman.addPrescription(p);
 	}
 
 	// OPTION 12 OF THE PATIENT MENU : EMERGENCY OPTION

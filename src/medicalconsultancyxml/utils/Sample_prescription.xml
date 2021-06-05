@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Prescription duration="3" notes="Take after meals">
+<Prescription duration="3" notes="Take after meals second time">
     <name>Ibuprofen</name>
     <doses>4</doses>
 </Prescription>
