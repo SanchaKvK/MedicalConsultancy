@@ -72,7 +72,12 @@ public class Video_consultation implements Serializable {
 		this.prescription=new ArrayList<Prescription>();
 	}
 
-
+	public Video_consultation(Patient p) {
+		super();
+		this.pat = p;
+		this.prescription=new ArrayList<Prescription>();
+	}
+	
 	public Video_consultation(Integer id_video, Date consultation_date, Time consultatiton_time, int duration,
 			String type, String notes) {
 		super();

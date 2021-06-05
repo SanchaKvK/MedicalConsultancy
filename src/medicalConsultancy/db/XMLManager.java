@@ -3,6 +3,7 @@ package medicalConsultancy.db;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+import db.pojos.Patient;
 import db.pojos.Prescription;
 import db.pojos.Video_consultation;
 
@@ -40,7 +41,6 @@ public class XMLManager {
 	file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml");
 	marshaller.marshal(vc, file);
 	// Printout
-	
 	}catch(JAXBException e) {
 		e.printStackTrace();
 	}
@@ -56,7 +56,6 @@ public class XMLManager {
 	Marshaller marshaller = jaxbC.createMarshaller();
 	// Pretty formatting
 	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
-	
 	marshaller.marshal(p, System.out);
 	file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample_prescription.xml");
 	marshaller.marshal(p, file);
@@ -67,18 +66,16 @@ public class XMLManager {
 	
 }
 	
-	public Video_consultation XMLtoJavaVideoconsultation(){
-		 
-		Video_consultation v = new Video_consultation();
+	public Video_consultation XMLtoJavaVideoconsultation(Patient p){		 
+		Video_consultation v= new Video_consultation(p);
 		try {
 			jaxbC = JAXBContext.newInstance(Video_consultation.class);
 			// Get the unmarshaller
 				unmarshaller = jaxbC.createUnmarshaller();
 				// Use the Unmarshaller to unmarshal the XML document from a file
-				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml");
+				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckvideoconsultation.xml");
 				 v = (Video_consultation) unmarshaller.unmarshal(file);
-				 System.out.println("El objeto videoconsulta que sacamos de XML es :"+v);
-				 return v;
+				 System.out.println("duracion"+v.getDuration()+"tiempo"+v.getConsultation_date()+"consultation time"+v.getConsultatiton_time()+"doctor"+v.getDoc()+"patient"+v.getPat());
 				} catch (JAXBException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -87,26 +84,9 @@ public class XMLManager {
 	}
 
 /*
-public Prescription XMLtoJavaPrescription(){
-		
+public Prescription XMLtoJavaPrescription(){	
 	}
-	
 */	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

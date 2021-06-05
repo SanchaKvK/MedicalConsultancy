@@ -551,7 +551,9 @@ public class Menu {
 	// INTO A JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLVideoConsultationtoJava() throws Exception {
-		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation();
+		Patient patient = dbman.getPatient(user.getId());
+		System.out.println("Patient+"+patient);
+		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation(patient);
 		dbman.addVideo_consultation(v);
 	}
 
