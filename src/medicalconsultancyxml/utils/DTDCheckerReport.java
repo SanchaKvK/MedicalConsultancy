@@ -11,7 +11,7 @@ import org.xml.sax.SAXException;
 public class DTDCheckerReport {
 
     public static void main(String[] args) {
-        File xmlFile = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/unmarshalling.xml"); 
+        File xmlFile = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckprescription.xml"); 
         try {
         	// Create a DocumentBuilderFactory
             DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
