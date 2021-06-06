@@ -135,7 +135,7 @@ public class JPAUserManager implements UserInterface {
 		Object path;
 		Query q = em.createNativeQuery("SELECT * FROM pathology", Pathology.class);
 		try {
-			path = q.getSingleResult();
+			path = q.getResultList();
 			return true;
 		} catch (NoResultException e) {
 			return false;
