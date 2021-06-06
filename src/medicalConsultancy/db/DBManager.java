@@ -412,7 +412,43 @@ public class DBManager implements DBinterface {
 		}
 
 	}
+//get the id of the last videoconsultation added
+	
+	public int getLastVideoconsultationid() {
+		int id=1;
+		Statement stmt;
+		try {
+			stmt = c.createStatement();
 
+			String sql = "SELECT id_video FROM videoconsultation WHERE id_video =(SELECT max(id_video) FROM videoconsultation)";
+		ResultSet rs;
+		
+			rs = stmt.executeQuery(sql);
+	
+			while(rs.next()) {
+				id = rs.getInt("id_video");
+				
+			}
+			stmt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return id;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public List<Doctor> searchDoctorByName(String name) {
 

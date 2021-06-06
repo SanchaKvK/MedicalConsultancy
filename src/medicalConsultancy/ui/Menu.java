@@ -543,7 +543,16 @@ public class Menu {
 		Patient patient = dbman.getPatient(user.getId());
 		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation(patient,file);
 		dbman.addVideo_consultation(v);
+		int id_video = dbman.getLastVideoconsultationid();
+		dbman.changeVideoconsultationDuration(v.getDuration(), id_video);
+		dbman.changeVideoconsultationNotes(v.getNotes(), id_video);
+		for(int i =0; i<v.getPrescription().size();i++) {
+		v.getPrescription().get(i).setVd(dbman.getVideo(id_video));
+		dbman.addPrescription(v.getPrescription().get(i));
+
 	}
+	}
+
 
 	// OPTION 12 OF THE PATIENT MENU : EMERGENCY OPTION
 
