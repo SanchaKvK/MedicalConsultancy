@@ -525,7 +525,8 @@ public class Menu {
 				System.out
 						.println("A videoconsultation with a prescription must be used to be turned into an XML file");
 			}
-			xmltransitionobject.JavatoXMlVideoconsultation(video);
+			File file = inputOutput.askForXMLfile();
+			xmltransitionobject.JavatoXMlVideoconsultation(video,file);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -546,11 +547,10 @@ public class Menu {
 		if (video.getPrescription() == null) {
 			System.out.println("A videoconsultation with a prescription must be used to be turned into an XML file");
 		} else {
-
+			File file = inputOutput.askForXMLfile();
 			List<Prescription> prescriptions = dbman.getPrescriptionOfVideos(id_video);
 			for (int i = 0; i < prescriptions.size(); i++) {
-
-				xmltransitionobject.JavatoXMlPrescription(prescriptions.get(i));
+				xmltransitionobject.JavatoXMlPrescription(prescriptions.get(i),file);
 			}
 		}
 
@@ -560,8 +560,9 @@ public class Menu {
 	// INTO A JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLVideoConsultationtoJava() throws Exception {
+		File file = inputOutput.askForXMLfile();
 		Patient patient = dbman.getPatient(user.getId());
-		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation(patient);
+		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation(patient,file);
 		dbman.addVideo_consultation(v);
 	}
 
@@ -569,7 +570,10 @@ public class Menu {
 	// JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLPrescriptiontoJava() throws Exception {
-		Prescription p = xmltransitionobject.XMLtoJavaPrescription();
+		File file = inputOutput.askForXMLfile();
+		Prescription p = xmltransitionobject.XMLtoJavaPrescription(file);
+		
+		p.setVd(null);
 		dbman.addPrescription(p);
 	}
 

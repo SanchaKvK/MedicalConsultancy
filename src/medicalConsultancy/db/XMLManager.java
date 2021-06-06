@@ -27,7 +27,7 @@ public class XMLManager {
 	private Unmarshaller unmarshaller;
 
 
-	public void JavatoXMlVideoconsultation(Video_consultation vc) {
+	public void JavatoXMlVideoconsultation(Video_consultation vc, File file) {
 	try {
 		
 		// Create the JAXBContext
@@ -38,7 +38,6 @@ public class XMLManager {
 	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
 	
 	marshaller.marshal(vc, System.out);
-	file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml");
 	marshaller.marshal(vc, file);
 	// Printout
 	}catch(JAXBException e) {
@@ -47,7 +46,7 @@ public class XMLManager {
 	
 }
 	
-	public void JavatoXMlPrescription(Prescription p) {
+	public void JavatoXMlPrescription(Prescription p, File file) {
 	try {
 		
 		// Create the JAXBContext
@@ -57,7 +56,6 @@ public class XMLManager {
 	// Pretty formatting
 	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
 	marshaller.marshal(p, System.out);
-	file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample_prescription.xml");
 	marshaller.marshal(p, file);
 	// Printout
 	}catch(JAXBException e) {
@@ -66,14 +64,13 @@ public class XMLManager {
 	
 }
 	
-	public Video_consultation XMLtoJavaVideoconsultation(Patient p){		 
+	public Video_consultation XMLtoJavaVideoconsultation(Patient p, File file){		 
 		Video_consultation v= new Video_consultation();
 		try {
 			jaxbC = JAXBContext.newInstance(Video_consultation.class);
 			// Get the unmarshaller
 				unmarshaller = jaxbC.createUnmarshaller();
 				// Use the Unmarshaller to unmarshal the XML document from a file
-				file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckvideoconsultation.xml");
 				 v = (Video_consultation) unmarshaller.unmarshal(file);
 				 v.setPat(p);
 				} catch (JAXBException e) {
@@ -84,14 +81,13 @@ public class XMLManager {
 	}
 
 
-public Prescription XMLtoJavaPrescription(){	
+public Prescription XMLtoJavaPrescription(File file){	
 	Prescription p= new Prescription();
 	try {
 		jaxbC = JAXBContext.newInstance(Prescription.class);
 		// Get the unmarshaller
 			unmarshaller = jaxbC.createUnmarshaller();
 			// Use the Unmarshaller to unmarshal the XML document from a file
-			file = new File("/Users/sanchavonknobloch/git/MedicalConsultancy/src/medicalconsultancyxml/utils/dtdcheckprescription.xml");
 			 p = (Prescription) unmarshaller.unmarshal(file);
 			} catch (JAXBException e) {
 				// TODO Auto-generated catch block
