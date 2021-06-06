@@ -1,0 +1,7 @@
+<!DOCTYPE Prescription [
+   <!ELEMENT Prescription (name,doses)>
+   <!ATTLIST Prescription duration CDATA #REQUIRED
+                  	  notes CDATA #REQUIRED>
+   <!ELEMENT name (#PCDATA)>
+   <!ELEMENT doses (#PCDATA)>
+]>

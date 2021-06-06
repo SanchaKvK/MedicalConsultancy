@@ -109,7 +109,5 @@ public interface DBinterface {
 	public Boolean checkIfRating(int id_doctor, int id_patient) ;
 	
 
-	
-	
 
 }

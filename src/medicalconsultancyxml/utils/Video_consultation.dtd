@@ -1,0 +1,23 @@
+
+<!DOCTYPE Video_consultation [
+   <!ELEMENT Video_consultation (consultation_date, consultation_time, duration,type_of_call,notes,prescriptions,doc,pat)>
+   <!ATTLIST Video_consultation duration CDATA #REQUIRED
+                  	  notes CDATA #REQUIRED>
+   <!ELEMENT consultation_date (#PCDATA)>
+   <!ELEMENT consultation_time (#PCDATA)>
+   <!ELEMENT type_of_call (#PCDATA)>
+   <!ELEMENT prescriptions (prescription+)>
+   <!ELEMENT prescription (name,doses,duration,notes)>
+   <!ATTLIST prescription duration CDATA #REQUIRED
+                  	  notes CDATA #REQUIRED>
+   <!ELEMENT name (#PCDATA)>
+   <!ELEMENT doses (#PCDATA)>
+   <!ELEMENT doc (id,specialization,hospital)>
+   <!ATTLIST doc name CDATA #REQUIRED >
+   <!ELEMENT id (#PCDATA)>
+   <!ELEMENT specialization (#PCDATA)>
+   <!ELEMENT hospital (#PCDATA)>
+
+]>
+
+

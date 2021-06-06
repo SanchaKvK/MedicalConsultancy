@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE Prescription [
+   <!ELEMENT Prescription (name,doses)>
+   <!ATTLIST Prescription duration CDATA #REQUIRED
+                  	  notes CDATA #REQUIRED>
+   <!ELEMENT name (#PCDATA)>
+   <!ELEMENT doses (#PCDATA)>
+]>
+
+<Prescription duration="3" notes="Take after meals x2">
+    <name>Ibuprofen</name>
+    <doses>4</doses>
+</Prescription>

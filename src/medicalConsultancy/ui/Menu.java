@@ -42,8 +42,14 @@ public class Menu {
 	private static XMLManager xmltransitionobject = new XMLManager();
 
 	public static void main(String[] args) throws Exception {
+
 		dbman.connect();
 		usman.connect();
+		if (usman.checkPathologyTable() == false) {
+			usman.addPathology(new Pathology("Migraine", "Neuropathology"));
+			usman.addPathology(new Pathology("Diabetes type II", "Obesity"));
+			usman.addPathology(new Pathology("Tachycardia", "Cardiopathology"));
+		}
 
 		do {
 
@@ -127,9 +133,12 @@ public class Menu {
 				break;
 			case 6:
 				List<Doctor> d = searchDoctor();
-				for (Doctor doctor : d) {
-					System.out.println(doctor);
-				}
+				if (d.isEmpty())
+					System.out.println("There are no doctors with that name");
+				else
+					for (Doctor doctor : d) {
+						System.out.println(doctor);
+					}
 				break;
 			case 7:
 				deleteVideoPatient();
@@ -153,7 +162,7 @@ public class Menu {
 				break;
 			case 13:
 				deleteAccount();
-				break;
+				return;
 			case 0:
 				dbman.disconnect();
 				usman.disconnect();
@@ -381,7 +390,10 @@ public class Menu {
 		if (vd.isEmpty()) {
 			System.out.println("You have no future videos");
 			return;
-		}
+		} else
+			for (Video_consultation video_consultation : vd) {
+				System.out.println(video_consultation);
+			}
 
 		int id_video = inputOutput.askVideoId(vd);
 
@@ -499,28 +511,28 @@ public class Menu {
 	// OPTION 8 OF THE PATIENT MENU : TURN A PATIENT VIDEOCONSULTATION INTO AN XML
 	// FILE
 
-	private static void JavaVideoConsultationtoXML(){
+	private static void JavaVideoConsultationtoXML() {
 
-		
 		try {
-		List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
-		if (vd.isEmpty()) {
-			System.out.println("You have no videos to turn into an XML file");
-			return;
-		}
-		int id_video = inputOutput.askVideoId(vd);
-		Video_consultation video = dbman.getVideo(id_video);
-		if(video.getPrescription()==null) {
-			System.out.println("A videoconsultation with a prescription must be used to be turned into an XML file");
-		}
-		xmltransitionobject.JavatoXMlVideoconsultation(video);
+			List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+			if (vd.isEmpty()) {
+				System.out.println("You have no videos to turn into an XML file");
+				return;
+			}
+			int id_video = inputOutput.askVideoId(vd);
+			Video_consultation video = dbman.getVideo(id_video);
+			if (video.getPrescription() == null) {
+				System.out
+						.println("A videoconsultation with a prescription must be used to be turned into an XML file");
+			}
+			File file = inputOutput.askForXMLfile();
+			xmltransitionobject.JavatoXMlVideoconsultation(video,file);
 
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	}
-		
 
 	// OPTION 9 OF THE PATIENT MENU : TURN A PATIENT PRESCRIPTION INTO AN XML FILE
 
@@ -532,17 +544,14 @@ public class Menu {
 		}
 		int id_video = inputOutput.askVideoId(vd);
 		Video_consultation video = dbman.getVideo(id_video);
-		if(video.getPrescription()==null) {
+		if (video.getPrescription() == null) {
 			System.out.println("A videoconsultation with a prescription must be used to be turned into an XML file");
-		}
-		else {
-			
-
+		} else {
+			File file = inputOutput.askForXMLfile();
 			List<Prescription> prescriptions = dbman.getPrescriptionOfVideos(id_video);
-			for (int i=0;i<prescriptions.size();i++) {
-			      
-				xmltransitionobject.JavatoXMlPrescription(prescriptions.get(i));
-			    }
+			for (int i = 0; i < prescriptions.size(); i++) {
+				xmltransitionobject.JavatoXMlPrescription(prescriptions.get(i),file);
+			}
 		}
 
 	}
@@ -551,7 +560,9 @@ public class Menu {
 	// INTO A JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLVideoConsultationtoJava() throws Exception {
-		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation();
+		File file = inputOutput.askForXMLfile();
+		Patient patient = dbman.getPatient(user.getId());
+		Video_consultation v = xmltransitionobject.XMLtoJavaVideoconsultation(patient,file);
 		dbman.addVideo_consultation(v);
 	}
 
@@ -559,14 +570,19 @@ public class Menu {
 	// JAVA VIDEOCONSULTATION OBJECT
 
 	private static void XMLPrescriptiontoJava() throws Exception {
+		File file = inputOutput.askForXMLfile();
+		Prescription p = xmltransitionobject.XMLtoJavaPrescription(file);
+		
+		p.setVd(null);
+		dbman.addPrescription(p);
 	}
 
 	// OPTION 12 OF THE PATIENT MENU : EMERGENCY OPTION
 
 	private static void emergency() {
 
-		List<Doctor> doctors = dbman.searchDoctorType("Medical emergencies");
-		if (doctors == null) {
+		List<Doctor> doctors = dbman.searchDoctorType(" emergency");
+		if (doctors.isEmpty()) {
 			System.out.println("Right now we do not have an emergency doctor");
 			return;
 		}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE Video_consultation [
+   <!ELEMENT Video_consultation (consultation_date, consultation_time,type_of_call,prescriptions,doc)>
+   <!ATTLIST Video_consultation duration CDATA #REQUIRED
+                  	  notes CDATA #REQUIRED>
+   <!ELEMENT consultation_date (#PCDATA)>
+   <!ELEMENT consultation_time (#PCDATA)>
+   <!ELEMENT type_of_call (#PCDATA)>
+   <!ELEMENT prescriptions (prescription+)>
+   <!ELEMENT prescription (name,doses)>
+   <!ATTLIST prescription duration CDATA #REQUIRED
+                  	  notes CDATA #REQUIRED>
+   <!ELEMENT name (#PCDATA)>
+   <!ELEMENT doses (#PCDATA)>
+   <!ELEMENT doc (id,specialization,hospital)>
+   <!ATTLIST doc name CDATA #REQUIRED >
+   <!ELEMENT id (#PCDATA)>
+   <!ELEMENT specialization (#PCDATA)>
+   <!ELEMENT hospital (#PCDATA)>
+
+]>
+
+<Video_consultation duration="10" notes="Brief inquiry second videoconsultation">
+    <consultation_date>2021-06-04</consultation_date>
+    <consultation_time>6:00 PM</consultation_time>
+    <type_of_call>Medical emergencies</type_of_call>
+    <prescriptions>
+        <prescription duration="3" notes="Take after meals">
+            <name>Ibuprofen</name>
+            <doses>4</doses>
+        </prescription>
+    </prescriptions>
+    <doc name="Sancha1">
+        <id>51</id>
+        <specialization>Neurology</specialization>
+        <hospital>san rafael</hospital>
+    </doc>
+</Video_consultation>
+

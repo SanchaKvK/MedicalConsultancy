@@ -43,5 +43,11 @@ public interface UserInterface {
 
 	//returns a pathology that has that id_pathology
 	public Pathology getPathology(int id_pathology);
+	
+	//check if there are pathologies in the pathology table. Returns true if there are pathologies, and false if not. 
+	public Boolean checkPathologyTable();
+	
+	//We use JPA to diagnose a pathology, so we have to add a pathology with JPA. addPathology creates a pathology
+	public void addPathology(Pathology p);
 
 }
