@@ -21,8 +21,8 @@ public class XmltoHtmlVideoConsultation {
 	}
 
 	public static void main(String[] args) {
-		//TODO PUT THE RIGHT URL
-		simpleTransform("/Sample-videoconsultation.xml", "./xmls/Report-Style.xslt", "./xmls/External-Report.html");
+		
+		simpleTransform("/Users/veroniqueperez-sala/git/MedicalConsultancy/src/medicalconsultancyxml/utils/Sample-videoconsultation.xml","/MedicalConsultancy/src/medicalconsultancyxml/utils/Video_consultation-Style.xslt", "/MedicalConsultancy/src/medicalconsultancyxml/utils/External-VideoConsultation.html");
 
 	}
 
