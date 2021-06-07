@@ -113,11 +113,9 @@ public class inputOutput {
 			System.out.println("6. Search doctor");
 			System.out.println("7. Cancel appointment");
 			System.out.println("8. Write a videoconsultation into an XML file");
-			System.out.println("9. Write a prescription into an XML file");
-			System.out.println("10. Write a videoconsultation from an XML file into a Java object");
-			System.out.println("11. Write a prescription from an XML file into a Java object");
-			System.out.println("12. Emergency");
-			System.out.println("13.Delete account ");
+			System.out.println("9. Write a videoconsultation from an XML file into a Java object");
+			System.out.println("10. Emergency");
+			System.out.println("11.Delete account ");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
@@ -126,7 +124,7 @@ public class inputOutput {
 
 			if (state == true) {
 				option = Integer.parseInt(string);
-				if (option < 0 || option > 13) {
+				if (option < 0 || option > 11) {
 					System.out.println("Error: " + option + " is not an option");
 
 				}
@@ -195,6 +193,8 @@ public class inputOutput {
 			System.out.println("6. Cancel Appointment");
 			System.out.println("7. Add videoconsultation information");
 			System.out.println("8. Diagnose");
+			System.out.println("9. Write a prescription into an XML file");
+			System.out.println("10. Write a prescription from an XML file into a Java object");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
@@ -203,7 +203,7 @@ public class inputOutput {
 
 			if (state == true) {
 				option = Integer.parseInt(string);
-				if (option < 0 || option > 8) {
+				if (option < 0 || option > 10) {
 					System.out.println("Error: " + option + " is not an option");
 
 				}

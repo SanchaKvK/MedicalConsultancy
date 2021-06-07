@@ -107,7 +107,7 @@ public interface DBinterface {
 	
 	//check if there is a rating associated with that doctor and that patient. Return true if there is a rating and false if there is not. 
 	public Boolean checkIfRating(int id_doctor, int id_patient) ;
-	
-
+	//provides the last videoconsultation addeds' id
+	public int getLastVideoconsultationid() ;
 
 }
