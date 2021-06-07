@@ -114,8 +114,9 @@ public class inputOutput {
 			System.out.println("7. Cancel appointment");
 			System.out.println("8. Write a videoconsultation into an XML file");
 			System.out.println("9. Write a videoconsultation from an XML file into a Java object");
-			System.out.println("10. Emergency");
-			System.out.println("11.Delete account ");
+			System.out.println("10. Show the html of VideoConsultation");
+			System.out.println("11. Emergency");
+			System.out.println("12.Delete account ");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
@@ -195,6 +196,7 @@ public class inputOutput {
 			System.out.println("8. Diagnose");
 			System.out.println("9. Write a prescription into an XML file");
 			System.out.println("10. Write a prescription from an XML file into a Java object");
+			System.out.println("11. Show the html of a prescription");
 			System.out.println("0. Exit");
 			string = reader.readLine();
 			state = isNumeric(string);
@@ -203,7 +205,7 @@ public class inputOutput {
 
 			if (state == true) {
 				option = Integer.parseInt(string);
-				if (option < 0 || option > 10) {
+				if (option < 0 || option > 11) {
 					System.out.println("Error: " + option + " is not an option");
 
 				}
@@ -925,6 +927,19 @@ public class inputOutput {
 		
 	}
 	
+	public static String askForHtmlUrL() {
+		System.out.println("Name the html of the Video Consultation, it will be saved in the folder XMLfiles");
+		try {
+			String s = reader.readLine();
+			return s;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
 	
 	// this function checks if a string can be converted to a date
 	public static boolean isDate(String string) {

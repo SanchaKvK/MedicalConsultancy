@@ -18,6 +18,10 @@ import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 
 public class XMLManager {
@@ -102,6 +106,15 @@ public Prescription XMLtoJavaPrescription(File file){
 	}
 	
 	
-	
+public static void simpleTransform(String sourcePath, String xsltPath,String resultDir) {
+	TransformerFactory tFactory = TransformerFactory.newInstance();
+	System.out.println("i entered the simple transform function");
+	try {
+		Transformer transformer = tFactory.newTransformer(new StreamSource(new File(xsltPath)));
+		transformer.transform(new StreamSource(new File(sourcePath)),new StreamResult(new File(resultDir)));
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
 }
 	

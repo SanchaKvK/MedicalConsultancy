@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Video_consultation duration="10" notes="Increment of dosage as required">
+<Video_consultation duration="10" notes="Brief inquiry">
     <consultation_date>2021-06-04</consultation_date>
     <consultation_time>6:00 PM</consultation_time>
     <type_of_call>Medical emergencies</type_of_call>

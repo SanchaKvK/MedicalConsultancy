@@ -151,9 +151,13 @@ public class Menu {
 				XMLVideoConsultationtoJava();
 				break;
 			case 10:
-				emergency();
+				getAllPatientVideos();
+				createHtmlVideo();
 				break;
 			case 11:
+				emergency();
+				break;
+			case 12:
 				deleteAccount();
 				return;
 			case 0:
@@ -245,6 +249,10 @@ public class Menu {
 					break;
 				case 10:
 					XMLPrescriptiontoJava();
+					break;
+				case 11:
+					//TODO create or join with the java to xml a function that selects the paths
+					createHtmlPrescription();
 					break;
 				case 0:
 					dbman.disconnect();
@@ -840,4 +848,58 @@ public class Menu {
 			dbman.addPrescription(p);
 		}
 
+
+        private static void createHtmlVideo() {
+        	
+        	try {
+        		String samplePath= "./XMLfiles/Sample-videoconsultation.xml";
+            	String  stylePath ="./XMLfiles/Video_consultation-Style.xslt";
+            	String finalPath;
+    			List<Video_consultation> vd = dbman.getVideosOfPatient(user.getId());
+    			if (vd.isEmpty()) {
+    				System.out.println("You have no videos to turn into an Html");
+    				return;
+    			}
+    			int id_video = inputOutput.askVideoId(vd);
+    			Video_consultation video = dbman.getVideo(id_video);
+    			if (video.getPrescription() == null) {
+    				System.out
+    						.println("A videoconsultation with a prescription must be used to be turned into an Html");
+    			}
+    			File file = new File(samplePath);
+    			xmltransitionobject.JavatoXMlVideoconsultation(video,file);
+
+    			finalPath= inputOutput.askForHtmlUrL();
+        	XMLManager.simpleTransform(samplePath,stylePath, "./XMLfiles/"+finalPath+".html");
+        	} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        }
+        private static void createHtmlPrescription() throws IOException {
+        	try {
+        		String samplePath= "./XMLfiles/Sample-prescription.xml";
+            	String  stylePath ="./XMLfiles/Prescription-Style.xslt";
+            	String finalPath;
+            	
+            	List<Video_consultation> vd = dbman.getVideosOfDoctor(user.getId());
+    			int id_video = inputOutput.askVideoId(vd);
+    			Video_consultation video = dbman.getVideo(id_video);
+    			if (video.getPrescription() == null) {
+    				System.out.println("A videoconsultation with a prescription must be used to be turned into an Html");
+    			} else {
+    				File file = new File(samplePath);
+    				List<Prescription> prescriptions = dbman.getPrescriptionOfVideos(id_video);
+    				for (int i = 0; i < prescriptions.size(); i++) {
+    					xmltransitionobject.JavatoXMlPrescription(prescriptions.get(i),file);
+    				}
+    			}
+    			finalPath= inputOutput.askForHtmlUrL();
+        	XMLManager.simpleTransform(samplePath,stylePath, "./XMLfiles/"+finalPath+".html");
+        	} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        	
+        }  
 }
