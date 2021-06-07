@@ -3,6 +3,7 @@
 
 <xsl:template match="/">
    <html>
+   <ht>video Consultation</ht>
    <p><b><xsl:value-of select="//name" /></b></p>
    <p><b>Contents: </b><xsl:value-of select="//content" /></p>
    <p><b>Paid authors:</b></p>
