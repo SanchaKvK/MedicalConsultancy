@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -132,14 +133,14 @@ public class JPAUserManager implements UserInterface {
 
 	@Override
 	public Boolean checkPathologyTable() {
-		Object path;
+		List<Pathology> path = new ArrayList<Pathology>();
 		Query q = em.createNativeQuery("SELECT * FROM pathology", Pathology.class);
-		try {
-			path = q.getResultList();
-			return true;
-		} catch (NoResultException e) {
+
+		path = (List<Pathology>) q.getResultList();
+		if (path.isEmpty())
 			return false;
-		}
+		else
+			return true;
 
 	}
 
